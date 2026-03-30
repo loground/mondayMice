@@ -18,7 +18,7 @@ function App() {
   const motionRafRef = useRef(0)
   const CLOSE_RETURN_DELAY_MS = 1800
 
-  const computeCornerMotion = (element) => {
+  const computeCornerMotion = (element, side) => {
     if (!element) return { x: 0, y: 0 }
 
     const rect = element.getBoundingClientRect()
@@ -28,7 +28,10 @@ function App() {
     const currentCenterX = rect.left + rect.width / 2
     const currentCenterY = rect.top + rect.height / 2
 
-    const targetCenterX = window.innerWidth - margin - (rect.width * scale) / 2
+    const targetCenterX =
+      side === 'left'
+        ? margin + (rect.width * scale) / 2
+        : window.innerWidth - margin - (rect.width * scale) / 2
     const targetCenterY = margin + (rect.height * scale) / 2
 
     return {
@@ -41,7 +44,8 @@ function App() {
     if (selectedModel === null) {
       if (closeTimerRef.current) window.clearTimeout(closeTimerRef.current)
       if (motionRafRef.current) window.cancelAnimationFrame(motionRafRef.current)
-      const targetMotion = computeCornerMotion(element)
+      const side = modelId === 'basket' ? 'left' : 'right'
+      const targetMotion = computeCornerMotion(element, side)
       setSelectedMotion({ x: 0, y: 0 })
       setSelectedModel(modelId)
       setPanelVisible(true)
@@ -107,6 +111,7 @@ function App() {
   }, [])
 
   const isFocused = selectedModel !== null
+  const focusSide = selectedModel === 'basket' ? 'left' : 'right'
   const pageReady = assetsReady && videoReady
 
   return (
@@ -114,7 +119,10 @@ function App() {
       {!pageReady ? <PageLoader /> : null}
       <ModeSwitcher mode={mode} onChange={setMode} />
 
-      <section className={`layout ${isFocused ? 'layout--focused' : ''}`} aria-label="Monday Mice homepage">
+      <section
+        className={`layout ${isFocused ? `layout--focused layout--to-${focusSide}` : ''}`}
+        aria-label="Monday Mice homepage"
+      >
         <ModelSlot
           className="tv"
           modelPath="/tv.glb"
@@ -146,7 +154,9 @@ function App() {
         />
       </section>
 
-      <article className={`content-panel ${panelVisible ? 'is-visible' : ''}`}>
+      <article
+        className={`content-panel content-panel--from-${focusSide} ${panelVisible ? 'is-visible' : ''}`}
+      >
         <h2>{selectedModel === 'tv' ? 'TV Content' : 'Cart Content'}</h2>
         <p>
           {selectedModel === 'tv'
