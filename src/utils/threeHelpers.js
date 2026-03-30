@@ -2,19 +2,24 @@ import {
   DataTexture,
   Float32BufferAttribute,
   NearestFilter,
-  RedFormat,
+  RGBAFormat,
   Vector3,
 } from 'three'
 
 export function createToonGradientMap() {
   const shades = 5
-  const data = new Uint8Array(shades)
+  const data = new Uint8Array(shades * 4)
 
   for (let i = 0; i < shades; i += 1) {
-    data[i] = Math.round((i / (shades - 1)) * 255)
+    const shade = Math.round((i / (shades - 1)) * 255)
+    const idx = i * 4
+    data[idx] = shade
+    data[idx + 1] = shade
+    data[idx + 2] = shade
+    data[idx + 3] = 255
   }
 
-  const texture = new DataTexture(data, shades, 1, RedFormat)
+  const texture = new DataTexture(data, shades, 1, RGBAFormat)
   texture.minFilter = NearestFilter
   texture.magFilter = NearestFilter
   texture.generateMipmaps = false

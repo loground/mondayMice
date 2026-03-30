@@ -1,6 +1,6 @@
 import { useLoader } from '@react-three/fiber'
 import { useLayoutEffect, useMemo, useRef } from 'react'
-import { Box3, Color, MeshToonMaterial, Vector3 } from 'three'
+import { Box3, Color, MeshToonMaterial, SRGBColorSpace, Vector3 } from 'three'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 import { useHoverMotion } from '../../hooks/useHoverMotion'
 import { createToonGradientMap } from '../../utils/threeHelpers'
@@ -21,16 +21,18 @@ export function ToonModel({ modelPath, hovered = false, tiltSign = 1 }) {
       const toonMaterials = srcMaterials.map((material) => {
         const baseColor = material?.color ? material.color.clone() : new Color('#f2f2f2')
         baseColor.offsetHSL(0, 0, -0.08)
+        const sourceMap = material?.map ?? null
+        if (sourceMap) sourceMap.colorSpace = SRGBColorSpace
 
         return new MeshToonMaterial({
           color: baseColor,
-          map: material?.map ?? null,
+          map: sourceMap,
           transparent: material?.transparent ?? false,
           opacity: material?.opacity ?? 1,
           side: material?.side,
           gradientMap: toonGradient,
-          emissive: baseColor.clone().multiplyScalar(0.14),
-          emissiveIntensity: 0.32,
+          emissive: baseColor.clone().multiplyScalar(0.24),
+          emissiveIntensity: 0.42,
         })
       })
 
