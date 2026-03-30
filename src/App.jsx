@@ -22,7 +22,7 @@ function App() {
     if (!element) return { x: 0, y: 0 }
 
     const rect = element.getBoundingClientRect()
-    const scale = 0.2
+    const scale = 0.3
     const margin = 14
 
     const currentCenterX = rect.left + rect.width / 2
