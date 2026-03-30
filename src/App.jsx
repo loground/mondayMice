@@ -16,7 +16,7 @@ function App() {
 
   const closeTimerRef = useRef(0)
   const motionRafRef = useRef(0)
-  const CLOSE_RETURN_DELAY_MS = 1800
+  const CLOSE_RETURN_DELAY_MS = 1200
 
   const computeCornerMotion = (element, side) => {
     if (!element) return { x: 0, y: 0 }
