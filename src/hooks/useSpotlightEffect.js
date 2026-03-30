@@ -40,6 +40,16 @@ export function useSpotlightEffect(config = {}) {
       document.documentElement.style.setProperty('--my', String(ny))
     }
 
+    const handleTouchMove = (event) => {
+      const touch = event.touches[0]
+      if (!touch) return
+      targetPos.current = { x: touch.clientX, y: touch.clientY }
+      const nx = touch.clientX / window.innerWidth
+      const ny = touch.clientY / window.innerHeight
+      document.documentElement.style.setProperty('--mx', String(nx))
+      document.documentElement.style.setProperty('--my', String(ny))
+    }
+
     const handleMouseLeave = () => {
       targetPos.current = {
         x: window.innerWidth * 0.5,
@@ -52,11 +62,11 @@ export function useSpotlightEffect(config = {}) {
       spotlightPos.current.y = lerp(spotlightPos.current.y, targetPos.current.y, fadeSpeed)
 
       ctx.clearRect(0, 0, window.innerWidth, window.innerHeight)
-      ctx.fillStyle = 'rgba(0, 0, 0, 0.76)'
+      ctx.fillStyle = `rgba(0, 0, 0, ${maskAlpha})`
       ctx.fillRect(0, 0, window.innerWidth, window.innerHeight)
 
       const pulseScale = 1 + 0.1 * Math.sin((Date.now() / pulseSpeed) * Math.PI * 2)
-      const currentSpotlightSize = spotlightSize * pulseScale
+      const currentSpotlightSize = liveSpotlightSize * pulseScale
 
       const gradient = ctx.createRadialGradient(
         spotlightPos.current.x,
@@ -114,6 +124,7 @@ export function useSpotlightEffect(config = {}) {
 
     window.addEventListener('resize', resizeCanvas)
     document.addEventListener('mousemove', handleMouseMove)
+    document.addEventListener('touchmove', handleTouchMove, { passive: true })
     document.addEventListener('mouseleave', handleMouseLeave)
 
     render()
@@ -121,6 +132,7 @@ export function useSpotlightEffect(config = {}) {
     return () => {
       window.removeEventListener('resize', resizeCanvas)
       document.removeEventListener('mousemove', handleMouseMove)
+      document.removeEventListener('touchmove', handleTouchMove)
       document.removeEventListener('mouseleave', handleMouseLeave)
       if (animationFrame.current) window.cancelAnimationFrame(animationFrame.current)
     }
@@ -128,3 +140,6 @@ export function useSpotlightEffect(config = {}) {
 
   return canvasRef
 }
+    const isCoarsePointer = window.matchMedia('(pointer: coarse)').matches
+    const maskAlpha = isCoarsePointer ? 0.45 : 0.76
+    const liveSpotlightSize = isCoarsePointer ? spotlightSize * 1.35 : spotlightSize
