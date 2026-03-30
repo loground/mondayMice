@@ -1,5 +1,5 @@
 import { Canvas, useFrame } from '@react-three/fiber'
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { MathUtils } from 'three'
 import { ToonModel } from './models/ToonModel'
 import { TvModel } from './models/TvModel'
@@ -46,7 +46,21 @@ export function ModelSlot({
   onToggle,
 }) {
   const [hovered, setHovered] = useState(false)
+  const [isCoarsePointer, setIsCoarsePointer] = useState(false)
   const isSpotlightMode = mode === 'spotlight'
+  const lightActive = isSpotlightMode && (hovered || isCoarsePointer)
+
+  useEffect(() => {
+    const media = window.matchMedia('(pointer: coarse)')
+    const syncPointer = () => setIsCoarsePointer(media.matches)
+    syncPointer()
+    if (typeof media.addEventListener === 'function') {
+      media.addEventListener('change', syncPointer)
+      return () => media.removeEventListener('change', syncPointer)
+    }
+    media.addListener(syncPointer)
+    return () => media.removeListener(syncPointer)
+  }, [])
 
   return (
     <div
@@ -70,9 +84,12 @@ export function ModelSlot({
       }}
     >
       <Canvas camera={{ position: [0, 0, 4.8], fov: 34 }} dpr={[1, 1.6]}>
-        <ambientLight intensity={isSpotlightMode ? 0.3 : 0.72} color={isSpotlightMode ? '#8f98b5' : '#f5f1e8'} />
+        <ambientLight
+          intensity={isSpotlightMode ? (isCoarsePointer ? 0.48 : 0.3) : 0.72}
+          color={isSpotlightMode ? '#8f98b5' : '#f5f1e8'}
+        />
         <hemisphereLight
-          intensity={isSpotlightMode ? 0.36 : 0.86}
+          intensity={isSpotlightMode ? (isCoarsePointer ? 0.58 : 0.36) : 0.86}
           color={isSpotlightMode ? '#3e4963' : '#ffe2b5'}
           groundColor={isSpotlightMode ? '#090b12' : '#9fb3d8'}
         />
@@ -86,7 +103,7 @@ export function ModelSlot({
           intensity={isSpotlightMode ? 0.22 : 0.55}
           color={isSpotlightMode ? '#444f6e' : '#ccdcff'}
         />
-        <CursorFollowerLight active={isSpotlightMode ? hovered : false} />
+        <CursorFollowerLight active={lightActive} />
         {modelType === 'tv' ? (
           <TvModel hovered={hovered} tiltSign={tiltSign} />
         ) : (

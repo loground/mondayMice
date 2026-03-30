@@ -309,9 +309,15 @@
 }
 
 @media (max-width: 900px) {
+  .page {
+    height: 100dvh;
+    min-height: 100dvh;
+    overflow: hidden;
+  }
+
   .layout {
     width: min(520px, 92vw);
-    min-height: 100svh;
+    min-height: 100dvh;
     grid-template-columns: 1fr;
     grid-template-rows: auto auto;
     justify-items: center;

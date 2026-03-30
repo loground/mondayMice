@@ -20,6 +20,9 @@ export function useSpotlightEffect(config = {}) {
 
     const ctx = canvas.getContext('2d')
     if (!ctx) return undefined
+    const isCoarsePointer = window.matchMedia('(pointer: coarse)').matches
+    const maskAlpha = isCoarsePointer ? 0.45 : 0.76
+    const liveSpotlightSize = isCoarsePointer ? spotlightSize * 1.35 : spotlightSize
 
     const resizeCanvas = () => {
       const dpr = Math.min(window.devicePixelRatio || 1, 2)
@@ -124,6 +127,7 @@ export function useSpotlightEffect(config = {}) {
 
     window.addEventListener('resize', resizeCanvas)
     document.addEventListener('mousemove', handleMouseMove)
+    document.addEventListener('touchstart', handleTouchMove, { passive: true })
     document.addEventListener('touchmove', handleTouchMove, { passive: true })
     document.addEventListener('mouseleave', handleMouseLeave)
 
@@ -132,6 +136,7 @@ export function useSpotlightEffect(config = {}) {
     return () => {
       window.removeEventListener('resize', resizeCanvas)
       document.removeEventListener('mousemove', handleMouseMove)
+      document.removeEventListener('touchstart', handleTouchMove)
       document.removeEventListener('touchmove', handleTouchMove)
       document.removeEventListener('mouseleave', handleMouseLeave)
       if (animationFrame.current) window.cancelAnimationFrame(animationFrame.current)
@@ -140,6 +145,3 @@ export function useSpotlightEffect(config = {}) {
 
   return canvasRef
 }
-    const isCoarsePointer = window.matchMedia('(pointer: coarse)').matches
-    const maskAlpha = isCoarsePointer ? 0.45 : 0.76
-    const liveSpotlightSize = isCoarsePointer ? spotlightSize * 1.35 : spotlightSize
