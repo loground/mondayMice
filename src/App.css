@@ -310,35 +310,33 @@
 
 @media (max-width: 900px) {
   .layout {
-    width: min(640px, 96vw);
+    width: min(520px, 92vw);
     min-height: 100svh;
     grid-template-columns: 1fr;
-    grid-template-rows: auto auto auto;
+    grid-template-rows: auto auto;
     justify-items: center;
-    gap: 1rem;
-    padding-block: 1rem;
+    gap: 1.1rem;
+    padding-block: 1.8rem 1.1rem;
   }
 
   .title {
-    order: 1;
-    width: clamp(48px, 15vw, 88px);
-    max-height: 40svh;
+    display: none;
   }
 
   .tv {
-    order: 2;
+    order: 1;
     grid-column: auto;
-    width: min(88vw, 460px);
-    height: min(80vw, 420px);
+    width: min(82vw, 360px);
+    height: min(52vw, 250px);
     justify-self: center;
     transform: none;
   }
 
   .basket {
-    order: 3;
+    order: 2;
     grid-column: auto;
-    width: min(90vw, 480px);
-    height: min(82vw, 430px);
+    width: min(84vw, 370px);
+    height: min(54vw, 260px);
     justify-self: center;
     transform: none;
   }

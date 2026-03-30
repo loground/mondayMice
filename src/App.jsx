@@ -111,7 +111,8 @@ function App() {
   }, [])
 
   const isFocused = selectedModel !== null
-  const focusSide = selectedModel === 'basket' ? 'left' : 'right'
+  const focusSide =
+    selectedModel === 'tv' ? 'right' : selectedModel === 'basket' ? 'left' : 'right'
   const contentFromSide = focusSide === 'right' ? 'left' : 'right'
   const pageReady = assetsReady && videoReady
 
