@@ -103,6 +103,12 @@ export function ModelSlot({
           intensity={isSpotlightMode ? 0.22 : 0.55}
           color={isSpotlightMode ? '#444f6e' : '#ccdcff'}
         />
+        {isCoarsePointer ? (
+          <>
+            <pointLight position={[0, -0.25, 3.5]} intensity={1.2} color="#fff2dc" distance={10.5} />
+            <directionalLight position={[0, -2.4, 2.1]} intensity={0.72} color="#e8f0ff" />
+          </>
+        ) : null}
         <CursorFollowerLight active={lightActive} />
         {modelType === 'tv' ? (
           <TvModel hovered={hovered} tiltSign={tiltSign} />
