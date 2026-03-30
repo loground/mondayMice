@@ -180,29 +180,29 @@
 }
 
 .layout--focused .model-slot.is-away {
-  opacity: 0;
+  opacity: 1;
   pointer-events: none;
-  filter: drop-shadow(0 16px 28px rgba(0, 0, 0, 0));
+  filter: drop-shadow(0 16px 28px rgba(0, 0, 0, 0.38));
   transform: translateX(0);
   transition:
-    transform 1900ms cubic-bezier(0.2, 0.7, 0.2, 1),
-    opacity 1450ms ease,
-    filter 900ms ease,
-    visibility 0s linear 1450ms;
+    transform 2300ms cubic-bezier(0.16, 0.84, 0.22, 1),
+    opacity 0ms linear 2300ms,
+    filter 0ms linear 2300ms,
+    visibility 0s linear 2300ms;
   visibility: hidden;
 }
 
 .layout--to-right .model-slot.is-away {
-  transform: translateX(-85vw);
-}
-
-.layout--to-left .model-slot.is-away {
   transform: translateX(85vw);
 }
 
+.layout--to-left .model-slot.is-away {
+  transform: translateX(-85vw);
+}
+
 .layout--focused .model-slot.is-away canvas {
-  opacity: 0;
-  transition: opacity 1300ms ease;
+  opacity: 1;
+  transition: opacity 0ms linear 2300ms;
 }
 
 .layout:not(.layout--focused) .model-slot {
@@ -210,16 +210,16 @@
 }
 
 .title.is-away {
-  opacity: 0;
+  opacity: 1;
   transform:
     perspective(700px)
     rotateY(calc((var(--mx) - 0.5) * 3deg))
     rotateX(calc((0.5 - var(--my)) * 2deg))
     translateX(0)
-    scale(0.75);
+    scale(0.92);
   transition:
-    opacity 1350ms ease,
-    transform 1700ms ease;
+    opacity 0ms linear 2100ms,
+    transform 2100ms cubic-bezier(0.16, 0.84, 0.22, 1);
 }
 
 .layout--to-right .title.is-away {
@@ -227,8 +227,8 @@
     perspective(700px)
     rotateY(calc((var(--mx) - 0.5) * 3deg))
     rotateX(calc((0.5 - var(--my)) * 2deg))
-    translateX(-120px)
-    scale(0.75);
+    translateX(95vw)
+    scale(0.92);
 }
 
 .layout--to-left .title.is-away {
@@ -236,8 +236,8 @@
     perspective(700px)
     rotateY(calc((var(--mx) - 0.5) * 3deg))
     rotateX(calc((0.5 - var(--my)) * 2deg))
-    translateX(120px)
-    scale(0.75);
+    translateX(-95vw)
+    scale(0.92);
 }
 
 .content-panel {

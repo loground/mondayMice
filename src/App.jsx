@@ -112,6 +112,7 @@ function App() {
 
   const isFocused = selectedModel !== null
   const focusSide = selectedModel === 'basket' ? 'left' : 'right'
+  const contentFromSide = focusSide === 'right' ? 'left' : 'right'
   const pageReady = assetsReady && videoReady
 
   return (
@@ -155,7 +156,7 @@ function App() {
       </section>
 
       <article
-        className={`content-panel content-panel--from-${focusSide} ${panelVisible ? 'is-visible' : ''}`}
+        className={`content-panel content-panel--from-${contentFromSide} ${panelVisible ? 'is-visible' : ''}`}
       >
         <h2>{selectedModel === 'tv' ? 'TV Content' : 'Cart Content'}</h2>
         <p>
