@@ -21,8 +21,8 @@ export function useSpotlightEffect(config = {}) {
     const ctx = canvas.getContext('2d')
     if (!ctx) return undefined
     const isCoarsePointer = window.matchMedia('(pointer: coarse)').matches
-    const maskAlpha = isCoarsePointer ? 0.45 : 0.76
-    const liveSpotlightSize = isCoarsePointer ? spotlightSize * 1.35 : spotlightSize
+    const maskAlpha = isCoarsePointer ? 0.22 : 0.76
+    const liveSpotlightSize = isCoarsePointer ? spotlightSize * 2.25 : spotlightSize
 
     const resizeCanvas = () => {
       const dpr = Math.min(window.devicePixelRatio || 1, 2)
@@ -80,7 +80,7 @@ export function useSpotlightEffect(config = {}) {
         currentSpotlightSize,
       )
       gradient.addColorStop(0, `rgba(${glowColor}, ${spotlightIntensity})`)
-      gradient.addColorStop(0.55, `rgba(${glowColor}, ${spotlightIntensity * 0.82})`)
+      gradient.addColorStop(0.62, `rgba(${glowColor}, ${spotlightIntensity * 0.82})`)
       gradient.addColorStop(1, 'rgba(0, 0, 0, 0)')
 
       ctx.globalCompositeOperation = 'destination-out'
