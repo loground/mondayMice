@@ -313,16 +313,19 @@
     height: 100dvh;
     min-height: 100dvh;
     overflow: hidden;
+    align-items: stretch;
   }
 
   .layout {
-    width: min(520px, 92vw);
+    width: min(430px, 94vw);
+    height: 100dvh;
     min-height: 100dvh;
-    grid-template-columns: 1fr;
-    grid-template-rows: auto auto;
-    justify-items: center;
-    gap: 1.1rem;
-    padding-block: 1.8rem 1.1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+    gap: clamp(0.35rem, 1.2vh, 0.8rem);
+    padding: 4.3rem 0.4rem 0.9rem;
   }
 
   .title {
@@ -332,8 +335,8 @@
   .tv {
     order: 1;
     grid-column: auto;
-    width: min(82vw, 360px);
-    height: min(52vw, 250px);
+    width: min(70vw, 300px);
+    height: min(38vw, 190px);
     justify-self: center;
     transform: none;
   }
@@ -341,8 +344,8 @@
   .basket {
     order: 2;
     grid-column: auto;
-    width: min(84vw, 370px);
-    height: min(54vw, 260px);
+    width: min(72vw, 310px);
+    height: min(40vw, 200px);
     justify-self: center;
     transform: none;
   }
