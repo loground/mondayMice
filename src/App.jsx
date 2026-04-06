@@ -16,7 +16,7 @@ function App() {
 
   const closeTimerRef = useRef(0)
   const motionRafRef = useRef(0)
-  const CLOSE_RETURN_DELAY_MS = 1200
+  const CLOSE_RETURN_DELAY_MS = 1700
 
   const computeCornerMotion = (element, side) => {
     if (!element) return { x: 0, y: 0 }
@@ -115,6 +115,8 @@ function App() {
     selectedModel === 'tv' ? 'right' : selectedModel === 'basket' ? 'left' : 'right'
   const contentFromSide = focusSide === 'right' ? 'left' : 'right'
   const pageReady = assetsReady && videoReady
+  const tvPanelVisible = selectedModel === 'tv' && panelVisible
+  const cartPanelVisible = selectedModel === 'cart' && panelVisible
 
   return (
     <main className={`page ${mode === 'spotlight' ? 'page--spotlight' : 'page--regular'}`}>
@@ -156,15 +158,28 @@ function App() {
         />
       </section>
 
+      <section className={`tv-banners-panel ${tvPanelVisible ? 'is-visible' : ''}`} aria-hidden={!tvPanelVisible}>
+        <div className="tv-banners">
+          <div className="tv-banner">
+            <div className="tv-banner__image" style={{ backgroundImage: "url('/banners/banner1.png')" }} />
+            <div className="tv-banner__overlay" />
+          </div>
+          <div className="tv-banner">
+            <div className="tv-banner__image" style={{ backgroundImage: "url('/banners/banner1.png')" }} />
+            <div className="tv-banner__overlay" />
+          </div>
+          <div className="tv-banner">
+            <div className="tv-banner__image" style={{ backgroundImage: "url('/banners/banner1.png')" }} />
+            <div className="tv-banner__overlay" />
+          </div>
+        </div>
+      </section>
+
       <article
-        className={`content-panel content-panel--from-${contentFromSide} ${panelVisible ? 'is-visible' : ''}`}
+        className={`content-panel content-panel--from-${contentFromSide} ${cartPanelVisible ? 'is-visible' : ''}`}
       >
-        <h2>{selectedModel === 'tv' ? 'TV Content' : 'Cart Content'}</h2>
-        <p>
-          {selectedModel === 'tv'
-            ? 'This is the centered content area for the TV model. Replace with your actual section.'
-            : 'This is the centered content area for the Cart model. Replace with your actual section.'}
-        </p>
+        <h2>Cart Content</h2>
+        <p>This is the centered content area for the Cart model. Replace with your actual section.</p>
       </article>
 
       {mode === 'spotlight' ? <SpotlightOverlay /> : null}

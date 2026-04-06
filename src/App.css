@@ -98,6 +98,10 @@
   transition: transform 1400ms ease;
 }
 
+.layout--focused {
+  z-index: 22;
+}
+
 .model-slot {
   position: relative;
   width: clamp(250px, 32vw, 450px);
@@ -291,6 +295,62 @@
   transition-delay: 420ms;
 }
 
+.tv-banners-panel {
+  position: fixed;
+  inset: 0;
+  z-index: 16;
+  width: 100vw;
+  display: flex;
+  align-items: center;
+  opacity: 1;
+  pointer-events: none;
+  transform: translateY(100vh);
+  transition: transform 1600ms cubic-bezier(0.2, 0.72, 0.2, 1);
+}
+
+.tv-banners-panel.is-visible {
+  transform: translateY(0);
+}
+
+.tv-banners {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.tv-banner {
+  position: relative;
+  width: 100%;
+  height: 30vh;
+  overflow: hidden;
+}
+
+.tv-banner__image {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  transform: scale(1);
+  transition: transform 0.3s ease;
+}
+
+.tv-banner__overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to right,
+    rgba(0, 0, 0, 0.6) 0%,
+    rgba(0, 0, 0, 0.28) 52%,
+    rgba(0, 0, 0, 0) 100%
+  );
+}
+
+.tv-banner:hover .tv-banner__image {
+  transform: scale(1.03);
+}
+
 @keyframes rise {
   from {
     opacity: 0;
@@ -349,5 +409,9 @@
 
   .layout--focused .model-slot.is-selected {
     transform: translate(var(--sel-x, 0px), var(--sel-y, 0px)) scale(0.22);
+  }
+
+  .tv-banner {
+    height: 22vh;
   }
 }
