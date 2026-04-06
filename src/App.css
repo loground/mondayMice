@@ -101,6 +101,11 @@
 
 .layout--focused {
   z-index: 22;
+  pointer-events: none;
+}
+
+.layout--focused .model-slot.is-selected {
+  pointer-events: auto;
 }
 
 .model-slot {
@@ -300,18 +305,27 @@
   position: fixed;
   inset: 0;
   z-index: 16;
+  height: 100dvh;
+  max-height: 100dvh;
   width: 100vw;
   display: flex;
   align-items: flex-start;
   box-sizing: border-box;
-  padding-top: clamp(4.6rem, 12vh, 8.5rem);
-  opacity: 1;
+  padding-top: calc(clamp(4.6rem, 12vh, 8.5rem) + 10vh);
+  opacity: 0;
   pointer-events: none;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
   transform: translateY(100vh);
-  transition: transform 1600ms cubic-bezier(0.2, 0.72, 0.2, 1);
+  transition:
+    transform 1200ms cubic-bezier(0.2, 0.72, 0.2, 1),
+    opacity 450ms ease;
 }
 
 .tv-banners-panel.is-visible {
+  opacity: 1;
+  pointer-events: auto;
   transform: translateY(0);
 }
 
@@ -325,8 +339,10 @@
 .tv-banner {
   position: relative;
   width: 100%;
-  height: 30vh;
+  height: 20vh;
   overflow: hidden;
+  opacity: 0;
+  transform: translateY(50px);
 }
 
 .tv-banner__image {
@@ -336,7 +352,10 @@
   background-position: center;
   background-repeat: no-repeat;
   transform: scale(1);
-  transition: transform 0.3s ease;
+  filter: brightness(0.72) saturate(0.9);
+  transition:
+    transform 0.3s ease,
+    filter 0.35s ease;
 }
 
 .tv-banner__overlay {
@@ -348,10 +367,21 @@
     rgba(0, 0, 0, 0.28) 52%,
     rgba(0, 0, 0, 0) 100%
   );
+  transition: opacity 0.35s ease;
 }
 
 .tv-banner:hover .tv-banner__image {
   transform: scale(1.03);
+  filter: brightness(1) saturate(1.02);
+}
+
+.tv-banner:hover .tv-banner__overlay {
+  opacity: 0.35;
+}
+
+.tv-banners-panel.is-visible .tv-banner {
+  animation: bannerStackUp 640ms cubic-bezier(0.19, 0.82, 0.22, 1) both;
+  animation-delay: calc(var(--banner-i, 0) * 90ms + 160ms);
 }
 
 @keyframes rise {
@@ -368,6 +398,18 @@
 @keyframes spin {
   to {
     transform: rotate(360deg);
+  }
+}
+
+@keyframes bannerStackUp {
+  from {
+    opacity: 0;
+    transform: translateY(60px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
@@ -421,6 +463,6 @@
   }
 
   .tv-banners-panel {
-    padding-top: calc(2.1rem + env(safe-area-inset-top));
+    padding-top: calc(2.1rem + env(safe-area-inset-top) + 10vh);
   }
 }

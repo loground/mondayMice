@@ -114,6 +114,7 @@ function App() {
   const pageReady = assetsReady && videoReady
   const tvPanelVisible = selectedModel === 'tv' && panelVisible
   const cartPanelVisible = selectedModel === 'cart' && panelVisible
+  const tvBanners = Array.from({ length: 10 })
 
   return (
     <main className={`page ${mode === 'spotlight' ? 'page--spotlight' : 'page--regular'}`}>
@@ -157,18 +158,12 @@ function App() {
 
       <section className={`tv-banners-panel ${tvPanelVisible ? 'is-visible' : ''}`} aria-hidden={!tvPanelVisible}>
         <div className="tv-banners">
-          <div className="tv-banner">
-            <div className="tv-banner__image" style={{ backgroundImage: "url('/banners/banner1.png')" }} />
-            <div className="tv-banner__overlay" />
-          </div>
-          <div className="tv-banner">
-            <div className="tv-banner__image" style={{ backgroundImage: "url('/banners/banner1.png')" }} />
-            <div className="tv-banner__overlay" />
-          </div>
-          <div className="tv-banner">
-            <div className="tv-banner__image" style={{ backgroundImage: "url('/banners/banner1.png')" }} />
-            <div className="tv-banner__overlay" />
-          </div>
+          {tvBanners.map((_, index) => (
+            <div key={`tv-banner-${index}`} className="tv-banner" style={{ '--banner-i': index }}>
+              <div className="tv-banner__image" style={{ backgroundImage: "url('/banners/banner1.png')" }} />
+              <div className="tv-banner__overlay" />
+            </div>
+          ))}
         </div>
       </section>
 
