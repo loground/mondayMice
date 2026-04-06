@@ -16,6 +16,15 @@ function App() {
 
   const closeTimerRef = useRef(0)
   const motionRafRef = useRef(0)
+  const tvBannersPanelRef = useRef(null)
+  const isFocused = selectedModel !== null
+  const focusSide =
+    selectedModel === 'tv' ? 'right' : selectedModel === 'basket' ? 'left' : 'right'
+  const contentFromSide = focusSide === 'right' ? 'left' : 'right'
+  const pageReady = assetsReady && videoReady
+  const tvPanelVisible = selectedModel === 'tv' && panelVisible
+  const cartPanelVisible = selectedModel === 'cart' && panelVisible
+  const tvBanners = Array.from({ length: 10 })
 
   const computeCornerMotion = (element, side) => {
     if (!element) return { x: 0, y: 0 }
@@ -74,6 +83,34 @@ function App() {
   }, [])
 
   useEffect(() => {
+    const panel = tvBannersPanelRef.current
+    if (!panel) return undefined
+
+    const banners = Array.from(panel.querySelectorAll('.tv-banner'))
+    banners.forEach((banner) => banner.classList.remove('is-revealed'))
+
+    if (!tvPanelVisible) return undefined
+
+    const observer = new IntersectionObserver(
+      (entries, activeObserver) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return
+          entry.target.classList.add('is-revealed')
+          activeObserver.unobserve(entry.target)
+        })
+      },
+      {
+        root: panel,
+        threshold: 0.3,
+        rootMargin: '0px 0px -8% 0px',
+      },
+    )
+
+    banners.forEach((banner) => observer.observe(banner))
+    return () => observer.disconnect()
+  }, [tvPanelVisible])
+
+  useEffect(() => {
     let mounted = true
     const prevOnStart = DefaultLoadingManager.onStart
     const prevOnLoad = DefaultLoadingManager.onLoad
@@ -106,15 +143,6 @@ function App() {
       DefaultLoadingManager.onLoad = prevOnLoad
     }
   }, [])
-
-  const isFocused = selectedModel !== null
-  const focusSide =
-    selectedModel === 'tv' ? 'right' : selectedModel === 'basket' ? 'left' : 'right'
-  const contentFromSide = focusSide === 'right' ? 'left' : 'right'
-  const pageReady = assetsReady && videoReady
-  const tvPanelVisible = selectedModel === 'tv' && panelVisible
-  const cartPanelVisible = selectedModel === 'cart' && panelVisible
-  const tvBanners = Array.from({ length: 10 })
 
   return (
     <main className={`page ${mode === 'spotlight' ? 'page--spotlight' : 'page--regular'}`}>
@@ -156,7 +184,11 @@ function App() {
         />
       </section>
 
-      <section className={`tv-banners-panel ${tvPanelVisible ? 'is-visible' : ''}`} aria-hidden={!tvPanelVisible}>
+      <section
+        ref={tvBannersPanelRef}
+        className={`tv-banners-panel ${tvPanelVisible ? 'is-visible' : ''}`}
+        aria-hidden={!tvPanelVisible}
+      >
         <div className="tv-banners">
           {tvBanners.map((_, index) => (
             <div
@@ -164,9 +196,7 @@ function App() {
               className="tv-banner"
               style={{
                 '--banner-i': index,
-                '--banner-delay': `${140 + index * 68 + (index % 3) * 55}ms`,
-                '--banner-duration': `${560 + (index % 4) * 120}ms`,
-                '--banner-shift': `${(index % 2 === 0 ? 1 : -1) * (10 + (index % 3) * 7)}px`,
+                '--banner-delay': `${120 + (index % 5) * 70}ms`,
               }}
             >
               <div className="tv-banner__image" style={{ backgroundImage: "url('/banners/banner1.png')" }} />

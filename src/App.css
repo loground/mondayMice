@@ -343,7 +343,8 @@
   height: calc((100dvh - var(--tv-top-offset)) / 5);
   overflow: hidden;
   opacity: 0;
-  transform: translateY(50px);
+  transform: translateY(46px);
+  will-change: transform, opacity;
 }
 
 .tv-banner__image {
@@ -380,8 +381,8 @@
   opacity: 0.35;
 }
 
-.tv-banners-panel.is-visible .tv-banner {
-  animation: bannerStackUp var(--banner-duration, 640ms) cubic-bezier(0.18, 0.86, 0.2, 1) both;
+.tv-banners-panel.is-visible .tv-banner.is-revealed {
+  animation: bannerStackUp 720ms cubic-bezier(0.22, 0.72, 0.2, 1) both;
   animation-delay: var(--banner-delay, 180ms);
 }
 
@@ -405,17 +406,12 @@
 @keyframes bannerStackUp {
   from {
     opacity: 0;
-    transform: translate3d(var(--banner-shift, 12px), 74px, 0) rotate(calc(var(--banner-shift, 12px) * 0.06));
-  }
-
-  58% {
-    opacity: 1;
-    transform: translate3d(calc(var(--banner-shift, 12px) * -0.32), -6px, 0) rotate(calc(var(--banner-shift, 12px) * -0.015));
+    transform: translateY(52px);
   }
 
   to {
     opacity: 1;
-    transform: translate3d(0, 0, 0) rotate(0deg);
+    transform: translateY(0);
   }
 }
 
