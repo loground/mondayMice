@@ -159,7 +159,16 @@ function App() {
       <section className={`tv-banners-panel ${tvPanelVisible ? 'is-visible' : ''}`} aria-hidden={!tvPanelVisible}>
         <div className="tv-banners">
           {tvBanners.map((_, index) => (
-            <div key={`tv-banner-${index}`} className="tv-banner" style={{ '--banner-i': index }}>
+            <div
+              key={`tv-banner-${index}`}
+              className="tv-banner"
+              style={{
+                '--banner-i': index,
+                '--banner-delay': `${140 + index * 68 + (index % 3) * 55}ms`,
+                '--banner-duration': `${560 + (index % 4) * 120}ms`,
+                '--banner-shift': `${(index % 2 === 0 ? 1 : -1) * (10 + (index % 3) * 7)}px`,
+              }}
+            >
               <div className="tv-banner__image" style={{ backgroundImage: "url('/banners/banner1.png')" }} />
               <div className="tv-banner__overlay" />
             </div>
