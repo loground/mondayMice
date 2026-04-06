@@ -23,6 +23,10 @@ export function TvModel({ hovered = false, tiltSign = 1, ...props }) {
   const [centerOffset, setCenterOffset] = useState([0, 0, 0])
   const [videoTexture, setVideoTexture] = useState(null)
   const hasSignaledVideoReady = useRef(false)
+  const channelOrder = useMemo(
+    () => ['/tvchannels/1.mp4', '/tvchannels/2.mp4', '/tvchannels/3.mov', '/tvchannels/4.mp4'].sort(() => Math.random() - 0.5),
+    [],
+  )
 
   const screenGeometry = useMemo(() => {
     const source = nodes?.['1001']?.geometry
@@ -30,9 +34,22 @@ export function TvModel({ hovered = false, tiltSign = 1, ...props }) {
     return createPlanarUVGeometry(source)
   }, [nodes])
 
+  const screenAspect = useMemo(() => {
+    const geometry = screenGeometry || nodes?.['1001']?.geometry
+    if (!geometry) return 16 / 9
+    geometry.computeBoundingBox()
+    const box = geometry.boundingBox
+    if (!box) return 16 / 9
+    const size = new Vector3()
+    box.getSize(size)
+    const dims = [Math.abs(size.x), Math.abs(size.y), Math.abs(size.z)].sort((a, b) => b - a)
+    const width = dims[0] || 1
+    const height = dims[1] || 1
+    return width / Math.max(height, 1e-6)
+  }, [nodes, screenGeometry])
+
   useEffect(() => {
     const video = document.createElement('video')
-    video.src = '/vid.mp4'
     video.crossOrigin = 'anonymous'
     video.loop = true
     video.muted = true
@@ -49,8 +66,8 @@ export function TvModel({ hovered = false, tiltSign = 1, ...props }) {
     texture.flipY = false
     texture.colorSpace = SRGBColorSpace
     texture.center.set(0.5, 0.5)
-    texture.repeat.set(0.96, 0.96)
-    texture.offset.set(0.02, 0.02)
+    texture.repeat.set(1, 1)
+    texture.offset.set(0, 0)
 
     setVideoTexture(texture)
     const markVideoReady = () => {
@@ -59,21 +76,67 @@ export function TvModel({ hovered = false, tiltSign = 1, ...props }) {
       window.dispatchEvent(new CustomEvent('tv-video-ready'))
     }
 
+    const applyCenterCrop = () => {
+      const vw = video.videoWidth || 1
+      const vh = video.videoHeight || 1
+      const videoAspect = vw / Math.max(vh, 1e-6)
+      const targetAspect = screenAspect || 16 / 9
+
+      let repeatX = 1
+      let repeatY = 1
+
+      if (videoAspect > targetAspect) {
+        repeatX = targetAspect / videoAspect
+      } else {
+        repeatY = videoAspect / targetAspect
+      }
+
+      // Pull crop slightly toward full frame so the channel looks less zoomed.
+      const zoomOutFactor = 0.5
+      repeatX += (1 - repeatX) * zoomOutFactor
+      repeatY += (1 - repeatY) * zoomOutFactor
+
+      texture.repeat.set(repeatX, repeatY)
+      texture.offset.set((1 - repeatX) * 0.5, (1 - repeatY) * 0.5)
+      texture.needsUpdate = true
+    }
+
+    const currentIndex = { value: 0 }
+    const loadChannel = (index) => {
+      if (index >= channelOrder.length) return
+      currentIndex.value = index
+      video.src = channelOrder[index]
+      video.load()
+      video.play().catch(() => {})
+    }
+
     const tryPlay = () => {
       video.play().catch(() => {})
       markVideoReady()
     }
+    const onLoadedMetadata = () => {
+      applyCenterCrop()
+      tryPlay()
+    }
+    const onVideoError = () => {
+      loadChannel(currentIndex.value + 1)
+    }
+
+    video.addEventListener('loadedmetadata', onLoadedMetadata)
     video.addEventListener('canplay', tryPlay)
-    tryPlay()
+    video.addEventListener('error', onVideoError)
+    loadChannel(0)
 
     return () => {
+      video.removeEventListener('loadedmetadata', onLoadedMetadata)
       video.removeEventListener('canplay', tryPlay)
+      video.removeEventListener('error', onVideoError)
       video.pause()
       video.removeAttribute('src')
       video.load()
       texture.dispose()
     }
-  }, [])
+  }, [channelOrder, screenAspect])
 
   useEffect(() => {
     return () => {
@@ -122,7 +185,23 @@ export function TvModel({ hovered = false, tiltSign = 1, ...props }) {
           geometry={screenGeometry || nodes['1001'].geometry}
           rotation={[Math.PI / 2, 0, 0]}
         >
-          <meshBasicMaterial map={videoTexture} toneMapped={false} side={DoubleSide} />
+          <meshBasicMaterial
+            map={videoTexture}
+            toneMapped={false}
+            side={DoubleSide}
+            onBeforeCompile={(shader) => {
+              shader.fragmentShader = shader.fragmentShader.replace(
+                '#include <map_fragment>',
+                `
+                #ifdef USE_MAP
+                  vec2 mondayUv = vec2(1.0 - vMapUv.x, vMapUv.y);
+                  vec4 sampledDiffuseColor = texture2D(map, mondayUv);
+                  diffuseColor *= sampledDiffuseColor;
+                #endif
+                `,
+              )
+            }}
+          />
         </mesh>
       </group>
     </group>
