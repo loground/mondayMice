@@ -16,7 +16,6 @@ function App() {
 
   const closeTimerRef = useRef(0)
   const motionRafRef = useRef(0)
-  const CLOSE_RETURN_DELAY_MS = 1700
 
   const computeCornerMotion = (element, side) => {
     if (!element) return { x: 0, y: 0 }
@@ -62,10 +61,8 @@ function App() {
     if (selectedModel === modelId) {
       setPanelVisible(false)
       if (closeTimerRef.current) window.clearTimeout(closeTimerRef.current)
-      closeTimerRef.current = window.setTimeout(() => {
-        setSelectedModel(null)
-        setSelectedMotion({ x: 0, y: 0 })
-      }, CLOSE_RETURN_DELAY_MS)
+      setSelectedModel(null)
+      setSelectedMotion({ x: 0, y: 0 })
     }
   }
 

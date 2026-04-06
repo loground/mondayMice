@@ -90,6 +90,7 @@
   z-index: 1;
   width: min(1180px, 94vw);
   min-height: 86svh;
+  margin-top: clamp(1.2rem, 3.8vh, 3rem);
   display: grid;
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
@@ -301,7 +302,9 @@
   z-index: 16;
   width: 100vw;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
+  box-sizing: border-box;
+  padding-top: clamp(4.6rem, 12vh, 8.5rem);
   opacity: 1;
   pointer-events: none;
   transform: translateY(100vh);
@@ -378,11 +381,13 @@
   .layout {
     width: min(520px, 92vw);
     min-height: 100dvh;
+    margin-top: 0;
     grid-template-columns: 1fr;
     grid-template-rows: auto auto;
     justify-items: center;
     gap: 1.1rem;
-    padding-block: 1.8rem 1.1rem;
+    padding-top: calc(3.2rem + env(safe-area-inset-top));
+    padding-bottom: 1.1rem;
   }
 
   .title {
@@ -413,5 +418,9 @@
 
   .tv-banner {
     height: 22vh;
+  }
+
+  .tv-banners-panel {
+    padding-top: calc(2.1rem + env(safe-area-inset-top));
   }
 }
