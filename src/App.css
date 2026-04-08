@@ -576,7 +576,8 @@
   }
 
   .tv-footer-slot__image {
-    width: min(64vw, 320px);
+    width: min(42vw, 190px);
+    max-height: calc(var(--tv-footer-space) * 0.42);
   }
 
   .layout.layout--return-right .title,
