@@ -5,6 +5,7 @@
   --ink: #f5f6ff;
   --mx: 0.5;
   --my: 0.5;
+  --regular-surface: #f7f7f8;
   --tv-header-space: calc(clamp(4.6rem, 12vh, 8.5rem) + 10vh);
   --tv-footer-space: clamp(58px, 11vh, 116px);
 }
@@ -342,7 +343,7 @@
 .tv-footer-slot {
   width: 100%;
   min-height: var(--tv-footer-space);
-  background: #e7e8ee;
+  background: var(--regular-surface);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -372,7 +373,7 @@
   z-index: 18;
   opacity: 0;
   pointer-events: none;
-  background: #e7e8ee;
+  background: var(--regular-surface);
   transition: opacity 240ms ease;
 }
 
