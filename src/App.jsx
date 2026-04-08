@@ -226,8 +226,12 @@ function App() {
               <div className="tv-banner__overlay" />
             </div>
           ))}
+          <div className="tv-footer-slot" aria-hidden="true">
+            <img className="tv-footer-slot__image" src="/images/footer.png" alt="" />
+          </div>
         </div>
       </section>
+      <div className={`tv-scroll-header ${tvPanelVisible ? 'is-visible' : ''}`} aria-hidden="true" />
 
       <article
         className={`content-panel content-panel--from-${contentFromSide} ${cartPanelVisible ? 'is-visible' : ''}`}
