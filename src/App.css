@@ -531,7 +531,19 @@
 
   .tv-banners-panel {
     --tv-top-offset: var(--tv-header-space);
+    left: 0;
+    right: auto;
+    width: min(72vw, 440px);
+    max-width: 72vw;
     padding-top: var(--tv-top-offset);
+    transform: translate3d(-108%, 0, 0);
+    transition:
+      transform 900ms cubic-bezier(0.2, 0.76, 0.24, 1),
+      opacity 260ms ease;
+  }
+
+  .tv-banners-panel.is-visible {
+    transform: translate3d(0, 0, 0);
   }
 
   .tv-banner__image {

@@ -37,7 +37,7 @@ function App() {
     [],
   )
 
-  const computeCornerMotion = (element, side, cornerScale = 0.33) => {
+  const computeCornerMotion = (element, side, cornerScale = 0.33, lockY = false) => {
     if (!element) return { x: 0, y: 0 }
 
     const rect = element.getBoundingClientRect()
@@ -50,7 +50,7 @@ function App() {
       side === 'left'
         ? margin + (rect.width * cornerScale) / 2
         : window.innerWidth - margin - (rect.width * cornerScale) / 2
-    const targetCenterY = margin + (rect.height * cornerScale) / 2
+    const targetCenterY = lockY ? currentCenterY : margin + (rect.height * cornerScale) / 2
 
     return {
       x: targetCenterX - currentCenterX,
@@ -65,7 +65,21 @@ function App() {
       const side = modelId === 'basket' ? 'left' : 'right'
       const isMobile = window.matchMedia('(max-width: 900px)').matches
       const cornerScale = isMobile ? 1 : 0.33
-      const targetMotion = computeCornerMotion(element, side, cornerScale)
+      let targetMotion = computeCornerMotion(element, side, cornerScale)
+
+      if (isMobile && modelId === 'tv') {
+        const basketElement = document.querySelector('.model-slot.basket')
+        if (basketElement) {
+          const fromRect = element.getBoundingClientRect()
+          const toRect = basketElement.getBoundingClientRect()
+          targetMotion = {
+            x: toRect.left + toRect.width / 2 - (fromRect.left + fromRect.width / 2),
+            y: 0,
+          }
+        } else {
+          targetMotion = computeCornerMotion(element, side, cornerScale, true)
+        }
+      }
       setSelectedMotion({ x: 0, y: 0 })
       setSelectedModel(modelId)
       setPanelVisible(true)
@@ -214,7 +228,7 @@ function App() {
 
       <section
         ref={tvBannersPanelRef}
-        className={`tv-banners-panel ${tvPanelVisible ? 'is-visible' : ''}`}
+        className={`tv-banners-panel tv-banners-panel--tv ${tvPanelVisible ? 'is-visible' : ''}`}
         aria-hidden={!tvPanelVisible}
       >
         <div className="tv-banners">
