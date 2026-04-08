@@ -113,7 +113,12 @@ export function ModelSlot({
         {modelType === 'tv' ? (
           <TvModel hovered={hovered} tiltSign={tiltSign} />
         ) : (
-          <ToonModel modelPath={modelPath} hovered={hovered} tiltSign={tiltSign} />
+          <ToonModel
+            modelPath={modelPath}
+            hovered={hovered}
+            tiltSign={tiltSign}
+            useToon={!isCoarsePointer}
+          />
         )}
       </Canvas>
     </div>

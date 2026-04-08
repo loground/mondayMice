@@ -5,7 +5,7 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 import { useHoverMotion } from '../../hooks/useHoverMotion'
 import { createToonGradientMap } from '../../utils/threeHelpers'
 
-export function ToonModel({ modelPath, hovered = false, tiltSign = 1 }) {
+export function ToonModel({ modelPath, hovered = false, tiltSign = 1, useToon = true }) {
   const gltf = useLoader(GLTFLoader, modelPath)
   const groupRef = useRef(null)
 
@@ -19,10 +19,20 @@ export function ToonModel({ modelPath, hovered = false, tiltSign = 1 }) {
       const srcMaterial = child.material
       const srcMaterials = Array.isArray(srcMaterial) ? srcMaterial : [srcMaterial]
       const toonMaterials = srcMaterials.map((material) => {
-        const baseColor = material?.color ? material.color.clone() : new Color('#f2f2f2')
-        baseColor.offsetHSL(0, 0, -0.08)
         const sourceMap = material?.map ?? null
         if (sourceMap) sourceMap.colorSpace = SRGBColorSpace
+
+        if (!useToon) {
+          const fallback = material?.clone?.() ?? material
+          if (fallback?.map) fallback.map.colorSpace = SRGBColorSpace
+          if (fallback?.emissive && typeof fallback.emissiveIntensity === 'number') {
+            fallback.emissiveIntensity = Math.max(fallback.emissiveIntensity, 0.12)
+          }
+          return fallback
+        }
+
+        const baseColor = material?.color ? material.color.clone() : new Color('#f2f2f2')
+        baseColor.offsetHSL(0, 0, -0.08)
 
         return new MeshToonMaterial({
           color: baseColor,
@@ -41,7 +51,7 @@ export function ToonModel({ modelPath, hovered = false, tiltSign = 1 }) {
       child.receiveShadow = true
     })
     return root
-  }, [gltf.scene, toonGradient])
+  }, [gltf.scene, toonGradient, useToon])
 
   const fitScale = useMemo(() => {
     const box = new Box3().setFromObject(clonedScene)
