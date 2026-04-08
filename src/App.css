@@ -115,14 +115,15 @@
   user-select: none;
   visibility: visible;
   border-radius: 18px;
-  filter: drop-shadow(0 16px 28px rgba(0, 0, 0, 0.38));
+  box-shadow: 0 16px 28px rgba(0, 0, 0, 0.22);
   cursor: pointer;
   transition:
     transform 1900ms cubic-bezier(0.2, 0.7, 0.2, 1),
     opacity 1450ms ease,
-    filter 1100ms ease,
+    box-shadow 850ms ease,
     visibility 0s linear;
   animation: rise 1500ms ease both;
+  will-change: transform, opacity;
 }
 
 .model-slot canvas {
@@ -132,18 +133,20 @@
   cursor: pointer;
   opacity: 1;
   transition: opacity 1300ms ease;
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }
 
 .tv {
   grid-column: 1;
   justify-self: end;
-  transform: translateY(3.5vh);
+  transform: translate3d(0, 3.5vh, 0);
 }
 
 .basket {
   grid-column: 3;
   justify-self: start;
-  transform: translateY(3.2vh);
+  transform: translate3d(0, 3.2vh, 0);
 }
 
 .title {
@@ -180,34 +183,34 @@
 
 .layout--focused .model-slot.is-selected {
   z-index: 24;
-  transform: translate(var(--sel-x, 0px), var(--sel-y, 0px)) scale(0.2);
+  transform: translate3d(var(--sel-x, 0px), var(--sel-y, 0px), 0) scale(0.2);
   transform-origin: center center;
-  filter: drop-shadow(0 20px 34px rgba(0, 0, 0, 0.5));
+  box-shadow: 0 20px 34px rgba(0, 0, 0, 0.3);
   transition:
     transform 1880ms cubic-bezier(0.2, 0.82, 0.22, 1),
     opacity 1200ms ease,
-    filter 1400ms ease;
+    box-shadow 900ms ease;
 }
 
 .layout--focused .model-slot.is-away {
   opacity: 1;
   pointer-events: none;
-  filter: drop-shadow(0 16px 28px rgba(0, 0, 0, 0.38));
-  transform: translateX(0);
+  box-shadow: 0 16px 28px rgba(0, 0, 0, 0.22);
+  transform: translate3d(0, 0, 0);
   transition:
     transform 2300ms cubic-bezier(0.16, 0.84, 0.22, 1),
     opacity 0ms linear 2300ms,
-    filter 0ms linear 2300ms,
+    box-shadow 0ms linear 2300ms,
     visibility 0s linear 2300ms;
   visibility: hidden;
 }
 
 .layout--to-right .model-slot.is-away {
-  transform: translateX(85vw);
+  transform: translate3d(85vw, 0, 0);
 }
 
 .layout--to-left .model-slot.is-away {
-  transform: translateX(-85vw);
+  transform: translate3d(-85vw, 0, 0);
 }
 
 .layout--focused .model-slot.is-away canvas {
@@ -216,7 +219,7 @@
 }
 
 .layout:not(.layout--focused) .model-slot {
-  filter: drop-shadow(0 16px 28px rgba(0, 0, 0, 0.38));
+  box-shadow: 0 16px 28px rgba(0, 0, 0, 0.22);
 }
 
 .title.is-away {
@@ -436,6 +439,12 @@
     padding-bottom: 1.1rem;
   }
 
+  .mode-switch {
+    top: calc(8px + env(safe-area-inset-top));
+    transform: translateX(-50%) scale(0.94);
+    transform-origin: top center;
+  }
+
   .title {
     display: none;
   }
@@ -443,23 +452,23 @@
   .tv {
     order: 2;
     grid-column: auto;
-    width: min(82vw, 360px);
-    height: min(52vw, 250px);
+    width: min(84vw, 350px);
+    height: min(56vw, 248px);
     justify-self: center;
-    transform: none;
+    transform: translate3d(0, 0, 0);
   }
 
   .basket {
     order: 1;
     grid-column: auto;
-    width: min(84vw, 370px);
-    height: min(54vw, 260px);
+    width: min(86vw, 360px);
+    height: min(58vw, 256px);
     justify-self: center;
-    transform: none;
+    transform: translate3d(0, 0, 0);
   }
 
   .layout--focused .model-slot.is-selected {
-    transform: translate(var(--sel-x, 0px), var(--sel-y, 0px)) scale(0.22);
+    transform: translate3d(var(--sel-x, 0px), var(--sel-y, 0px), 0) scale(0.22);
   }
 
   .tv-banner {
