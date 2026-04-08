@@ -24,7 +24,7 @@ export function TvModel({ hovered = false, tiltSign = 1, ...props }) {
   const [videoTexture, setVideoTexture] = useState(null)
   const hasSignaledVideoReady = useRef(false)
   const channelOrder = useMemo(
-    () => ['/tvchannels/1.mp4', '/tvchannels/2.mp4', '/tvchannels/3.mov', '/tvchannels/4.mp4'].sort(() => Math.random() - 0.5),
+    () => ['/tvchannels/1.mp4', '/tvchannels/2.mp4', '/tvchannels/3.mp4'].sort(() => Math.random() - 0.5),
     [],
   )
 
