@@ -1,12 +1,19 @@
 import { useLoader } from '@react-three/fiber'
 import { useLayoutEffect, useMemo, useRef } from 'react'
 import { Box3, Color, MeshToonMaterial, SRGBColorSpace, Vector3 } from 'three'
+import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 import { useHoverMotion } from '../../hooks/useHoverMotion'
 import { createToonGradientMap } from '../../utils/threeHelpers'
 
+function withDraco(loader) {
+  const dracoLoader = new DRACOLoader()
+  dracoLoader.setDecoderPath('https://www.gstatic.com/draco/v1/decoders/')
+  loader.setDRACOLoader(dracoLoader)
+}
+
 export function ToonModel({ modelPath, hovered = false, tiltSign = 1, useToon = true }) {
-  const gltf = useLoader(GLTFLoader, modelPath)
+  const gltf = useLoader(GLTFLoader, modelPath, withDraco)
   const groupRef = useRef(null)
 
   const toonGradient = useMemo(() => createToonGradientMap(), [])
@@ -90,4 +97,4 @@ export function ToonModel({ modelPath, hovered = false, tiltSign = 1, useToon = 
   )
 }
 
-useLoader.preload(GLTFLoader, '/cart.glb')
+useLoader.preload(GLTFLoader, '/cart.glb', withDraco)

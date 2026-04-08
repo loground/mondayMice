@@ -9,12 +9,19 @@ import {
   Vector3,
   VideoTexture,
 } from 'three'
+import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 import { useHoverMotion } from '../../hooks/useHoverMotion'
 import { createPlanarUVGeometry } from '../../utils/threeHelpers'
 
+function withDraco(loader) {
+  const dracoLoader = new DRACOLoader()
+  dracoLoader.setDecoderPath('https://www.gstatic.com/draco/v1/decoders/')
+  loader.setDRACOLoader(dracoLoader)
+}
+
 export function TvModel({ hovered = false, tiltSign = 1, ...props }) {
-  const gltf = useLoader(GLTFLoader, '/tv.glb')
+  const gltf = useLoader(GLTFLoader, '/tv.glb', withDraco)
   const { nodes, materials } = gltf
 
   const groupRef = useRef(null)
@@ -194,26 +201,85 @@ export function TvModel({ hovered = false, tiltSign = 1, ...props }) {
   return (
     <group ref={groupRef} {...props} dispose={null}>
       <group ref={modelRef} position={centerOffset} scale={fitScale}>
-        <group rotation={[Math.PI / 2, 0, 0]}>
-          <mesh castShadow receiveShadow geometry={nodes['1_1'].geometry} material={materials['Material.004']} />
-          <mesh castShadow receiveShadow geometry={nodes['1_2'].geometry} material={materials.кожа} />
-          <mesh castShadow receiveShadow geometry={nodes['1_3'].geometry} material={materials['Material.006']} />
-          <mesh castShadow receiveShadow geometry={nodes['1_4'].geometry} material={materials['Material.007']} />
-          <mesh castShadow receiveShadow geometry={nodes['1_5'].geometry} material={materials['шерсть ']} />
-          <mesh castShadow receiveShadow geometry={nodes['1_6'].geometry} material={materials['основа телека']} />
-          <mesh
-            castShadow
-            receiveShadow
-            geometry={nodes['1_7'].geometry}
-            material={materials['кнопки ножки и антены']}
-          />
-          <mesh castShadow receiveShadow geometry={nodes['1_8'].geometry} material={materials.палки} />
-        </group>
+        <mesh
+          castShadow
+          receiveShadow
+          geometry={nodes['1_1'].geometry}
+          material={materials['Material.004']}
+          position={[-0.078, 0.041, -0.104]}
+          rotation={[Math.PI / 2, 0, 0]}
+          scale={0.384}
+        />
+        <mesh
+          castShadow
+          receiveShadow
+          geometry={nodes['1_2'].geometry}
+          material={materials.кожа}
+          position={[-0.067, 0.291, 0.057]}
+          rotation={[Math.PI / 2, 0, 0]}
+          scale={0.214}
+        />
+        <mesh
+          castShadow
+          receiveShadow
+          geometry={nodes['1_3'].geometry}
+          material={materials['Material.006']}
+          position={[0.088, 0.294, 0.029]}
+          rotation={[Math.PI / 2, 0, 0]}
+          scale={0.082}
+        />
+        <mesh
+          castShadow
+          receiveShadow
+          geometry={nodes['1_4'].geometry}
+          material={materials['Material.007']}
+          position={[0.065, 0.26, 0.036]}
+          rotation={[Math.PI / 2, 0, 0]}
+          scale={0.011}
+        />
+        <mesh
+          castShadow
+          receiveShadow
+          geometry={nodes['1_5'].geometry}
+          material={materials['шерсть ']}
+          position={[-0.035, 0.308, 0.079]}
+          rotation={[Math.PI / 2, 0, 0]}
+          scale={0.158}
+        />
+        <mesh
+          castShadow
+          receiveShadow
+          geometry={nodes['1_6'].geometry}
+          material={materials['основа телека']}
+          position={[-0.099, -0.079, -0.104]}
+          rotation={[Math.PI / 2, 0, 0]}
+          scale={0.387}
+        />
+        <mesh
+          castShadow
+          receiveShadow
+          geometry={nodes['1_7'].geometry}
+          material={materials['кнопки ножки и антены']}
+          position={[-0.079, -0.012, -0.089]}
+          rotation={[Math.PI / 2, 0, 0]}
+          scale={0.387}
+        />
+        <mesh
+          castShadow
+          receiveShadow
+          geometry={nodes['1_8'].geometry}
+          material={materials.палки}
+          position={[-0.018, 0.304, -0.216]}
+          rotation={[Math.PI / 2, 0, 0]}
+          scale={0.144}
+        />
         <mesh
           castShadow
           receiveShadow
           geometry={screenGeometry || nodes['1001'].geometry}
+          position={[0.088, -0.001, -0.099]}
           rotation={[Math.PI / 2, 0, 0]}
+          scale={0.279}
         >
           <meshBasicMaterial
             map={videoTexture}
@@ -238,4 +304,4 @@ export function TvModel({ hovered = false, tiltSign = 1, ...props }) {
   )
 }
 
-useLoader.preload(GLTFLoader, '/tv.glb')
+useLoader.preload(GLTFLoader, '/tv.glb', withDraco)
