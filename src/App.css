@@ -533,8 +533,8 @@
     --tv-top-offset: var(--tv-header-space);
     left: 0;
     right: auto;
-    width: min(72vw, 440px);
-    max-width: 72vw;
+    width: 50vw;
+    max-width: 50vw;
     padding-top: var(--tv-top-offset);
     transform: translate3d(-108%, 0, 0);
     transition:
