@@ -37,11 +37,10 @@ function App() {
     [],
   )
 
-  const computeCornerMotion = (element, side) => {
+  const computeCornerMotion = (element, side, cornerScale = 0.33) => {
     if (!element) return { x: 0, y: 0 }
 
     const rect = element.getBoundingClientRect()
-    const scale = 0.3
     const margin = 14
 
     const currentCenterX = rect.left + rect.width / 2
@@ -49,9 +48,9 @@ function App() {
 
     const targetCenterX =
       side === 'left'
-        ? margin + (rect.width * scale) / 2
-        : window.innerWidth - margin - (rect.width * scale) / 2
-    const targetCenterY = margin + (rect.height * scale) / 2
+        ? margin + (rect.width * cornerScale) / 2
+        : window.innerWidth - margin - (rect.width * cornerScale) / 2
+    const targetCenterY = margin + (rect.height * cornerScale) / 2
 
     return {
       x: targetCenterX - currentCenterX,
@@ -64,7 +63,9 @@ function App() {
       if (closeTimerRef.current) window.clearTimeout(closeTimerRef.current)
       if (motionRafRef.current) window.cancelAnimationFrame(motionRafRef.current)
       const side = modelId === 'basket' ? 'left' : 'right'
-      const targetMotion = computeCornerMotion(element, side)
+      const isMobile = window.matchMedia('(max-width: 900px)').matches
+      const cornerScale = isMobile ? 1 : 0.33
+      const targetMotion = computeCornerMotion(element, side, cornerScale)
       setSelectedMotion({ x: 0, y: 0 })
       setSelectedModel(modelId)
       setPanelVisible(true)

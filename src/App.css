@@ -522,7 +522,7 @@
   }
 
   .layout--focused .model-slot.is-selected {
-    transform: translate3d(var(--sel-x, 0px), var(--sel-y, 0px), 0) scale(0.363);
+    transform: translate3d(var(--sel-x, 0px), var(--sel-y, 0px), 0) scale(1);
   }
 
   .tv-banner {
