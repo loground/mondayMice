@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { DefaultLoadingManager } from 'three'
 import { ModeSwitcher } from './components/ModeSwitcher'
 import { ModelSlot } from './components/ModelSlot'
@@ -13,18 +13,28 @@ function App() {
   const [panelVisible, setPanelVisible] = useState(false)
   const [assetsReady, setAssetsReady] = useState(false)
   const [videoReady, setVideoReady] = useState(false)
+  const [tvBannersVisible, setTvBannersVisible] = useState(false)
 
   const closeTimerRef = useRef(0)
   const motionRafRef = useRef(0)
   const tvBannersPanelRef = useRef(null)
+  const tvBannersTimerRef = useRef(0)
+  const TV_BANNERS_OPEN_DELAY_MS = 520
   const isFocused = selectedModel !== null
   const focusSide =
     selectedModel === 'tv' ? 'right' : selectedModel === 'basket' ? 'left' : 'right'
   const contentFromSide = focusSide === 'right' ? 'left' : 'right'
   const pageReady = assetsReady && videoReady
-  const tvPanelVisible = selectedModel === 'tv' && panelVisible
+  const tvPanelVisible = selectedModel === 'tv' && panelVisible && tvBannersVisible
   const cartPanelVisible = selectedModel === 'cart' && panelVisible
-  const tvBanners = Array.from({ length: 10 })
+  const tvBanners = useMemo(
+    () =>
+      Array.from({ length: 10 }, (_, index) => ({
+        id: `tv-banner-${index}`,
+        delay: `${120 + (index % 5) * 70}ms`,
+      })),
+    [],
+  )
 
   const computeCornerMotion = (element, side) => {
     if (!element) return { x: 0, y: 0 }
@@ -79,8 +89,22 @@ function App() {
     return () => {
       if (closeTimerRef.current) window.clearTimeout(closeTimerRef.current)
       if (motionRafRef.current) window.cancelAnimationFrame(motionRafRef.current)
+      if (tvBannersTimerRef.current) window.clearTimeout(tvBannersTimerRef.current)
     }
   }, [])
+
+  useEffect(() => {
+    if (tvBannersTimerRef.current) window.clearTimeout(tvBannersTimerRef.current)
+    if (selectedModel === 'tv' && panelVisible) {
+      setTvBannersVisible(false)
+      tvBannersTimerRef.current = window.setTimeout(() => {
+        setTvBannersVisible(true)
+      }, TV_BANNERS_OPEN_DELAY_MS)
+      return undefined
+    }
+    setTvBannersVisible(false)
+    return undefined
+  }, [selectedModel, panelVisible])
 
   useEffect(() => {
     const panel = tvBannersPanelRef.current
@@ -190,13 +214,12 @@ function App() {
         aria-hidden={!tvPanelVisible}
       >
         <div className="tv-banners">
-          {tvBanners.map((_, index) => (
+          {tvBanners.map((banner) => (
             <div
-              key={`tv-banner-${index}`}
+              key={banner.id}
               className="tv-banner"
               style={{
-                '--banner-i': index,
-                '--banner-delay': `${120 + (index % 5) * 70}ms`,
+                '--banner-delay': banner.delay,
               }}
             >
               <div className="tv-banner__image" style={{ backgroundImage: "url('/banners/banner1.png')" }} />
