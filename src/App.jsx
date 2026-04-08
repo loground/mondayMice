@@ -124,7 +124,12 @@ function App() {
   useEffect(() => {
     if (tvBannersTimerRef.current) window.clearTimeout(tvBannersTimerRef.current)
     if (selectedModel === 'tv' && panelVisible) {
+      const isMobile = window.matchMedia('(max-width: 900px)').matches
       setTvBannersVisible(false)
+      if (isMobile) {
+        setTvBannersVisible(true)
+        return undefined
+      }
       tvBannersTimerRef.current = window.setTimeout(() => {
         setTvBannersVisible(true)
       }, TV_BANNERS_OPEN_DELAY_MS)
