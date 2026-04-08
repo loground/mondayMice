@@ -476,13 +476,14 @@
   }
 
   .layout {
-    width: min(520px, 92vw);
+    width: min(980px, 96vw);
     min-height: 100dvh;
     margin-top: 0;
-    grid-template-columns: 1fr;
-    grid-template-rows: auto auto;
-    justify-items: center;
-    gap: 1.1rem;
+    grid-template-columns: 1fr auto 1fr;
+    grid-template-rows: 1fr;
+    align-items: center;
+    justify-items: stretch;
+    gap: clamp(0.4rem, 2.2vw, 1.2rem);
     padding-top: calc(3.2rem + env(safe-area-inset-top));
     padding-bottom: 1.1rem;
   }
@@ -493,28 +494,31 @@
     transform-origin: top center;
   }
 
-  .title {
-    display: none;
-  }
-
   .tv {
-    order: 2;
-    grid-column: auto;
-    width: min(84vw, 350px);
-    height: min(56vw, 248px);
-    justify-self: center;
+    order: 0;
+    grid-column: 1;
+    width: min(36vw, 245px);
+    height: min(34vw, 210px);
+    justify-self: end;
     margin-top: 0;
     transform: none;
   }
 
   .basket {
-    order: 1;
-    grid-column: auto;
-    width: min(86vw, 360px);
-    height: min(58vw, 256px);
-    justify-self: center;
+    order: 0;
+    grid-column: 3;
+    width: min(36vw, 250px);
+    height: min(34vw, 212px);
+    justify-self: start;
     margin-top: 0;
     transform: none;
+  }
+
+  .title {
+    display: block;
+    grid-column: 2;
+    width: clamp(34px, 8vw, 52px);
+    max-height: 56vh;
   }
 
   .layout--focused .model-slot.is-selected {
@@ -522,12 +526,17 @@
   }
 
   .tv-banner {
-    height: 22vh;
+    height: calc((100dvh - var(--tv-top-offset) - var(--tv-footer-space)) / 5);
   }
 
   .tv-banners-panel {
     --tv-top-offset: var(--tv-header-space);
     padding-top: var(--tv-top-offset);
+  }
+
+  .tv-banner__image {
+    background-size: contain;
+    background-color: #101018;
   }
 
   .tv-footer-slot__image {
