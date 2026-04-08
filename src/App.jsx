@@ -15,11 +15,13 @@ function App() {
   const [videoReady, setVideoReady] = useState(false)
   const [tvBannersVisible, setTvBannersVisible] = useState(false)
   const [tvCanvasVersion, setTvCanvasVersion] = useState(0)
+  const [returnSwipe, setReturnSwipe] = useState('')
 
   const closeTimerRef = useRef(0)
   const motionRafRef = useRef(0)
   const tvBannersPanelRef = useRef(null)
   const tvBannersTimerRef = useRef(0)
+  const returnSwipeTimerRef = useRef(0)
   const TV_BANNERS_OPEN_DELAY_MS = 520
   const isFocused = selectedModel !== null
   const focusSide =
@@ -96,6 +98,14 @@ function App() {
     if (selectedModel === modelId) {
       setPanelVisible(false)
       if (closeTimerRef.current) window.clearTimeout(closeTimerRef.current)
+      if (returnSwipeTimerRef.current) window.clearTimeout(returnSwipeTimerRef.current)
+      if (window.matchMedia('(max-width: 900px)').matches && modelId === 'tv') {
+        setReturnSwipe('right')
+        returnSwipeTimerRef.current = window.setTimeout(() => setReturnSwipe(''), 920)
+      } else if (window.matchMedia('(max-width: 900px)').matches && modelId === 'basket') {
+        setReturnSwipe('left')
+        returnSwipeTimerRef.current = window.setTimeout(() => setReturnSwipe(''), 920)
+      }
       setSelectedModel(null)
       setSelectedMotion({ x: 0, y: 0 })
       if (modelId === 'tv') setTvCanvasVersion((prev) => prev + 1)
@@ -107,6 +117,7 @@ function App() {
       if (closeTimerRef.current) window.clearTimeout(closeTimerRef.current)
       if (motionRafRef.current) window.cancelAnimationFrame(motionRafRef.current)
       if (tvBannersTimerRef.current) window.clearTimeout(tvBannersTimerRef.current)
+      if (returnSwipeTimerRef.current) window.clearTimeout(returnSwipeTimerRef.current)
     }
   }, [])
 
@@ -191,7 +202,7 @@ function App() {
       <ModeSwitcher mode={mode} onChange={setMode} />
 
       <section
-        className={`layout ${isFocused ? `layout--focused layout--to-${focusSide}` : ''}`}
+        className={`layout ${isFocused ? `layout--focused layout--to-${focusSide}` : ''} ${returnSwipe ? `layout--return-${returnSwipe}` : ''}`}
         aria-label="Monday Mice homepage"
       >
         <ModelSlot
