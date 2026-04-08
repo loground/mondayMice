@@ -14,6 +14,7 @@ function App() {
   const [assetsReady, setAssetsReady] = useState(false)
   const [videoReady, setVideoReady] = useState(false)
   const [tvBannersVisible, setTvBannersVisible] = useState(false)
+  const [tvCanvasVersion, setTvCanvasVersion] = useState(0)
 
   const closeTimerRef = useRef(0)
   const motionRafRef = useRef(0)
@@ -82,6 +83,7 @@ function App() {
       if (closeTimerRef.current) window.clearTimeout(closeTimerRef.current)
       setSelectedModel(null)
       setSelectedMotion({ x: 0, y: 0 })
+      if (modelId === 'tv') setTvCanvasVersion((prev) => prev + 1)
     }
   }
 
@@ -178,6 +180,7 @@ function App() {
         aria-label="Monday Mice homepage"
       >
         <ModelSlot
+          canvasKey={`tv-${tvCanvasVersion}`}
           className="tv"
           modelPath="/tv.glb"
           modelType="tv"

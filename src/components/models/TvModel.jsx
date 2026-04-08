@@ -57,6 +57,10 @@ export function TvModel({ hovered = false, tiltSign = 1, ...props }) {
     video.autoplay = true
     video.preload = 'auto'
     video.defaultMuted = true
+    video.setAttribute('muted', '')
+    video.setAttribute('playsinline', '')
+    video.setAttribute('webkit-playsinline', '')
+    video.disablePictureInPicture = true
 
     const texture = new VideoTexture(video)
     texture.minFilter = LinearFilter
@@ -102,17 +106,29 @@ export function TvModel({ hovered = false, tiltSign = 1, ...props }) {
     }
 
     const currentIndex = { value: 0 }
+    const attemptPlay = () => {
+      const playPromise = video.play()
+      if (playPromise && typeof playPromise.then === 'function') {
+        playPromise
+          .then(() => {
+            markVideoReady()
+          })
+          .catch(() => {})
+      } else {
+        markVideoReady()
+      }
+    }
+
     const loadChannel = (index) => {
       if (index >= channelOrder.length) return
       currentIndex.value = index
       video.src = channelOrder[index]
       video.load()
-      video.play().catch(() => {})
+      attemptPlay()
     }
 
     const tryPlay = () => {
-      video.play().catch(() => {})
-      markVideoReady()
+      attemptPlay()
     }
     const onLoadedMetadata = () => {
       applyCenterCrop()
@@ -121,16 +137,30 @@ export function TvModel({ hovered = false, tiltSign = 1, ...props }) {
     const onVideoError = () => {
       loadChannel(currentIndex.value + 1)
     }
+    const onUserGestureUnlock = () => {
+      attemptPlay()
+    }
+    const onVisibilityChange = () => {
+      if (document.visibilityState === 'visible') attemptPlay()
+    }
 
     video.addEventListener('loadedmetadata', onLoadedMetadata)
     video.addEventListener('canplay', tryPlay)
+    video.addEventListener('playing', markVideoReady)
     video.addEventListener('error', onVideoError)
+    window.addEventListener('pointerdown', onUserGestureUnlock, { passive: true })
+    window.addEventListener('touchstart', onUserGestureUnlock, { passive: true })
+    document.addEventListener('visibilitychange', onVisibilityChange)
     loadChannel(0)
 
     return () => {
       video.removeEventListener('loadedmetadata', onLoadedMetadata)
       video.removeEventListener('canplay', tryPlay)
+      video.removeEventListener('playing', markVideoReady)
       video.removeEventListener('error', onVideoError)
+      window.removeEventListener('pointerdown', onUserGestureUnlock)
+      window.removeEventListener('touchstart', onUserGestureUnlock)
+      document.removeEventListener('visibilitychange', onVisibilityChange)
       video.pause()
       video.removeAttribute('src')
       video.load()
