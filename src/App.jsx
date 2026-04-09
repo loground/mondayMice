@@ -38,7 +38,7 @@ function App() {
     () =>
       Array.from({ length: 10 }, (_, index) => ({
         id: `tv-banner-${index}`,
-        delay: `${120 + (index % 5) * 70}ms`,
+        delay: `${90 + index * 58 + ((index * 17) % 36)}ms`,
       })),
     [],
   )
