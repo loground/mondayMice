@@ -112,7 +112,7 @@ export function ModelSlot({
         ) : null}
         <CursorFollowerLight active={lightActive} />
         {modelType === 'tv' ? (
-          <TvModel hovered={hovered} tiltSign={tiltSign} />
+          <TvModel hovered={hovered} tiltSign={tiltSign} selected={selected} />
         ) : (
           <ToonModel
             modelPath={modelPath}

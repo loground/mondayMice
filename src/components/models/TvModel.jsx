@@ -20,7 +20,26 @@ function withDraco(loader) {
   loader.setDRACOLoader(dracoLoader)
 }
 
-export function TvModel({ hovered = false, tiltSign = 1, ...props }) {
+const IDLE_CHANNELS = ['/tvchannels/1.mp4', '/tvchannels/2.mp4', '/tvchannels/3.mp4']
+const TRANSITION_CHANNEL = '/tvchannels/transition.mp4'
+const BACK_CHANNEL = '/tvchannels/back.mp4'
+
+let lastIdleChannel = ''
+
+function pickNextIdleChannel() {
+  if (IDLE_CHANNELS.length === 1) {
+    lastIdleChannel = IDLE_CHANNELS[0]
+    return IDLE_CHANNELS[0]
+  }
+
+  const availableChannels = IDLE_CHANNELS.filter((channel) => channel !== lastIdleChannel)
+  const nextChannel =
+    availableChannels[Math.floor(Math.random() * availableChannels.length)] || IDLE_CHANNELS[0]
+  lastIdleChannel = nextChannel
+  return nextChannel
+}
+
+export function TvModel({ hovered = false, tiltSign = 1, selected = false, ...props }) {
   const gltf = useLoader(GLTFLoader, '/tv.glb', withDraco)
   const { nodes, materials } = gltf
 
@@ -30,10 +49,9 @@ export function TvModel({ hovered = false, tiltSign = 1, ...props }) {
   const [centerOffset, setCenterOffset] = useState([0, 0, 0])
   const [videoTexture, setVideoTexture] = useState(null)
   const hasSignaledVideoReady = useRef(false)
-  const channelOrder = useMemo(
-    () => ['/tvchannels/1.mp4', '/tvchannels/2.mp4', '/tvchannels/3.mp4'].sort(() => Math.random() - 0.5),
-    [],
-  )
+  const videoRef = useRef(null)
+  const playbackModeRef = useRef('idle')
+  const previousSelectedRef = useRef(selected)
 
   const screenGeometry = useMemo(() => {
     const source = nodes?.['1001']?.geometry
@@ -57,6 +75,7 @@ export function TvModel({ hovered = false, tiltSign = 1, ...props }) {
 
   useEffect(() => {
     const video = document.createElement('video')
+    videoRef.current = video
     video.crossOrigin = 'anonymous'
     video.loop = true
     video.muted = true
@@ -112,7 +131,6 @@ export function TvModel({ hovered = false, tiltSign = 1, ...props }) {
       texture.needsUpdate = true
     }
 
-    const currentIndex = { value: 0 }
     const attemptPlay = () => {
       const playPromise = video.play()
       if (playPromise && typeof playPromise.then === 'function') {
@@ -126,12 +144,22 @@ export function TvModel({ hovered = false, tiltSign = 1, ...props }) {
       }
     }
 
-    const loadChannel = (index) => {
-      if (index >= channelOrder.length) return
-      currentIndex.value = index
-      video.src = channelOrder[index]
+    const loadSource = (src, { loop = true } = {}) => {
+      if (!src) return
+      video.loop = loop
+      video.src = src
       video.load()
       attemptPlay()
+    }
+
+    const playIdleChannel = () => {
+      playbackModeRef.current = 'idle'
+      loadSource(pickNextIdleChannel(), { loop: true })
+    }
+
+    const playBackChannel = () => {
+      playbackModeRef.current = 'back'
+      loadSource(BACK_CHANNEL, { loop: true })
     }
 
     const tryPlay = () => {
@@ -142,7 +170,15 @@ export function TvModel({ hovered = false, tiltSign = 1, ...props }) {
       tryPlay()
     }
     const onVideoError = () => {
-      loadChannel(currentIndex.value + 1)
+      if (playbackModeRef.current === 'transition') {
+        playBackChannel()
+        return
+      }
+      if (playbackModeRef.current === 'back') {
+        playIdleChannel()
+        return
+      }
+      playIdleChannel()
     }
     const onUserGestureUnlock = () => {
       attemptPlay()
@@ -150,20 +186,28 @@ export function TvModel({ hovered = false, tiltSign = 1, ...props }) {
     const onVisibilityChange = () => {
       if (document.visibilityState === 'visible') attemptPlay()
     }
+    const onEnded = () => {
+      if (playbackModeRef.current === 'transition') {
+        playBackChannel()
+      }
+    }
 
     video.addEventListener('loadedmetadata', onLoadedMetadata)
     video.addEventListener('canplay', tryPlay)
     video.addEventListener('playing', markVideoReady)
+    video.addEventListener('ended', onEnded)
     video.addEventListener('error', onVideoError)
     window.addEventListener('pointerdown', onUserGestureUnlock, { passive: true })
     window.addEventListener('touchstart', onUserGestureUnlock, { passive: true })
     document.addEventListener('visibilitychange', onVisibilityChange)
-    loadChannel(0)
+    playIdleChannel()
 
     return () => {
+      videoRef.current = null
       video.removeEventListener('loadedmetadata', onLoadedMetadata)
       video.removeEventListener('canplay', tryPlay)
       video.removeEventListener('playing', markVideoReady)
+      video.removeEventListener('ended', onEnded)
       video.removeEventListener('error', onVideoError)
       window.removeEventListener('pointerdown', onUserGestureUnlock)
       window.removeEventListener('touchstart', onUserGestureUnlock)
@@ -173,7 +217,30 @@ export function TvModel({ hovered = false, tiltSign = 1, ...props }) {
       video.load()
       texture.dispose()
     }
-  }, [channelOrder, screenAspect])
+  }, [screenAspect])
+
+  useEffect(() => {
+    const video = videoRef.current
+    if (!video) return
+
+    if (!previousSelectedRef.current && selected) {
+      playbackModeRef.current = 'transition'
+      video.loop = false
+      video.src = TRANSITION_CHANNEL
+      video.load()
+      video.play().catch(() => {})
+    }
+
+    if (previousSelectedRef.current && !selected) {
+      playbackModeRef.current = 'idle'
+      video.loop = true
+      video.src = pickNextIdleChannel()
+      video.load()
+      video.play().catch(() => {})
+    }
+
+    previousSelectedRef.current = selected
+  }, [selected])
 
   useEffect(() => {
     return () => {
