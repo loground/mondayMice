@@ -1,5 +1,5 @@
 import { useLoader } from '@react-three/fiber'
-import { useEffect, useLayoutEffect, useMemo, useRef } from 'react'
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import {
   Box3,
   ClampToEdgeWrapping,
@@ -51,36 +51,13 @@ export function TvModel({
 
   const groupRef = useRef(null)
   const modelRef = useRef(null)
+  const [fitScale, setFitScale] = useState(1)
+  const [centerOffset, setCenterOffset] = useState([0, 0, 0])
+  const [videoTexture, setVideoTexture] = useState(null)
   const hasSignaledVideoReady = useRef(false)
+  const videoRef = useRef(null)
   const playbackModeRef = useRef('idle')
   const previousSelectedRef = useRef(selected)
-  const videoRef = useRef(null)
-  const videoElement = useMemo(
-    () => (typeof document !== 'undefined' ? document.createElement('video') : null),
-    [],
-  )
-
-  const videoTexture = useMemo(() => {
-    if (!videoElement) return null
-    const texture = new VideoTexture(videoElement)
-    texture.minFilter = LinearFilter
-    texture.magFilter = LinearFilter
-    texture.wrapS = ClampToEdgeWrapping
-    texture.wrapT = ClampToEdgeWrapping
-    texture.flipY = false
-    texture.colorSpace = SRGBColorSpace
-    texture.center.set(0.5, 0.5)
-    texture.repeat.set(1, 1)
-    texture.offset.set(0, 0)
-    return texture
-  }, [videoElement])
-
-  useEffect(() => {
-    videoRef.current = videoElement
-    return () => {
-      videoRef.current = null
-    }
-  }, [videoElement])
 
   const screenGeometry = useMemo(() => {
     const source = nodes?.['1001']?.geometry
@@ -103,8 +80,8 @@ export function TvModel({
   }, [nodes, screenGeometry])
 
   useEffect(() => {
-    const video = videoRef.current
-    if (!video || !videoTexture) return
+    const video = document.createElement('video')
+    videoRef.current = video
     video.crossOrigin = 'anonymous'
     video.loop = true
     video.muted = true
@@ -117,6 +94,18 @@ export function TvModel({
     video.setAttribute('webkit-playsinline', '')
     video.disablePictureInPicture = true
 
+    const texture = new VideoTexture(video)
+    texture.minFilter = LinearFilter
+    texture.magFilter = LinearFilter
+    texture.wrapS = ClampToEdgeWrapping
+    texture.wrapT = ClampToEdgeWrapping
+    texture.flipY = false
+    texture.colorSpace = SRGBColorSpace
+    texture.center.set(0.5, 0.5)
+    texture.repeat.set(1, 1)
+    texture.offset.set(0, 0)
+
+    setVideoTexture(texture)
     const markVideoReady = () => {
       if (hasSignaledVideoReady.current) return
       hasSignaledVideoReady.current = true
@@ -148,9 +137,9 @@ export function TvModel({
       const rawOffsetY = (1 - repeatY) * 0.5 - verticalBias
       const offsetY = Math.max(0, Math.min(1 - repeatY, rawOffsetY))
 
-      videoTexture.repeat.set(repeatX, repeatY)
-      videoTexture.offset.set(offsetX, offsetY)
-      videoTexture.needsUpdate = true
+      texture.repeat.set(repeatX, repeatY)
+      texture.offset.set(offsetX, offsetY)
+      texture.needsUpdate = true
     }
 
     const attemptPlay = () => {
@@ -225,6 +214,7 @@ export function TvModel({
     playIdleChannel()
 
     return () => {
+      videoRef.current = null
       video.removeEventListener('loadedmetadata', onLoadedMetadata)
       video.removeEventListener('canplay', tryPlay)
       video.removeEventListener('playing', markVideoReady)
@@ -236,9 +226,9 @@ export function TvModel({
       video.pause()
       video.removeAttribute('src')
       video.load()
-      videoTexture.dispose()
+      texture.dispose()
     }
-  }, [screenAspect, videoTexture])
+  }, [screenAspect])
 
   useEffect(() => {
     const video = videoRef.current
@@ -303,15 +293,15 @@ export function TvModel({
     box.getCenter(center)
     const maxAxis = Math.max(size.x, size.y, size.z) || 1
     const nextScale = 2.2 / maxAxis
-    modelRef.current.position.set(-center.x * nextScale, -center.y * nextScale, -center.z * nextScale)
-    modelRef.current.scale.setScalar(nextScale)
+    setFitScale(nextScale)
+    setCenterOffset([-center.x * nextScale, -center.y * nextScale, -center.z * nextScale])
   }, [nodes, materials])
 
   useHoverMotion(groupRef, hovered, tiltSign)
 
   return (
     <group ref={groupRef} {...props} dispose={null}>
-      <group ref={modelRef}>
+      <group ref={modelRef} position={centerOffset} scale={fitScale}>
         <mesh
           castShadow
           receiveShadow

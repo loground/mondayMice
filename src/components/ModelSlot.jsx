@@ -35,6 +35,7 @@ function CursorFollowerLight({ active }) {
 }
 
 export function ModelSlot({
+  canvasKey,
   className,
   modelPath,
   modelType,
@@ -85,7 +86,7 @@ export function ModelSlot({
         if (event.key === 'Enter' || event.key === ' ') onToggle(event.currentTarget)
       }}
     >
-      <Canvas camera={{ position: [0, 0, 4.8], fov: 34 }} dpr={[1, 2]}>
+      <Canvas key={canvasKey} camera={{ position: [0, 0, 4.8], fov: 34 }} dpr={[1, 2]}>
         <ambientLight
           intensity={isSpotlightMode ? (isCoarsePointer ? 0.48 : 0.3) : 0.72}
           color={isSpotlightMode ? '#8f98b5' : '#f5f1e8'}
