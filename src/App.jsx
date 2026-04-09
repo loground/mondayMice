@@ -212,8 +212,8 @@ function App() {
       },
       {
         root: panel,
-        threshold: 0.3,
-        rootMargin: '0px 0px -8% 0px',
+        threshold: 0.01,
+        rootMargin: '0px 0px 20% 0px',
       },
     )
 
@@ -344,6 +344,7 @@ function App() {
         </div>
       </section>
       <div className={`tv-scroll-header ${tvPanelVisible ? 'is-visible' : ''}`} aria-hidden="true" />
+      <div className={`tv-scroll-footer-fade ${tvPanelVisible ? 'is-visible' : ''}`} aria-hidden="true" />
 
       <article
         className={`content-panel content-panel--from-${contentFromSide} ${cartPanelVisible ? 'is-visible' : ''}`}

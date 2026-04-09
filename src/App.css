@@ -432,7 +432,7 @@
 
 .tv-footer-slot {
   width: 100%;
-  min-height: var(--tv-footer-space);
+  height: var(--tv-footer-space);
   background: var(--regular-surface);
   display: flex;
   align-items: center;
@@ -475,20 +475,47 @@
   opacity: 1;
 }
 
+.tv-scroll-footer-fade {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 22vh;
+  z-index: 19;
+  pointer-events: none;
+  opacity: 0;
+  background: linear-gradient(
+    to top,
+    rgba(12, 14, 20, 0.16) 0%,
+    rgba(12, 14, 20, 0.08) 42%,
+    rgba(12, 14, 20, 0) 100%
+  );
+  transition: opacity 240ms ease;
+}
+
+.tv-scroll-footer-fade.is-visible {
+  opacity: 1;
+}
+
 .tv-banner {
   position: relative;
   width: 100%;
-  height: calc((100dvh - var(--tv-top-offset)) / 5);
+  height: calc((100dvh - var(--tv-top-offset)) / 4.09);
   overflow: hidden;
   opacity: 0;
   transform: translate3d(0, 0, 0);
   will-change: transform, opacity;
   contain: paint;
+  backface-visibility: hidden;
+}
+
+.tv-banner + .tv-banner {
+  margin-top: -1px;
 }
 
 .tv-banner__image {
   position: absolute;
-  inset: 0;
+  inset: -1px 0;
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -685,7 +712,7 @@
   }
 
   .tv-banner {
-    height: calc((100dvh - var(--tv-top-offset) - var(--tv-footer-space)) / 5);
+    height: calc((100dvh - var(--tv-top-offset)) / 4.09);
   }
 
   .tv-banners-panel {
