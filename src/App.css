@@ -189,6 +189,11 @@
   transform-origin: center center;
 }
 
+.model-slot.tv.is-return-spin {
+  transform: none !important;
+  transition: none !important;
+}
+
 .tv {
   grid-column: 1;
   justify-self: end;
