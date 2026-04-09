@@ -39,7 +39,13 @@ function pickNextIdleChannel() {
   return nextChannel
 }
 
-export function TvModel({ hovered = false, tiltSign = 1, selected = false, ...props }) {
+export function TvModel({
+  hovered = false,
+  tiltSign = 1,
+  selected = false,
+  forceBackVideo = false,
+  ...props
+}) {
   const gltf = useLoader(GLTFLoader, '/tv.glb', withDraco)
   const { nodes, materials } = gltf
 
@@ -228,7 +234,7 @@ export function TvModel({ hovered = false, tiltSign = 1, selected = false, ...pr
     const video = videoRef.current
     if (!video) return
 
-    if (!previousSelectedRef.current && selected) {
+    if (!previousSelectedRef.current && selected && !forceBackVideo) {
       playbackModeRef.current = 'transition'
       video.loop = false
       video.src = TRANSITION_CHANNEL
@@ -245,7 +251,30 @@ export function TvModel({ hovered = false, tiltSign = 1, selected = false, ...pr
     }
 
     previousSelectedRef.current = selected
-  }, [selected])
+  }, [selected, forceBackVideo])
+
+  useEffect(() => {
+    const video = videoRef.current
+    if (!video) return
+
+    if (forceBackVideo) {
+      playbackModeRef.current = 'back'
+      video.loop = true
+      video.src = BACK_CHANNEL
+      video.load()
+      video.play().catch(() => {})
+      return
+    }
+
+    if (!selected) return
+    if (playbackModeRef.current !== 'back') return
+
+    playbackModeRef.current = 'transition'
+    video.loop = false
+    video.src = TRANSITION_CHANNEL
+    video.load()
+    video.play().catch(() => {})
+  }, [forceBackVideo, selected])
 
   useEffect(() => {
     return () => {

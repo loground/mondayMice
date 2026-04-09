@@ -42,6 +42,7 @@ export function ModelSlot({
   tiltSign,
   mode,
   selected,
+  forceBackVideo,
   selectedMotion,
   away,
   onToggle,
@@ -112,7 +113,12 @@ export function ModelSlot({
         ) : null}
         <CursorFollowerLight active={lightActive} />
         {modelType === 'tv' ? (
-          <TvModel hovered={hovered} tiltSign={tiltSign} selected={selected} />
+          <TvModel
+            hovered={hovered}
+            tiltSign={tiltSign}
+            selected={selected}
+            forceBackVideo={forceBackVideo}
+          />
         ) : (
           <ToonModel
             modelPath={modelPath}

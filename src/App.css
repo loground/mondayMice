@@ -57,6 +57,26 @@
   animation: spriteQuad 344ms steps(1) infinite;
 }
 
+.sprite-transition-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  pointer-events: none;
+  background-image: url('/spriteAnim.webp');
+  background-repeat: no-repeat;
+  background-size: 200% 200%;
+  background-position: 0% 0%;
+  animation: spriteQuad 344ms steps(1) infinite;
+}
+
+.hidden-audio {
+  position: absolute;
+  width: 0;
+  height: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
 .mode-switch {
   position: fixed;
   top: 14px;
@@ -238,6 +258,20 @@
   transition:
     transform 1880ms cubic-bezier(0.2, 0.82, 0.22, 1),
     opacity 1200ms ease;
+}
+
+.layout--suppress-select .model-slot.is-selected,
+.layout--suppress-select .model-slot.is-away,
+.layout--suppress-select .title.is-away {
+  transition: none !important;
+  animation: none !important;
+}
+
+@media (min-width: 901px) {
+  .layout--focused.layout--to-right .model-slot.tv.is-selected {
+    transition: none !important;
+    animation: none !important;
+  }
 }
 
 .layout--focused .model-slot.is-away {

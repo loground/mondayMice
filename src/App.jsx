@@ -1,13 +1,12 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { DefaultLoadingManager } from 'three'
-import { ModeSwitcher } from './components/ModeSwitcher'
 import { ModelSlot } from './components/ModelSlot'
 import { PageLoader } from './components/PageLoader'
 import { SpotlightOverlay } from './components/SpotlightOverlay'
 import './App.css'
 
 function App() {
-  const [mode, setMode] = useState('regular')
+  const [mode] = useState('regular')
   const [selectedModel, setSelectedModel] = useState(null)
   const [selectedMotion, setSelectedMotion] = useState({ x: 0, y: 0 })
   const [panelVisible, setPanelVisible] = useState(false)
@@ -16,13 +15,18 @@ function App() {
   const [tvBannersVisible, setTvBannersVisible] = useState(false)
   const [tvCanvasVersion, setTvCanvasVersion] = useState(0)
   const [returnSwipe, setReturnSwipe] = useState('')
+  const [spriteTransitionActive, setSpriteTransitionActive] = useState(false)
+  const [suppressSelectTransition, setSuppressSelectTransition] = useState(false)
+  const [forceBackVideo, setForceBackVideo] = useState(false)
 
   const closeTimerRef = useRef(0)
   const motionRafRef = useRef(0)
   const tvBannersPanelRef = useRef(null)
-  const tvBannersTimerRef = useRef(0)
   const returnSwipeTimerRef = useRef(0)
-  const TV_BANNERS_OPEN_DELAY_MS = 520
+  const spriteTransitionTimerRef = useRef(0)
+  const unsuppressTimerRef = useRef(0)
+  const DESKTOP_SPRITE_MS = 680
+  const DESKTOP_NO_FLY_SUPPRESS_MS = 900
   const isFocused = selectedModel !== null
   const focusSide =
     selectedModel === 'tv' ? 'right' : selectedModel === 'basket' ? 'left' : 'right'
@@ -73,11 +77,14 @@ function App() {
   }
 
   const toggleModel = (modelId, element) => {
+    const isMobile = window.matchMedia('(max-width: 900px)').matches
+
     if (selectedModel === null) {
       if (closeTimerRef.current) window.clearTimeout(closeTimerRef.current)
       if (motionRafRef.current) window.cancelAnimationFrame(motionRafRef.current)
+      if (spriteTransitionTimerRef.current) window.clearTimeout(spriteTransitionTimerRef.current)
+      if (unsuppressTimerRef.current) window.clearTimeout(unsuppressTimerRef.current)
       const side = modelId === 'basket' ? 'left' : 'right'
-      const isMobile = window.matchMedia('(max-width: 900px)').matches
       const cornerScale = isMobile ? 1 : 0.33
       let targetMotion = computeCornerMotion(element, side, cornerScale)
 
@@ -94,6 +101,25 @@ function App() {
           targetMotion = computeCornerMotion(element, side, cornerScale, true)
         }
       }
+
+      if (!isMobile && modelId === 'tv') {
+        setSpriteTransitionActive(true)
+        spriteTransitionTimerRef.current = window.setTimeout(() => {
+          setSuppressSelectTransition(true)
+          setSelectedMotion(targetMotion)
+          setSelectedModel(modelId)
+          setPanelVisible(true)
+          setTvBannersVisible(true)
+          setForceBackVideo(true)
+          setSpriteTransitionActive(false)
+          unsuppressTimerRef.current = window.setTimeout(
+            () => setSuppressSelectTransition(false),
+            DESKTOP_NO_FLY_SUPPRESS_MS,
+          )
+        }, DESKTOP_SPRITE_MS)
+        return
+      }
+
       setSelectedMotion({ x: 0, y: 0 })
       setSelectedModel(modelId)
       setPanelVisible(true)
@@ -108,13 +134,34 @@ function App() {
     }
 
     if (selectedModel === modelId) {
+      if (!isMobile && modelId === 'tv') {
+        if (spriteTransitionTimerRef.current) window.clearTimeout(spriteTransitionTimerRef.current)
+        if (unsuppressTimerRef.current) window.clearTimeout(unsuppressTimerRef.current)
+        setSpriteTransitionActive(true)
+        spriteTransitionTimerRef.current = window.setTimeout(() => {
+          setSuppressSelectTransition(true)
+          setPanelVisible(false)
+          setSelectedModel(null)
+          setSelectedMotion({ x: 0, y: 0 })
+          setTvBannersVisible(false)
+          setForceBackVideo(false)
+          setSpriteTransitionActive(false)
+          setTvCanvasVersion((prev) => prev + 1)
+          unsuppressTimerRef.current = window.setTimeout(
+            () => setSuppressSelectTransition(false),
+            DESKTOP_NO_FLY_SUPPRESS_MS,
+          )
+        }, DESKTOP_SPRITE_MS)
+        return
+      }
+
       setPanelVisible(false)
       if (closeTimerRef.current) window.clearTimeout(closeTimerRef.current)
       if (returnSwipeTimerRef.current) window.clearTimeout(returnSwipeTimerRef.current)
-      if (window.matchMedia('(max-width: 900px)').matches && modelId === 'tv') {
+      if (isMobile && modelId === 'tv') {
         setReturnSwipe('right')
         returnSwipeTimerRef.current = window.setTimeout(() => setReturnSwipe(''), 920)
-      } else if (window.matchMedia('(max-width: 900px)').matches && modelId === 'basket') {
+      } else if (isMobile && modelId === 'basket') {
         setReturnSwipe('left')
         returnSwipeTimerRef.current = window.setTimeout(() => setReturnSwipe(''), 920)
       }
@@ -128,28 +175,20 @@ function App() {
     return () => {
       if (closeTimerRef.current) window.clearTimeout(closeTimerRef.current)
       if (motionRafRef.current) window.cancelAnimationFrame(motionRafRef.current)
-      if (tvBannersTimerRef.current) window.clearTimeout(tvBannersTimerRef.current)
       if (returnSwipeTimerRef.current) window.clearTimeout(returnSwipeTimerRef.current)
+      if (spriteTransitionTimerRef.current) window.clearTimeout(spriteTransitionTimerRef.current)
+      if (unsuppressTimerRef.current) window.clearTimeout(unsuppressTimerRef.current)
     }
   }, [])
 
   useEffect(() => {
-    if (tvBannersTimerRef.current) window.clearTimeout(tvBannersTimerRef.current)
     if (selectedModel === 'tv' && panelVisible) {
-      const isMobile = window.matchMedia('(max-width: 900px)').matches
-      setTvBannersVisible(false)
-      if (isMobile) {
-        setTvBannersVisible(true)
-        return undefined
-      }
-      tvBannersTimerRef.current = window.setTimeout(() => {
-        setTvBannersVisible(true)
-      }, TV_BANNERS_OPEN_DELAY_MS)
+      setTvBannersVisible(true)
       return undefined
     }
     setTvBannersVisible(false)
     return undefined
-  }, [selectedModel, panelVisible])
+  }, [selectedModel, panelVisible, spriteTransitionActive])
 
   useEffect(() => {
     const panel = tvBannersPanelRef.current
@@ -216,7 +255,12 @@ function App() {
   return (
     <main className={`page ${mode === 'spotlight' ? 'page--spotlight' : 'page--regular'}`}>
       {!pageReady ? <PageLoader /> : null}
-      <ModeSwitcher mode={mode} onChange={setMode} />
+      {/* Switcher hidden for now by request */}
+      {spriteTransitionActive ? (
+        <div className="sprite-transition-overlay" aria-hidden="true">
+          <audio className="hidden-audio" src="/tvchannels/tvSound.mp3" autoPlay preload="auto" />
+        </div>
+      ) : null}
       {mode === 'spotlight' ? (
         <div className="spotlight-bg-images" aria-hidden="true">
           {spotlightImages.map((item) => (
@@ -237,7 +281,7 @@ function App() {
       ) : null}
 
       <section
-        className={`layout ${isFocused ? `layout--focused layout--to-${focusSide}` : ''} ${returnSwipe ? `layout--return-${returnSwipe}` : ''}`}
+        className={`layout ${isFocused ? `layout--focused layout--to-${focusSide}` : ''} ${returnSwipe ? `layout--return-${returnSwipe}` : ''} ${suppressSelectTransition ? 'layout--suppress-select' : ''}`}
         aria-label="Monday Mice homepage"
       >
         <ModelSlot
@@ -248,6 +292,7 @@ function App() {
           tiltSign={1}
           mode={mode}
           selected={selectedModel === 'tv'}
+          forceBackVideo={forceBackVideo}
           away={selectedModel === 'cart'}
           selectedMotion={selectedModel === 'tv' ? selectedMotion : undefined}
           onToggle={(element) => toggleModel('tv', element)}
