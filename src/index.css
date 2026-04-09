@@ -8,11 +8,15 @@ body,
   margin: 0;
   width: 100%;
   min-height: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
 }
 
 body {
   font-family: 'Nanum Pen Script', 'Comic Sans MS', cursive;
   color: #1d1d1d;
+  overscroll-behavior-x: none;
+  touch-action: pan-y;
 }
 
 @media (max-width: 900px) {
