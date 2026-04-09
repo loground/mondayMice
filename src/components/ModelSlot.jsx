@@ -125,7 +125,6 @@ export function ModelSlot({
             modelPath={modelPath}
             hovered={hovered}
             tiltSign={tiltSign}
-            useToon={!isCoarsePointer}
           />
         )}
       </Canvas>

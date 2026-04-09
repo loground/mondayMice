@@ -1,10 +1,9 @@
 import { useLoader } from '@react-three/fiber'
 import { useLayoutEffect, useMemo, useRef } from 'react'
-import { Box3, Color, MeshToonMaterial, SRGBColorSpace, Vector3 } from 'three'
+import { Box3, SRGBColorSpace, Vector3 } from 'three'
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 import { useHoverMotion } from '../../hooks/useHoverMotion'
-import { createToonGradientMap } from '../../utils/threeHelpers'
 
 function withDraco(loader) {
   const dracoLoader = new DRACOLoader()
@@ -12,11 +11,9 @@ function withDraco(loader) {
   loader.setDRACOLoader(dracoLoader)
 }
 
-export function ToonModel({ modelPath, hovered = false, tiltSign = 1, useToon = true }) {
+export function ToonModel({ modelPath, hovered = false, tiltSign = 1 }) {
   const gltf = useLoader(GLTFLoader, modelPath, withDraco)
   const groupRef = useRef(null)
-
-  const toonGradient = useMemo(() => createToonGradientMap(), [])
 
   const clonedScene = useMemo(() => {
     const root = gltf.scene.clone(true)
@@ -25,40 +22,24 @@ export function ToonModel({ modelPath, hovered = false, tiltSign = 1, useToon = 
 
       const srcMaterial = child.material
       const srcMaterials = Array.isArray(srcMaterial) ? srcMaterial : [srcMaterial]
-      const toonMaterials = srcMaterials.map((material) => {
+      const clonedMaterials = srcMaterials.map((material) => {
         const sourceMap = material?.map ?? null
         if (sourceMap) sourceMap.colorSpace = SRGBColorSpace
 
-        if (!useToon) {
-          const fallback = material?.clone?.() ?? material
-          if (fallback?.map) fallback.map.colorSpace = SRGBColorSpace
-          if (fallback?.emissive && typeof fallback.emissiveIntensity === 'number') {
-            fallback.emissiveIntensity = Math.max(fallback.emissiveIntensity, 0.12)
-          }
-          return fallback
+        const fallback = material?.clone?.() ?? material
+        if (fallback?.map) fallback.map.colorSpace = SRGBColorSpace
+        if (fallback?.emissive && typeof fallback.emissiveIntensity === 'number') {
+          fallback.emissiveIntensity = Math.max(fallback.emissiveIntensity, 0.12)
         }
-
-        const baseColor = material?.color ? material.color.clone() : new Color('#f2f2f2')
-        baseColor.offsetHSL(0, 0, -0.08)
-
-        return new MeshToonMaterial({
-          color: baseColor,
-          map: sourceMap,
-          transparent: material?.transparent ?? false,
-          opacity: material?.opacity ?? 1,
-          side: material?.side,
-          gradientMap: toonGradient,
-          emissive: baseColor.clone().multiplyScalar(0.24),
-          emissiveIntensity: 0.42,
-        })
+        return fallback
       })
 
-      child.material = Array.isArray(srcMaterial) ? toonMaterials : toonMaterials[0]
+      child.material = Array.isArray(srcMaterial) ? clonedMaterials : clonedMaterials[0]
       child.castShadow = true
       child.receiveShadow = true
     })
     return root
-  }, [gltf.scene, toonGradient, useToon])
+  }, [gltf.scene])
 
   const fitScale = useMemo(() => {
     const box = new Box3().setFromObject(clonedScene)
@@ -77,7 +58,6 @@ export function ToonModel({ modelPath, hovered = false, tiltSign = 1, useToon = 
 
   useLayoutEffect(() => {
     return () => {
-      toonGradient.dispose()
       clonedScene.traverse((child) => {
         if (!child.isMesh) return
         const mats = Array.isArray(child.material) ? child.material : [child.material]
@@ -86,7 +66,7 @@ export function ToonModel({ modelPath, hovered = false, tiltSign = 1, useToon = 
         })
       })
     }
-  }, [clonedScene, toonGradient])
+  }, [clonedScene])
 
   useHoverMotion(groupRef, hovered, tiltSign)
 
