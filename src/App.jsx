@@ -13,11 +13,11 @@ function App() {
   const [assetsReady, setAssetsReady] = useState(false)
   const [videoReady, setVideoReady] = useState(false)
   const [tvBannersVisible, setTvBannersVisible] = useState(false)
-  const [tvCanvasVersion, setTvCanvasVersion] = useState(0)
   const [returnSwipe, setReturnSwipe] = useState('')
   const [spriteTransitionActive, setSpriteTransitionActive] = useState(false)
   const [suppressSelectTransition, setSuppressSelectTransition] = useState(false)
   const [forceBackVideo, setForceBackVideo] = useState(false)
+  const [tvReturnSpin, setTvReturnSpin] = useState(false)
 
   const closeTimerRef = useRef(0)
   const motionRafRef = useRef(0)
@@ -25,6 +25,7 @@ function App() {
   const returnSwipeTimerRef = useRef(0)
   const spriteTransitionTimerRef = useRef(0)
   const unsuppressTimerRef = useRef(0)
+  const tvReturnSpinTimerRef = useRef(0)
   const DESKTOP_SPRITE_MS = 680
   const DESKTOP_NO_FLY_SUPPRESS_MS = 900
   const isFocused = selectedModel !== null
@@ -137,6 +138,7 @@ function App() {
       if (!isMobile && modelId === 'tv') {
         if (spriteTransitionTimerRef.current) window.clearTimeout(spriteTransitionTimerRef.current)
         if (unsuppressTimerRef.current) window.clearTimeout(unsuppressTimerRef.current)
+        if (tvReturnSpinTimerRef.current) window.clearTimeout(tvReturnSpinTimerRef.current)
         setSpriteTransitionActive(true)
         spriteTransitionTimerRef.current = window.setTimeout(() => {
           setSuppressSelectTransition(true)
@@ -146,7 +148,8 @@ function App() {
           setTvBannersVisible(false)
           setForceBackVideo(false)
           setSpriteTransitionActive(false)
-          setTvCanvasVersion((prev) => prev + 1)
+          setTvReturnSpin(true)
+          tvReturnSpinTimerRef.current = window.setTimeout(() => setTvReturnSpin(false), 760)
           unsuppressTimerRef.current = window.setTimeout(
             () => setSuppressSelectTransition(false),
             DESKTOP_NO_FLY_SUPPRESS_MS,
@@ -167,7 +170,6 @@ function App() {
       }
       setSelectedModel(null)
       setSelectedMotion({ x: 0, y: 0 })
-      if (modelId === 'tv') setTvCanvasVersion((prev) => prev + 1)
     }
   }
 
@@ -178,6 +180,7 @@ function App() {
       if (returnSwipeTimerRef.current) window.clearTimeout(returnSwipeTimerRef.current)
       if (spriteTransitionTimerRef.current) window.clearTimeout(spriteTransitionTimerRef.current)
       if (unsuppressTimerRef.current) window.clearTimeout(unsuppressTimerRef.current)
+      if (tvReturnSpinTimerRef.current) window.clearTimeout(tvReturnSpinTimerRef.current)
     }
   }, [])
 
@@ -285,7 +288,6 @@ function App() {
         aria-label="Monday Mice homepage"
       >
         <ModelSlot
-          canvasKey={`tv-${tvCanvasVersion}`}
           className="tv"
           modelPath="/tv.glb"
           modelType="tv"
@@ -293,6 +295,7 @@ function App() {
           mode={mode}
           selected={selectedModel === 'tv'}
           forceBackVideo={forceBackVideo}
+          returnSpin={tvReturnSpin}
           away={selectedModel === 'cart'}
           selectedMotion={selectedModel === 'tv' ? selectedMotion : undefined}
           onToggle={(element) => toggleModel('tv', element)}
