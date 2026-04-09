@@ -21,7 +21,7 @@ export function useSpotlightEffect(config = {}) {
     const ctx = canvas.getContext('2d')
     if (!ctx) return undefined
     const isCoarsePointer = window.matchMedia('(pointer: coarse)').matches
-    const maskAlpha = isCoarsePointer ? 0.22 : 0.76
+    const maskAlpha = isCoarsePointer ? 0.22 : 1
     const liveSpotlightSize = isCoarsePointer ? spotlightSize * 2.25 : spotlightSize
 
     const resizeCanvas = () => {

@@ -38,6 +38,18 @@ function App() {
       })),
     [],
   )
+  const spotlightImages = useMemo(
+    () =>
+      ['/spotlightImages/test1.png', '/spotlightImages/test2.png', '/spotlightImages/test3.png'].map((src, index) => ({
+        src,
+        id: `spotlight-image-${index}`,
+        top: `${12 + Math.random() * 72}%`,
+        left: `${8 + Math.random() * 82}%`,
+        rotate: `${-18 + Math.random() * 36}deg`,
+        scale: 0.68 + Math.random() * 0.55,
+      })),
+    [],
+  )
 
   const computeCornerMotion = (element, side, cornerScale = 0.33, lockY = false) => {
     if (!element) return { x: 0, y: 0 }
@@ -205,6 +217,24 @@ function App() {
     <main className={`page ${mode === 'spotlight' ? 'page--spotlight' : 'page--regular'}`}>
       {!pageReady ? <PageLoader /> : null}
       <ModeSwitcher mode={mode} onChange={setMode} />
+      {mode === 'spotlight' ? (
+        <div className="spotlight-bg-images" aria-hidden="true">
+          {spotlightImages.map((item) => (
+            <img
+              key={item.id}
+              className="spotlight-bg-image"
+              src={item.src}
+              alt=""
+              style={{
+                top: item.top,
+                left: item.left,
+                '--spot-rot': item.rotate,
+                '--spot-scale': item.scale,
+              }}
+            />
+          ))}
+        </div>
+      ) : null}
 
       <section
         className={`layout ${isFocused ? `layout--focused layout--to-${focusSide}` : ''} ${returnSwipe ? `layout--return-${returnSwipe}` : ''}`}
