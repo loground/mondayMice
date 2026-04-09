@@ -126,8 +126,13 @@ export function TvModel({ hovered = false, tiltSign = 1, selected = false, ...pr
       repeatX += (1 - repeatX) * zoomOutFactor
       repeatY += (1 - repeatY) * zoomOutFactor
 
+      const verticalBias = 0.05
+      const offsetX = (1 - repeatX) * 0.5
+      const rawOffsetY = (1 - repeatY) * 0.5 - verticalBias
+      const offsetY = Math.max(0, Math.min(1 - repeatY, rawOffsetY))
+
       texture.repeat.set(repeatX, repeatY)
-      texture.offset.set((1 - repeatX) * 0.5, (1 - repeatY) * 0.5)
+      texture.offset.set(offsetX, offsetY)
       texture.needsUpdate = true
     }
 
