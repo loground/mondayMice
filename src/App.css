@@ -54,16 +54,7 @@
   background-repeat: no-repeat;
   background-size: 200% 200%;
   background-position: 0% 0%;
-  animation: spriteQuad 860ms steps(1) infinite;
-}
-
-.page-loader__label {
-  position: relative;
-  z-index: 1;
-  margin: 0;
-  color: rgba(244, 245, 255, 0.9);
-  font-size: clamp(1rem, 1.5vw, 1.25rem);
-  letter-spacing: 0.04em;
+  animation: spriteQuad 344ms steps(1) infinite;
 }
 
 .mode-switch {
