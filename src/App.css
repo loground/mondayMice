@@ -96,11 +96,11 @@
 
 .mode-switcher-3d {
   position: fixed;
-  top: 2px;
-  left: -120px;
+  top: 0;
+  left: -18px;
   z-index: 24;
-  width: clamp(360px, 42vw, 560px);
-  height: clamp(360px, 42vw, 560px);
+  width: clamp(150px, 15vw, 220px);
+  height: clamp(150px, 15vw, 220px);
   border: 0;
   border-radius: 0;
   padding: 0;
@@ -574,10 +574,10 @@
 
   .mode-switcher-3d {
     top: calc(2px + env(safe-area-inset-top));
-    left: -72px;
+    left: -22px;
     right: auto;
-    width: min(62vw, 280px);
-    height: min(62vw, 280px);
+    width: min(36vw, 160px);
+    height: min(36vw, 160px);
   }
 
   .tv {

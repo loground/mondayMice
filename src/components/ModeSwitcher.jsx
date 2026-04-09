@@ -10,7 +10,7 @@ function withDraco(loader) {
   loader.setDRACOLoader(dracoLoader)
 }
 
-function SwitcherModel({ playTick, mode }) {
+function SwitcherModel({ playTick, mode, onToggle }) {
   const groupRef = useRef(null)
   const mixerRef = useRef(null)
   const actionsRef = useRef([])
@@ -82,7 +82,7 @@ function SwitcherModel({ playTick, mode }) {
   })
 
   return (
-    <group ref={groupRef} dispose={null} rotation={[0, 0, 0]} scale={8}>
+    <group ref={groupRef} dispose={null} rotation={[0, 0, 0]} scale={8} position={[0.5, -.5, 4]} >
       <group name="AuxScene">
         <primitive object={nodes._rootJoint} />
         
@@ -92,7 +92,11 @@ function SwitcherModel({ playTick, mode }) {
           material={materials['01_-_Default']}
           skeleton={nodes.Object_9.skeleton}
           rotation={[-Math.PI / 2, 0, 0]}
-          scale={0.025}
+          scale={0.1}
+          onClick={(event) => {
+            event.stopPropagation()
+            onToggle()
+          }}
         />
       </group>
     </group>
@@ -111,18 +115,24 @@ export function ModeSwitcher({ mode, onChange }) {
   }
 
   return (
-    <button
-      type="button"
+    <div
       className={`mode-switcher-3d ${mode === 'spotlight' ? 'is-spotlight' : 'is-regular'}`}
-      onClick={toggleMode}
+      role="button"
+      tabIndex={0}
       aria-label={`Switch display mode, current mode ${label}`}
+      onKeyDown={(event) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault()
+          toggleMode()
+        }
+      }}
     >
       <Canvas camera={{ position: [0, 0.18, 8.8], fov: 34 }} dpr={[1, 1.8]}>
         <ambientLight intensity={0.9} color="#f6f5f1" />
         <directionalLight position={[1.8, 2.4, 2]} intensity={1.2} color="#fff5dc" />
         <directionalLight position={[-1.6, 1.2, -1.5]} intensity={0.45} color="#9fb2d4" />
-        <SwitcherModel playTick={playTick} mode={mode}  />
+        <SwitcherModel playTick={playTick} mode={mode} onToggle={toggleMode} />
       </Canvas>
-    </button>
+    </div>
   )
 }
