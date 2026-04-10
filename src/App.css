@@ -500,7 +500,7 @@
 .tv-banner {
   position: relative;
   width: 100%;
-  height: calc((100dvh - var(--tv-top-offset)) / 4.09);
+  height: calc((100dvh - var(--tv-top-offset)) / 2.2);
   overflow: hidden;
   opacity: 0;
   transform: translate3d(0, 0, 0);
@@ -516,8 +516,8 @@
 .tv-banner__image {
   position: absolute;
   inset: -1px 0;
-  background-size: cover;
-  background-position: center;
+  background-size: 100% 100%;
+  background-position: center center;
   background-repeat: no-repeat;
   transform: scale(1);
   filter: brightness(0.72) saturate(0.9);
@@ -712,7 +712,7 @@
   }
 
   .tv-banner {
-    height: calc((100dvh - var(--tv-top-offset)) / 4.09);
+    height: calc((100dvh - var(--tv-top-offset)) / 2.2);
   }
 
   .tv-banners-panel {
@@ -733,8 +733,8 @@
   }
 
   .tv-banner__image {
-    background-size: contain;
-    background-color: #101018;
+    background-size: 100% 100%;
+    background-color: transparent;
   }
 
   .tv-footer-slot__image {

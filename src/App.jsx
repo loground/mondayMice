@@ -40,6 +40,12 @@ function App() {
       Array.from({ length: 10 }, (_, index) => ({
         id: `tv-banner-${index}`,
         delay: `${90 + index * 58 + ((index * 17) % 36)}ms`,
+        image:
+          index === 0
+            ? '/banners/maga.png'
+            : index === 1
+              ? '/banners/mmice.png'
+              : '/banners/banner1.png',
       })),
     [],
   )
@@ -334,7 +340,7 @@ function App() {
                 '--banner-delay': banner.delay,
               }}
             >
-              <div className="tv-banner__image" style={{ backgroundImage: "url('/banners/banner1.png')" }} />
+              <div className="tv-banner__image" style={{ backgroundImage: `url('${banner.image}')` }} />
               <div className="tv-banner__overlay" />
             </div>
           ))}
