@@ -42,10 +42,10 @@ function App() {
         delay: `${90 + index * 58 + ((index * 17) % 36)}ms`,
         image:
           index === 0
-            ? '/banners/maga.png'
+            ? '/banners/maga.webp'
             : index === 1
-              ? '/banners/mmice.png'
-              : '/banners/banner1.png',
+              ? '/banners/mmice.webp'
+              : '/banners/banner1.webp',
       })),
     [],
   )
