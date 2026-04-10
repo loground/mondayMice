@@ -13,6 +13,7 @@ function App() {
   const [assetsReady, setAssetsReady] = useState(false)
   const [videoReady, setVideoReady] = useState(false)
   const [tvBannersVisible, setTvBannersVisible] = useState(false)
+  const [tvModelVersion, setTvModelVersion] = useState(0)
   const [returnSwipe, setReturnSwipe] = useState('')
   const [spriteTransitionActive, setSpriteTransitionActive] = useState(false)
   const [suppressSelectTransition, setSuppressSelectTransition] = useState(false)
@@ -153,6 +154,7 @@ function App() {
           setSelectedMotion({ x: 0, y: 0 })
           setTvBannersVisible(false)
           setForceBackVideo(false)
+          setTvModelVersion((prev) => prev + 1)
           setSpriteTransitionActive(false)
           setTvReturnSpin(true)
           tvReturnSpinTimerRef.current = window.setTimeout(() => setTvReturnSpin(false), 760)
@@ -300,6 +302,7 @@ function App() {
           tiltSign={1}
           mode={mode}
           selected={selectedModel === 'tv'}
+          modelVersion={tvModelVersion}
           forceBackVideo={forceBackVideo}
           returnSpin={tvReturnSpin}
           away={selectedModel === 'cart'}

@@ -42,6 +42,7 @@ export function ModelSlot({
   tiltSign,
   mode,
   selected,
+  modelVersion,
   forceBackVideo,
   returnSpin,
   selectedMotion,
@@ -115,6 +116,7 @@ export function ModelSlot({
         <CursorFollowerLight active={lightActive} />
         {modelType === 'tv' ? (
           <TvModel
+            key={`tv-model-${modelVersion ?? 0}`}
             hovered={hovered}
             tiltSign={tiltSign}
             selected={selected}
