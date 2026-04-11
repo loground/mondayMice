@@ -169,7 +169,7 @@
     opacity 1450ms ease,
     visibility 0s linear;
   animation: rise 1500ms ease both;
-  will-change: transform, opacity;
+  will-change: auto;
 }
 
 .model-slot canvas {
@@ -182,6 +182,10 @@
   transform: translateZ(0);
   backface-visibility: hidden;
   image-rendering: auto;
+}
+
+.layout--focused .model-slot {
+  will-change: transform, opacity;
 }
 
 .tv {

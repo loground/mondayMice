@@ -14,6 +14,7 @@ function App() {
   const [videoReady, setVideoReady] = useState(false)
   const [tvBannersVisible, setTvBannersVisible] = useState(false)
   const [tvCanvasVersion, setTvCanvasVersion] = useState(0)
+  const [tvSlotVersion, setTvSlotVersion] = useState(0)
   const [tvModelVersion, setTvModelVersion] = useState(0)
   const [returnSwipe, setReturnSwipe] = useState('')
   const [spriteTransitionActive, setSpriteTransitionActive] = useState(false)
@@ -140,6 +141,7 @@ function App() {
           setTvBannersVisible(false)
           setForceBackVideo(false)
           setTvModelVersion((prev) => prev + 1)
+          setTvSlotVersion((prev) => prev + 1)
           setSpriteTransitionActive(false)
           unsuppressTimerRef.current = window.setTimeout(
             () => setSuppressSelectTransition(false),
@@ -278,6 +280,7 @@ function App() {
         aria-label="Monday Mice homepage"
       >
         <ModelSlot
+          key={`tv-slot-${tvSlotVersion}`}
           canvasKey={`tv-canvas-${tvCanvasVersion}`}
           className="tv"
           modelPath="/tv.glb"
