@@ -44,7 +44,6 @@ export function ModelSlot({
   selected,
   modelVersion,
   forceBackVideo,
-  returnSpin,
   selectedMotion,
   away,
   onToggle,
@@ -68,7 +67,7 @@ export function ModelSlot({
 
   return (
     <div
-      className={`model-slot ${className} ${selected ? 'is-selected' : ''} ${away ? 'is-away' : ''} ${returnSpin ? 'is-return-spin' : ''}`}
+      className={`model-slot ${className} ${selected ? 'is-selected' : ''} ${away ? 'is-away' : ''}`}
       onPointerEnter={() => setHovered(true)}
       onPointerLeave={() => setHovered(false)}
       onPointerCancel={() => setHovered(false)}
