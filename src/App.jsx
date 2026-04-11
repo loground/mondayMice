@@ -43,9 +43,9 @@ function App() {
         delay: `${90 + index * 58 + ((index * 17) % 36)}ms`,
         image:
           index === 0
-            ? '/banners/maga.webp'
+            ? '/banners/maga2.png'
             : index === 1
-              ? '/banners/mmice.webp'
+              ? '/banners/mmice3.png'
               : '/banners/banner1.webp',
       })),
     [],
@@ -93,24 +93,10 @@ function App() {
       if (spriteTransitionTimerRef.current) window.clearTimeout(spriteTransitionTimerRef.current)
       if (unsuppressTimerRef.current) window.clearTimeout(unsuppressTimerRef.current)
       const side = modelId === 'basket' ? 'left' : 'right'
-      const cornerScale = isMobile ? 1 : 0.33
+      const cornerScale = 0.33
       let targetMotion = computeCornerMotion(element, side, cornerScale)
 
-      if (isMobile && modelId === 'tv') {
-        const basketElement = document.querySelector('.model-slot.basket')
-        if (basketElement) {
-          const fromRect = element.getBoundingClientRect()
-          const toRect = basketElement.getBoundingClientRect()
-          targetMotion = {
-            x: toRect.left + toRect.width / 2 - (fromRect.left + fromRect.width / 2),
-            y: 0,
-          }
-        } else {
-          targetMotion = computeCornerMotion(element, side, cornerScale, true)
-        }
-      }
-
-      if (!isMobile && modelId === 'tv') {
+      if (modelId === 'tv') {
         setSpriteTransitionActive(true)
         spriteTransitionTimerRef.current = window.setTimeout(() => {
           setSuppressSelectTransition(true)
@@ -142,7 +128,7 @@ function App() {
     }
 
     if (selectedModel === modelId) {
-      if (!isMobile && modelId === 'tv') {
+      if (modelId === 'tv') {
         if (spriteTransitionTimerRef.current) window.clearTimeout(spriteTransitionTimerRef.current)
         if (unsuppressTimerRef.current) window.clearTimeout(unsuppressTimerRef.current)
         if (tvReturnSpinTimerRef.current) window.clearTimeout(tvReturnSpinTimerRef.current)
@@ -343,7 +329,7 @@ function App() {
                 '--banner-delay': banner.delay,
               }}
             >
-              <div className="tv-banner__image" style={{ backgroundImage: `url('${banner.image}')` }} />
+              <img className="tv-banner__image" src={banner.image} alt="" />
               <div className="tv-banner__overlay" />
             </div>
           ))}
