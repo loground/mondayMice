@@ -16,6 +16,7 @@ function App() {
   const [tvCanvasVersion, setTvCanvasVersion] = useState(0)
   const [tvSlotVersion, setTvSlotVersion] = useState(0)
   const [tvModelVersion, setTvModelVersion] = useState(0)
+  const [bannerFilter, setBannerFilter] = useState('all')
   const [returnSwipe, setReturnSwipe] = useState('')
   const [spriteTransitionActive, setSpriteTransitionActive] = useState(false)
   const [suppressSelectTransition, setSuppressSelectTransition] = useState(false)
@@ -42,6 +43,7 @@ function App() {
         id: 'tv-banner-0',
         delay: '90ms',
         image: '/banners/mmice.webp',
+        category: 'skate',
       },
       // Add next banners one by one here.
       // {
@@ -52,6 +54,19 @@ function App() {
     ],
     [],
   )
+  const bannerFilters = useMemo(
+    () => [
+      { id: 'all', label: 'ALL' },
+      { id: 'skate', label: 'SKATE' },
+      { id: 'clothes', label: 'CLOTHES' },
+      { id: 'random', label: 'RANDOM' },
+    ],
+    [],
+  )
+  const filteredTvBanners = useMemo(() => {
+    if (bannerFilter === 'all') return tvBanners
+    return tvBanners.filter((banner) => banner.category === bannerFilter)
+  }, [bannerFilter, tvBanners])
   const spotlightImages = useMemo(
     () =>
       ['/spotlightImages/test1.png', '/spotlightImages/test2.png', '/spotlightImages/test3.png'].map((src, index) => ({
@@ -323,7 +338,7 @@ function App() {
         aria-hidden={!tvPanelVisible}
       >
         <div className="tv-banners">
-          {tvBanners.map((banner) => (
+          {filteredTvBanners.map((banner) => (
             <div
               key={banner.id}
               className="tv-banner"
@@ -336,6 +351,18 @@ function App() {
               <div className="tv-banner__label">Warm-up before burial.</div>
             </div>
           ))}
+          <div className={`tv-filters ${tvPanelVisible ? 'is-visible' : ''}`}>
+            {bannerFilters.map((filter) => (
+              <button
+                key={filter.id}
+                type="button"
+                className={`tv-filter-btn ${bannerFilter === filter.id ? 'is-active' : ''}`}
+                onClick={() => setBannerFilter((prev) => prev)}
+              >
+                {filter.label}
+              </button>
+            ))}
+          </div>
           <div className="tv-footer-slot" aria-hidden="true">
             <img className="tv-footer-slot__image" src="/images/footer.png" alt="" />
           </div>
