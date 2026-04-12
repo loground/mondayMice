@@ -37,17 +37,19 @@ function App() {
   const tvPanelVisible = selectedModel === 'tv' && panelVisible && tvBannersVisible
   const cartPanelVisible = selectedModel === 'cart' && panelVisible
   const tvBanners = useMemo(
-    () =>
-      Array.from({ length: 10 }, (_, index) => ({
-        id: `tv-banner-${index}`,
-        delay: `${90 + index * 58 + ((index * 17) % 36)}ms`,
-        image:
-          index === 0
-            ? '/banners/maga2.png'
-            : index === 1
-              ? '/banners/mmice3.png'
-              : '/banners/banner1.webp',
-      })),
+    () => [
+      {
+        id: 'tv-banner-0',
+        delay: '90ms',
+        image: '/banners/mmice.webp',
+      },
+      // Add next banners one by one here.
+      // {
+      //   id: 'tv-banner-1',
+      //   delay: '160ms',
+      //   image: '/banners/next.webp',
+      // },
+    ],
     [],
   )
   const spotlightImages = useMemo(
@@ -331,6 +333,7 @@ function App() {
             >
               <img className="tv-banner__image" src={banner.image} alt="" />
               <div className="tv-banner__overlay" />
+              <div className="tv-banner__label">Warm-up before burial.</div>
             </div>
           ))}
           <div className="tv-footer-slot" aria-hidden="true">

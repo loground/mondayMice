@@ -12,7 +12,8 @@
 
 .page {
   position: relative;
-  min-height: 100svh;
+  min-height: 100dvh;
+  height: 100dvh;
   display: grid;
   place-items: center;
   color: var(--ink);
@@ -204,8 +205,9 @@
 
 .title {
   grid-column: 2;
-  width: clamp(56px, 7.2vw, 112px);
-  max-height: 82svh;
+  width: auto;
+  height: 82svh;
+  max-width: clamp(56px, 7.2vw, 112px);
   object-fit: contain;
   user-select: none;
   -webkit-user-drag: none;
@@ -418,6 +420,7 @@
   position: relative;
   z-index: 0;
   width: 100%;
+  min-height: calc(100dvh - var(--tv-top-offset));
   display: flex;
   flex-direction: column;
   gap: 0;
@@ -427,6 +430,7 @@
 .tv-footer-slot {
   width: 100%;
   height: var(--tv-footer-space);
+  margin-top: auto;
   background: var(--regular-surface);
   display: flex;
   align-items: center;
@@ -529,7 +533,7 @@
   height: auto;
   display: block;
   transform: scale(1);
-  filter: brightness(0.94) saturate(0.98);
+  filter: none;
   transition:
     transform 0.3s ease,
     filter 0.35s ease;
@@ -537,23 +541,42 @@
 
 .tv-banner__overlay {
   position: absolute;
-  inset: 0;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: min(38%, 420px);
   background: linear-gradient(
     to right,
-    rgba(0, 0, 0, 0.34) 0%,
-    rgba(0, 0, 0, 0.14) 52%,
+    rgba(0, 0, 0, 0.6) 0%,
     rgba(0, 0, 0, 0) 100%
   );
-  transition: opacity 0.35s ease;
+}
+
+.tv-banner__label {
+  position: absolute;
+  left: clamp(12px, 1.6vw, 24px);
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+  margin: 0;
+  color: #fff;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-size: clamp(14px, 1.15vw, 22px);
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  line-height: 1.1;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+  pointer-events: none;
+  user-select: none;
 }
 
 .tv-banner:hover .tv-banner__image {
   transform: scale(1.03);
-  filter: brightness(1) saturate(1.02);
+  filter: none;
 }
 
 .tv-banner:hover .tv-banner__overlay {
-  opacity: 0.35;
+  opacity: 1;
 }
 
 .tv-banners-panel.is-visible .tv-banner.is-revealed {
