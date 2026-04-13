@@ -42,7 +42,7 @@ function App() {
       {
         id: 'tv-banner-0',
         delay: '90ms',
-        image: '/banners/mmice.webp',
+        image: '/banners/mmice.png',
         category: 'skate',
       },
       // Add next banners one by one here.
@@ -348,7 +348,7 @@ function App() {
             >
               <img className="tv-banner__image" src={banner.image} alt="" />
               <div className="tv-banner__overlay" />
-              <div className="tv-banner__label">Warm-up before burial.</div>
+              <div className="tv-banner__label">MMICE FULL VIDEO 2025</div>
             </div>
           ))}
           <div className={`tv-filters ${tvPanelVisible ? 'is-visible' : ''}`}>
