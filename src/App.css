@@ -6,7 +6,7 @@
   --mx: 0.5;
   --my: 0.5;
   --regular-surface: #f7f7f8;
-  --tv-header-space: 450px;
+  --tv-header-space: 260px;
   --tv-footer-space: clamp(58px, 11vh, 116px);
 }
 
@@ -753,7 +753,7 @@
 
 @media (max-width: 900px) {
   :root {
-    --tv-header-space: 300px;
+    --tv-header-space: 180px;
     --tv-footer-space: clamp(52px, 10vh, 96px);
   }
 
