@@ -370,9 +370,7 @@ function App() {
           </div>
         </div>
       </section>
-      <div className={`tv-scroll-header ${tvPanelVisible ? 'is-visible' : ''}`} aria-hidden="true">
-        <img className="tv-scroll-header__image" src="/banners/header.webp" alt="" />
-      </div>
+      <div className={`tv-scroll-header ${tvPanelVisible ? 'is-visible' : ''}`} aria-hidden="true" />
       <div className={`tv-scroll-footer-fade ${tvPanelVisible ? 'is-visible' : ''}`} aria-hidden="true" />
 
       <article

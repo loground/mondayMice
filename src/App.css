@@ -500,7 +500,11 @@
   z-index: 18;
   opacity: 0;
   pointer-events: none;
-  background: var(--regular-surface);
+  background-color: var(--regular-surface);
+  background-image: url('/banners/header.webp');
+  background-repeat: no-repeat;
+  background-position: left top;
+  background-size: 100% 100%;
   transition: opacity 240ms ease;
   display: flex;
   align-items: flex-start;
@@ -514,19 +518,6 @@
 
 .tv-scroll-header.is-visible {
   opacity: 1;
-}
-
-.tv-scroll-header__image {
-  margin-top: 0;
-  margin-left: 0;
-  width: auto;
-  height: 100%;
-  max-width: 100%;
-  object-fit: contain;
-  object-position: left top;
-  pointer-events: none;
-  user-select: none;
-  -webkit-user-drag: none;
 }
 
 .tv-scroll-footer-fade {
@@ -807,11 +798,6 @@
     left: 10px;
   }
 
-  .tv-scroll-header__image {
-    width: auto;
-    height: 100%;
-    max-width: 100%;
-  }
 
   .tv-footer-slot__image {
     width: min(42vw, 190px);
