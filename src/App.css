@@ -209,10 +209,7 @@
   object-fit: contain;
   user-select: none;
   -webkit-user-drag: none;
-  filter:
-    invert(1)
-    brightness(1.08)
-    drop-shadow(0 12px 20px rgba(0, 0, 0, 0.4));
+  filter: none;
   transform:
     perspective(700px)
     rotateY(calc((var(--mx) - 0.5) * 3deg))
@@ -221,9 +218,7 @@
 }
 
 .page--regular .title {
-  filter:
-    brightness(0.06)
-    drop-shadow(0 8px 18px rgba(0, 0, 0, 0.14));
+  filter: none;
 }
 
 .spotlight-overlay {
@@ -712,6 +707,10 @@
     height: 100dvh;
     min-height: 100dvh;
     overflow: hidden;
+  }
+
+  .page-loader__sprite {
+    background-image: url('/spriteAnimMobile.webp');
   }
 
   .layout {
