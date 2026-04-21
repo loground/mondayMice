@@ -7,6 +7,7 @@
   --my: 0.5;
   --regular-surface: #f7f7f8;
   --tv-header-space: 208px;
+  --tv-header-gap: 6px;
   --tv-footer-space: clamp(58px, 11vh, 116px);
 }
 
@@ -390,7 +391,7 @@
   display: flex;
   align-items: flex-start;
   box-sizing: border-box;
-  padding-top: var(--tv-top-offset);
+  padding-top: calc(var(--tv-top-offset) + var(--tv-header-gap));
   padding-bottom: 0;
   opacity: 0;
   pointer-events: none;
@@ -504,7 +505,7 @@
   background-image: url('/banners/header.webp');
   background-repeat: no-repeat;
   background-position: left top;
-  background-size: 100% auto;
+  background-size: contain;
   transition: opacity 240ms ease;
   display: flex;
   align-items: flex-start;
@@ -798,6 +799,7 @@
 @media (max-width: 900px) {
   :root {
     --tv-header-space: 144px;
+    --tv-header-gap: 4px;
     --tv-footer-space: clamp(52px, 10vh, 96px);
   }
 
