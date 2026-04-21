@@ -114,6 +114,10 @@ export function HomePage({ onOpenMmice }) {
       const side = modelId === 'basket' ? 'left' : 'right'
       const cornerScale = isMobile ? (modelId === 'tv' ? 0.66 : 0.33) : 0.381
       const targetMotion = computeCornerMotion(element, side, cornerScale, false)
+      if (!isMobile && modelId === 'tv') {
+        targetMotion.x -= window.innerWidth * 0.025
+        targetMotion.y += window.innerHeight * 0.025
+      }
 
       if (modelId === 'tv') {
         setSpriteTransitionActive(true)

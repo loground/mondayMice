@@ -269,6 +269,7 @@
 
 @media (min-width: 901px) {
   .layout--focused.layout--to-right .model-slot.tv.is-selected {
+    transform: translate3d(var(--sel-x, 0px), var(--sel-y, 0px), 0) scale(0.457);
     transition: none !important;
     animation: none !important;
   }
@@ -395,7 +396,7 @@
   padding-bottom: 0;
   opacity: 0;
   pointer-events: none;
-  overflow-y: auto;
+  overflow-y: hidden;
   overscroll-behavior: contain;
   -webkit-overflow-scrolling: touch;
   transform: translate3d(100%, 0, 0);
