@@ -635,8 +635,8 @@
 
 .video-page__back {
   position: fixed;
-  top: clamp(10px, 1.4vw, 20px);
-  right: clamp(78px, 7vw, 126px);
+  top: clamp(6px, 0.9vw, 12px);
+  right: clamp(-72px, -4.4vw, -46px);
   z-index: 30;
   border: 0;
   background: transparent;
@@ -649,13 +649,25 @@
   cursor: pointer;
   padding: 0;
   line-height: 0;
-  transform: translateZ(0);
+  transform-origin: right center;
+  transform: perspective(900px) rotateY(-52deg) translateX(8%) translateZ(0);
+  transition:
+    transform 560ms cubic-bezier(0.18, 0.8, 0.22, 1),
+    filter 320ms ease;
+  filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.22));
 }
 
 .video-page__back img {
   display: block;
-  width: clamp(40px, 3.9vw, 56px);
+  width: clamp(234px, 26.4vw, 372px);
   height: auto;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .video-page__back:hover {
+    transform: perspective(900px) rotateY(0deg) translateX(0) translateZ(0);
+    filter: drop-shadow(0 8px 14px rgba(0, 0, 0, 0.24));
+  }
 }
 
 .video-page__bg {
@@ -912,11 +924,14 @@
 
   .video-page__back {
     top: calc(env(safe-area-inset-top) + 6px);
-    right: 10px;
+    right: 8px;
+    transform: none;
+    transition: none;
+    filter: none;
   }
 
   .video-page__back img {
-    width: clamp(42px, 14vw, 64px);
+    width: clamp(56px, 22vw, 92px);
   }
 
   .video-page__content {
