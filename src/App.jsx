@@ -40,7 +40,7 @@ function App() {
     <>
       <Routes>
         <Route path="/" element={<HomePage onOpenMmice={startRouteTransition} />} />
-        <Route path="/mmice" element={<MmicePage onBack={() => startRouteTransition('/')} />} />
+        <Route path="/mmice" element={<MmicePage onBack={() => navigate('/')} />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
 
