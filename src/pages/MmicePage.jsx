@@ -1,8 +1,8 @@
 export function MmicePage({ onBack }) {
   return (
     <main className="video-page" aria-label="MMICE FULL VIDEO 2025 page">
-      <button type="button" className="video-page__back" onClick={onBack}>
-        back
+      <button type="button" className="video-page__back" onClick={onBack} aria-label="Back">
+        <img src="/back.png" alt="" />
       </button>
 
       <section className="video-page__hero">

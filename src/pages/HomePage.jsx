@@ -14,6 +14,8 @@ export function HomePage({ onOpenMmice }) {
   const [tvBannersVisible, setTvBannersVisible] = useState(false)
   const [tvCanvasVersion, setTvCanvasVersion] = useState(0)
   const [tvSlotVersion, setTvSlotVersion] = useState(0)
+  const [cartCanvasVersion, setCartCanvasVersion] = useState(0)
+  const [cartSlotVersion, setCartSlotVersion] = useState(0)
   const [tvModelVersion, setTvModelVersion] = useState(0)
   const [bannerFilter, setBannerFilter] = useState('all')
   const [returnSwipe, setReturnSwipe] = useState('')
@@ -74,11 +76,18 @@ export function HomePage({ onOpenMmice }) {
     [],
   )
 
-  const computeCornerMotion = (element, side, cornerScale = 0.33, lockY = false) => {
+  const computeCornerMotion = (
+    element,
+    side,
+    cornerScale = 0.33,
+    lockY = false,
+    biasX = 0,
+  ) => {
     if (!element) return { x: 0, y: 0 }
 
     const rect = element.getBoundingClientRect()
-    const margin = 14
+    const viewportWidth = document.documentElement.clientWidth || window.innerWidth
+    const margin = 6
 
     const currentCenterX = rect.left + rect.width / 2
     const currentCenterY = rect.top + rect.height / 2
@@ -86,11 +95,11 @@ export function HomePage({ onOpenMmice }) {
     const targetCenterX =
       side === 'left'
         ? margin + (rect.width * cornerScale) / 2
-        : window.innerWidth - margin - (rect.width * cornerScale) / 2
+        : viewportWidth - margin - (rect.width * cornerScale) / 2
     const targetCenterY = lockY ? currentCenterY : margin + (rect.height * cornerScale) / 2
 
     return {
-      x: targetCenterX - currentCenterX,
+      x: targetCenterX - currentCenterX + biasX,
       y: targetCenterY - currentCenterY,
     }
   }
@@ -105,7 +114,14 @@ export function HomePage({ onOpenMmice }) {
       if (unsuppressTimerRef.current) window.clearTimeout(unsuppressTimerRef.current)
       const side = modelId === 'basket' ? 'left' : 'right'
       const cornerScale = 0.33
-      const targetMotion = computeCornerMotion(element, side, cornerScale)
+      const rect = element?.getBoundingClientRect?.()
+      const targetMotion = computeCornerMotion(
+        element,
+        side,
+        cornerScale,
+        false,
+        modelId === 'tv' && rect ? rect.width * cornerScale * 0.28 : 0,
+      )
 
       if (modelId === 'tv') {
         setSpriteTransitionActive(true)
@@ -152,6 +168,8 @@ export function HomePage({ onOpenMmice }) {
           setForceBackVideo(false)
           setTvModelVersion((prev) => prev + 1)
           setTvSlotVersion((prev) => prev + 1)
+          setCartCanvasVersion((prev) => prev + 1)
+          setCartSlotVersion((prev) => prev + 1)
           setSpriteTransitionActive(false)
           unsuppressTimerRef.current = window.setTimeout(
             () => setSuppressSelectTransition(false),
@@ -318,7 +336,8 @@ export function HomePage({ onOpenMmice }) {
         />
 
         <ModelSlot
-          canvasKey="cart-canvas"
+          key={`cart-slot-${cartSlotVersion}`}
+          canvasKey={`cart-canvas-${cartCanvasVersion}`}
           className="basket"
           modelPath="/cart.glb"
           modelType="cart"
