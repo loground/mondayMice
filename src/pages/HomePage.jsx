@@ -81,7 +81,6 @@ export function HomePage({ onOpenMmice }) {
     side,
     cornerScale = 0.33,
     lockY = false,
-    biasX = 0,
   ) => {
     if (!element) return { x: 0, y: 0 }
 
@@ -99,7 +98,7 @@ export function HomePage({ onOpenMmice }) {
     const targetCenterY = lockY ? currentCenterY : margin + (rect.height * cornerScale) / 2
 
     return {
-      x: targetCenterX - currentCenterX + biasX,
+      x: targetCenterX - currentCenterX,
       y: targetCenterY - currentCenterY,
     }
   }
@@ -113,15 +112,8 @@ export function HomePage({ onOpenMmice }) {
       if (spriteTransitionTimerRef.current) window.clearTimeout(spriteTransitionTimerRef.current)
       if (unsuppressTimerRef.current) window.clearTimeout(unsuppressTimerRef.current)
       const side = modelId === 'basket' ? 'left' : 'right'
-      const cornerScale = 0.33
-      const rect = element?.getBoundingClientRect?.()
-      const targetMotion = computeCornerMotion(
-        element,
-        side,
-        cornerScale,
-        false,
-        modelId === 'tv' && rect ? rect.width * cornerScale * 0.28 : 0,
-      )
+      const cornerScale = isMobile ? (modelId === 'tv' ? 0.66 : 0.33) : 0.381
+      const targetMotion = computeCornerMotion(element, side, cornerScale, false)
 
       if (modelId === 'tv') {
         setSpriteTransitionActive(true)
