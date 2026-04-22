@@ -53,7 +53,7 @@ export function HomePage({ onOpenMmice }) {
   const bannerFilters = useMemo(
     () => [
       { id: 'all', label: 'ALL' },
-      { id: 'skate', label: 'SK8V1DS' },
+      { id: 'skate', label: 'SK8CL1PS' },
     ],
     [],
   )
@@ -374,7 +374,7 @@ export function HomePage({ onOpenMmice }) {
                 key={filter.id}
                 type="button"
                 className={`tv-filter-btn ${bannerFilter === filter.id ? 'is-active' : ''}`}
-                onClick={() => setBannerFilter((prev) => prev)}
+                onClick={() => setBannerFilter(filter.id)}
               >
                 {filter.label}
               </button>
