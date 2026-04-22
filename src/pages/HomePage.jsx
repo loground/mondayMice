@@ -53,9 +53,7 @@ export function HomePage({ onOpenMmice }) {
   const bannerFilters = useMemo(
     () => [
       { id: 'all', label: 'ALL' },
-      { id: 'skate', label: 'SKATE' },
-      { id: 'clothes', label: 'CLOTHES' },
-      { id: 'random', label: 'RANDOM' },
+      { id: 'skate', label: 'SK8V1DS' },
     ],
     [],
   )
