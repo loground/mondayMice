@@ -7,7 +7,10 @@ export function MmicePage({ onBack }) {
 
       <main className="video-page" aria-label="MMICE FULL VIDEO 2025 page">
       <section className="video-page__bg" aria-hidden="true">
-        <img src="/pages/mmiceBg.png" alt="" />
+        <picture>
+          <source media="(max-width: 900px)" srcSet="/pages/mmiceBgMobile.png" />
+          <img src="/pages/mmiceBg.png" alt="" />
+        </picture>
       </section>
 
       <section className="video-page__content">
