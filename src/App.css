@@ -466,7 +466,7 @@
   letter-spacing: 0.02em;
   line-height: 1;
   padding: clamp(6px, 0.8vw, 9px) clamp(8px, 0.95vw, 12px);
-  cursor: default;
+  cursor: pointer;
   text-transform: uppercase;
   transition:
     color 180ms ease,
