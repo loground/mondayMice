@@ -936,7 +936,7 @@
   }
 
   .video-page__back {
-    top: clamp(188px, 36vh, 312px);
+    top: clamp(170px, 32vh, 280px);
     right: 4px;
     transform: none;
     transition: none;
@@ -950,7 +950,7 @@
 
   .video-page__content {
     z-index: 2;
-    padding-top: clamp(146px, 37vw, 214px);
+    padding-top: clamp(128px, 33vw, 196px);
     padding-left: 10px;
     padding-right: 10px;
     padding-bottom: 80px;
