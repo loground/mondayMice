@@ -45,9 +45,7 @@ function App() {
       </Routes>
 
       {routeTransitionActive ? (
-        <div className="sprite-transition-overlay" aria-hidden="true">
-          <audio className="hidden-audio" src="/tvchannels/tvSound.mp3" autoPlay preload="auto" />
-        </div>
+        <div className="sprite-transition-overlay" aria-hidden="true" />
       ) : null}
     </>
   )

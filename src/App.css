@@ -925,7 +925,7 @@
   }
 
   .tv-banners {
-    padding-top: 6px;
+    padding-top: 2px;
   }
 
   .tv-banners-panel.is-visible {
@@ -942,7 +942,7 @@
   }
 
   .video-page__back {
-    top: clamp(170px, 32vh, 280px);
+    top: clamp(188px, 35vh, 308px);
     right: 4px;
     bottom: auto;
     left: auto;
@@ -953,7 +953,7 @@
   }
 
   .video-page__back img {
-    width: clamp(96px, 30vw, 136px);
+    width: clamp(106px, 33vw, 150px);
   }
 
   .video-page__content {
@@ -966,7 +966,7 @@
   }
 
   .video-page__player {
-    width: min(94vw, 438px);
+    width: min(89vw, 416px);
   }
 
   .video-page__footer img {

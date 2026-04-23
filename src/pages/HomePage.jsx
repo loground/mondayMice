@@ -283,9 +283,7 @@ export function HomePage({ onOpenMmice }) {
       {!pageReady ? <PageLoader /> : null}
       {/* Switcher hidden for now by request */}
       {spriteTransitionActive ? (
-        <div className="sprite-transition-overlay" aria-hidden="true">
-          <audio className="hidden-audio" src="/tvchannels/tvSound.mp3" autoPlay preload="auto" />
-        </div>
+        <div className="sprite-transition-overlay" aria-hidden="true" />
       ) : null}
       {mode === 'spotlight' ? (
         <div className="spotlight-bg-images" aria-hidden="true">
