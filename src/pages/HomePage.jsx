@@ -32,8 +32,7 @@ export function HomePage({ onOpenMmice }) {
   const DESKTOP_SPRITE_MS = 680
   const DESKTOP_NO_FLY_SUPPRESS_MS = 900
   const isFocused = selectedModel !== null
-  const focusSide =
-    selectedModel === 'tv' ? 'right' : selectedModel === 'basket' ? 'left' : 'right'
+  const focusSide = 'right'
   const contentFromSide = focusSide === 'right' ? 'left' : 'right'
   const pageReady = assetsReady && videoReady
   const tvPanelVisible = selectedModel === 'tv' && panelVisible && tvBannersVisible
@@ -109,7 +108,7 @@ export function HomePage({ onOpenMmice }) {
       if (motionRafRef.current) window.cancelAnimationFrame(motionRafRef.current)
       if (spriteTransitionTimerRef.current) window.clearTimeout(spriteTransitionTimerRef.current)
       if (unsuppressTimerRef.current) window.clearTimeout(unsuppressTimerRef.current)
-      const side = modelId === 'basket' ? 'left' : 'right'
+      const side = 'right'
       const cornerScale = isMobile ? (modelId === 'tv' ? 0.66 : 0.33) : 0.381
       const targetMotion = computeCornerMotion(element, side, cornerScale, false)
       if (!isMobile && modelId === 'tv') {
@@ -141,10 +140,15 @@ export function HomePage({ onOpenMmice }) {
       if (modelId === 'cart') {
         setSpriteTransitionActive(true)
         spriteTransitionTimerRef.current = window.setTimeout(() => {
-          setSelectedMotion({ x: 0, y: 0 })
+          setSuppressSelectTransition(true)
+          setSelectedMotion(targetMotion)
           setSelectedModel(modelId)
           setPanelVisible(true)
           setSpriteTransitionActive(false)
+          unsuppressTimerRef.current = window.setTimeout(
+            () => setSuppressSelectTransition(false),
+            DESKTOP_NO_FLY_SUPPRESS_MS,
+          )
         }, DESKTOP_SPRITE_MS)
         return
       }
@@ -189,12 +193,18 @@ export function HomePage({ onOpenMmice }) {
 
       if (modelId === 'cart') {
         if (spriteTransitionTimerRef.current) window.clearTimeout(spriteTransitionTimerRef.current)
+        if (unsuppressTimerRef.current) window.clearTimeout(unsuppressTimerRef.current)
         setSpriteTransitionActive(true)
         spriteTransitionTimerRef.current = window.setTimeout(() => {
+          setSuppressSelectTransition(true)
           setPanelVisible(false)
           setSelectedModel(null)
           setSelectedMotion({ x: 0, y: 0 })
           setSpriteTransitionActive(false)
+          unsuppressTimerRef.current = window.setTimeout(
+            () => setSuppressSelectTransition(false),
+            DESKTOP_NO_FLY_SUPPRESS_MS,
+          )
         }, DESKTOP_SPRITE_MS)
         return
       }
