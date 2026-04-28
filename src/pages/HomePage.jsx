@@ -387,10 +387,9 @@ export function HomePage({ onOpenMmice }) {
       <div className={`tv-scroll-footer-fade ${tvPanelVisible ? 'is-visible' : ''}`} aria-hidden="true" />
 
       <article
-        className={`content-panel content-panel--from-${contentFromSide} ${cartPanelVisible ? 'is-visible' : ''}`}
+        className={`content-panel content-panel--from-${contentFromSide} content-panel--cart ${cartPanelVisible ? 'is-visible' : ''}`}
       >
-        <h2>Cart Content</h2>
-        <p>This is the centered content area for the Cart model. Replace with your actual section.</p>
+        <img className="cart-content-image" src="/cartContent.png" alt="Cart content" />
       </article>
 
       {mode === 'spotlight' ? <SpotlightOverlay /> : null}
