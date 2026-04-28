@@ -653,7 +653,7 @@
   padding: 0;
   line-height: 0;
   transform-origin: left bottom;
-  transform: translateX(-20%) rotate(-22deg);
+  transform: translateX(-25%) rotate(-22deg);
   transition: transform 460ms cubic-bezier(0.2, 0.8, 0.22, 1);
   filter: none;
   will-change: transform;
