@@ -661,7 +661,7 @@
 
 .video-page__back img {
   display: block;
-  width: clamp(210px, 19vw, 300px);
+  width: clamp(210px, 19vw, 250px);
   height: auto;
 }
 
