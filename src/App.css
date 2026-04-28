@@ -212,10 +212,7 @@
   -webkit-user-drag: none;
   filter: none;
   transform:
-    perspective(700px)
-    rotateY(calc((var(--mx) - 0.5) * 3deg))
-    rotateX(calc((0.5 - var(--my)) * 2deg))
-    translateZ(0);
+    perspective(700px) rotateY(calc((var(--mx) - 0.5) * 3deg)) rotateX(calc((0.5 - var(--my)) * 2deg)) translateZ(0);
 }
 
 .page--regular .title {
@@ -242,9 +239,7 @@
   width: clamp(120px, 12vw, 220px);
   height: auto;
   transform:
-    translate(-50%, -50%)
-    rotate(var(--spot-rot, 0deg))
-    scale(var(--spot-scale, 1));
+    translate(-50%, -50%) rotate(var(--spot-rot, 0deg)) scale(var(--spot-scale, 1));
   transform-origin: center center;
   user-select: none;
   -webkit-user-drag: none;
@@ -302,11 +297,7 @@
 .title.is-away {
   opacity: 1;
   transform:
-    perspective(700px)
-    rotateY(calc((var(--mx) - 0.5) * 3deg))
-    rotateX(calc((0.5 - var(--my)) * 2deg))
-    translateX(0)
-    scale(0.92);
+    perspective(700px) rotateY(calc((var(--mx) - 0.5) * 3deg)) rotateX(calc((0.5 - var(--my)) * 2deg)) translateX(0) scale(0.92);
   transition:
     opacity 0ms linear 2100ms,
     transform 2100ms cubic-bezier(0.16, 0.84, 0.22, 1);
@@ -314,20 +305,12 @@
 
 .layout--to-right .title.is-away {
   transform:
-    perspective(700px)
-    rotateY(calc((var(--mx) - 0.5) * 3deg))
-    rotateX(calc((0.5 - var(--my)) * 2deg))
-    translateX(95vw)
-    scale(0.92);
+    perspective(700px) rotateY(calc((var(--mx) - 0.5) * 3deg)) rotateX(calc((0.5 - var(--my)) * 2deg)) translateX(95vw) scale(0.92);
 }
 
 .layout--to-left .title.is-away {
   transform:
-    perspective(700px)
-    rotateY(calc((var(--mx) - 0.5) * 3deg))
-    rotateX(calc((0.5 - var(--my)) * 2deg))
-    translateX(-95vw)
-    scale(0.92);
+    perspective(700px) rotateY(calc((var(--mx) - 0.5) * 3deg)) rotateX(calc((0.5 - var(--my)) * 2deg)) translateX(-95vw) scale(0.92);
 }
 
 .content-panel {
@@ -551,12 +534,10 @@
   z-index: 19;
   pointer-events: none;
   opacity: 0;
-  background: linear-gradient(
-    to top,
-    rgba(12, 14, 20, 0.16) 0%,
-    rgba(12, 14, 20, 0.08) 42%,
-    rgba(12, 14, 20, 0) 100%
-  );
+  background: linear-gradient(to top,
+      rgba(12, 14, 20, 0.16) 0%,
+      rgba(12, 14, 20, 0.08) 42%,
+      rgba(12, 14, 20, 0) 100%);
   transition: opacity 240ms ease;
 }
 
@@ -582,7 +563,7 @@
   backface-visibility: hidden;
 }
 
-.tv-banner + .tv-banner {
+.tv-banner+.tv-banner {
   margin-top: 0;
 }
 
@@ -658,7 +639,7 @@
   top: auto;
   right: auto;
   bottom: clamp(22px, 3.6vh, 54px);
-  left: clamp(-18px, -1.2vw, -8px);
+  left: calc(clamp(-18px, -1.2vw, -8px));
   z-index: 30;
   border: 0;
   background: transparent;
@@ -672,7 +653,7 @@
   padding: 0;
   line-height: 0;
   transform-origin: left bottom;
-  transform: translateX(-4%) rotate(-22deg);
+  transform: translateX(-20%) rotate(-22deg);
   transition: transform 460ms cubic-bezier(0.2, 0.8, 0.22, 1);
   filter: none;
   will-change: transform;
