@@ -943,8 +943,8 @@
   }
 
   .video-page__back {
-    top: clamp(204px, 38vh, 332px);
-    right: 4px;
+    top: calc(clamp(204px, 38vh, 332px) + 20px);
+    right: calc(4px - 20px);
     bottom: auto;
     left: auto;
     transform: rotate(15deg);
