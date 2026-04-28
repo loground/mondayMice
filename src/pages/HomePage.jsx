@@ -45,7 +45,7 @@ export function HomePage({ onOpenMmice }) {
         delay: '90ms',
         image: '/banners/mmice.png',
         category: 'skate',
-        route: '/mmice',
+        route: '/warmupbeforeburial',
       },
     ],
     [],
