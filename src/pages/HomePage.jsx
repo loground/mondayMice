@@ -138,6 +138,17 @@ export function HomePage({ onOpenMmice }) {
         return
       }
 
+      if (modelId === 'cart') {
+        setSpriteTransitionActive(true)
+        spriteTransitionTimerRef.current = window.setTimeout(() => {
+          setSelectedMotion({ x: 0, y: 0 })
+          setSelectedModel(modelId)
+          setPanelVisible(true)
+          setSpriteTransitionActive(false)
+        }, DESKTOP_SPRITE_MS)
+        return
+      }
+
       setSelectedMotion({ x: 0, y: 0 })
       setSelectedModel(modelId)
       setPanelVisible(true)
@@ -172,6 +183,18 @@ export function HomePage({ onOpenMmice }) {
             () => setSuppressSelectTransition(false),
             DESKTOP_NO_FLY_SUPPRESS_MS,
           )
+        }, DESKTOP_SPRITE_MS)
+        return
+      }
+
+      if (modelId === 'cart') {
+        if (spriteTransitionTimerRef.current) window.clearTimeout(spriteTransitionTimerRef.current)
+        setSpriteTransitionActive(true)
+        spriteTransitionTimerRef.current = window.setTimeout(() => {
+          setPanelVisible(false)
+          setSelectedModel(null)
+          setSelectedMotion({ x: 0, y: 0 })
+          setSpriteTransitionActive(false)
         }, DESKTOP_SPRITE_MS)
         return
       }
