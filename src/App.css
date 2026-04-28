@@ -943,11 +943,11 @@
   }
 
   .video-page__back {
-    top: clamp(188px, 35vh, 308px);
+    top: clamp(204px, 38vh, 332px);
     right: 4px;
     bottom: auto;
     left: auto;
-    transform: none;
+    transform: rotate(15deg);
     transition: none;
     filter: none;
     z-index: 9;
@@ -959,7 +959,7 @@
 
   .video-page__content {
     z-index: 2;
-    padding-top: clamp(128px, 33vw, 196px);
+    padding-top: clamp(133px, 34vw, 201px);
     padding-left: 10px;
     padding-right: 10px;
     padding-bottom: 80px;
