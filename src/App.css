@@ -899,7 +899,7 @@
     height: min(34vw, 212px);
     justify-self: start;
     margin-top: 0;
-    transform: none;
+    transform: translateY(-1rem);
   }
 
   .title {
