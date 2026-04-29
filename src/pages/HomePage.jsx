@@ -4,7 +4,7 @@ import { ModelSlot } from '../components/ModelSlot'
 import { PageLoader } from '../components/PageLoader'
 import { SpotlightOverlay } from '../components/SpotlightOverlay'
 
-export function HomePage({ onOpenMmice }) {
+export function HomePage({ onOpenMmice, onOpenShop }) {
   const [mode] = useState('regular')
   const [selectedModel, setSelectedModel] = useState(null)
   const [selectedMotion, setSelectedMotion] = useState({ x: 0, y: 0 })
@@ -146,18 +146,7 @@ export function HomePage({ onOpenMmice }) {
       }
 
       if (modelId === 'cart') {
-        setSpriteTransitionActive(true)
-        spriteTransitionTimerRef.current = window.setTimeout(() => {
-          setSuppressSelectTransition(true)
-          setSelectedMotion(targetMotion)
-          setSelectedModel(modelId)
-          setPanelVisible(true)
-          setSpriteTransitionActive(false)
-          unsuppressTimerRef.current = window.setTimeout(
-            () => setSuppressSelectTransition(false),
-            DESKTOP_NO_FLY_SUPPRESS_MS,
-          )
-        }, DESKTOP_SPRITE_MS)
+        if (typeof onOpenShop === 'function') onOpenShop()
         return
       }
 

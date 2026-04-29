@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { Navigate, Route, Routes, useNavigate } from 'react-router-dom'
 import { HomePage } from './pages/HomePage'
 import { MmicePage } from './pages/MmicePage'
+import { ShopPage } from './pages/ShopPage'
 import './App.css'
 
 const ROUTE_TRANSITION_MS = 680
@@ -39,8 +40,12 @@ function App() {
   return (
     <>
       <Routes>
-        <Route path="/" element={<HomePage onOpenMmice={startRouteTransition} />} />
+        <Route
+          path="/"
+          element={<HomePage onOpenMmice={startRouteTransition} onOpenShop={() => startRouteTransition('/shop')} />}
+        />
         <Route path="/warmupbeforeburial" element={<MmicePage onBack={() => navigate('/')} />} />
+        <Route path="/shop" element={<ShopPage onBack={() => startRouteTransition('/')} />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
 
