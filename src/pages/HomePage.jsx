@@ -115,6 +115,10 @@ export function HomePage({ onOpenMmice }) {
         targetMotion.x -= window.innerWidth * 0.025
         targetMotion.y += window.innerHeight * 0.025
       }
+      if (!isMobile && modelId === 'cart') {
+        targetMotion.x -= window.innerWidth * 0.025
+        targetMotion.y += window.innerHeight * 0.025
+      }
       if (isMobile && modelId === 'tv') {
         targetMotion.x += window.innerWidth * 0.014
       }
