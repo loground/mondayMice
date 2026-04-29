@@ -11,19 +11,20 @@ function withDraco(loader) {
   loader.setDRACOLoader(dracoLoader)
 }
 
-export function ToonModel({ modelPath, hovered = false, tiltSign = 1 }) {
+export function ToonModel({ modelPath, hovered = false, tiltSign = 1, selected = false }) {
   const gltf = useLoader(GLTFLoader, modelPath, withDraco)
   const groupRef = useRef(null)
   const showSoonSign = modelPath === '/newMouse.glb'
-  const soonTexture = useLoader(TextureLoader, '/soon.png')
+  const [soonTexture, backCartTexture] = useLoader(TextureLoader, ['/soon.png', '/backCart.png'])
+  const activeSignTexture = selected ? backCartTexture : soonTexture
   const soonSignTexture = useMemo(() => {
-    if (!showSoonSign || !soonTexture?.image) return null
-    const image = soonTexture.image
+    if (!showSoonSign || !activeSignTexture?.image) return null
+    const image = activeSignTexture.image
     const source = document.createElement('canvas')
     source.width = image.width
     source.height = image.height
     const sourceCtx = source.getContext('2d')
-    if (!sourceCtx) return soonTexture
+    if (!sourceCtx) return activeSignTexture
     sourceCtx.drawImage(image, 0, 0)
 
     const sourceImg = sourceCtx.getImageData(0, 0, source.width, source.height)
@@ -41,7 +42,7 @@ export function ToonModel({ modelPath, hovered = false, tiltSign = 1 }) {
     canvas.width = 2048
     canvas.height = 1024
     const ctx = canvas.getContext('2d')
-    if (!ctx) return soonTexture
+    if (!ctx) return activeSignTexture
 
     const drawW = canvas.width * 0.44
     const drawH = drawW * (source.height / source.width)
@@ -64,7 +65,7 @@ export function ToonModel({ modelPath, hovered = false, tiltSign = 1 }) {
     tex.magFilter = LinearFilter
     tex.needsUpdate = true
     return tex
-  }, [showSoonSign, soonTexture])
+  }, [showSoonSign, activeSignTexture])
 
   const clonedScene = useMemo(() => {
     const root = gltf.scene.clone(true)
@@ -154,13 +155,13 @@ export function ToonModel({ modelPath, hovered = false, tiltSign = 1 }) {
   }, [gltf.scene, fitScale])
 
   useMemo(() => {
-    if (!showSoonSign || !soonTexture) return null
-    soonTexture.colorSpace = SRGBColorSpace
-    soonTexture.minFilter = LinearFilter
-    soonTexture.magFilter = LinearFilter
-    soonTexture.needsUpdate = true
+    if (!showSoonSign || !activeSignTexture) return null
+    activeSignTexture.colorSpace = SRGBColorSpace
+    activeSignTexture.minFilter = LinearFilter
+    activeSignTexture.magFilter = LinearFilter
+    activeSignTexture.needsUpdate = true
     return null
-  }, [showSoonSign, soonTexture])
+  }, [showSoonSign, activeSignTexture])
 
   useLayoutEffect(() => {
     return () => {

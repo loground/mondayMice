@@ -200,6 +200,13 @@ export function HomePage({ onOpenMmice }) {
           setPanelVisible(false)
           setSelectedModel(null)
           setSelectedMotion({ x: 0, y: 0 })
+          setTvBannersVisible(false)
+          setForceBackVideo(false)
+          setTvModelVersion((prev) => prev + 1)
+          setTvCanvasVersion((prev) => prev + 1)
+          setTvSlotVersion((prev) => prev + 1)
+          setCartCanvasVersion((prev) => prev + 1)
+          setCartSlotVersion((prev) => prev + 1)
           setSpriteTransitionActive(false)
           unsuppressTimerRef.current = window.setTimeout(
             () => setSuppressSelectTransition(false),
