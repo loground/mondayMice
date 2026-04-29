@@ -367,7 +367,7 @@ export function HomePage({ onOpenMmice }) {
           key={`cart-slot-${cartSlotVersion}`}
           canvasKey={`cart-canvas-${cartCanvasVersion}`}
           className="basket"
-          modelPath="/cartNew.glb"
+          modelPath="/newMouse.glb"
           modelType="cart"
           tiltSign={-1}
           mode={mode}
