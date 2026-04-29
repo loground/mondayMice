@@ -13,7 +13,7 @@ function App() {
   const navigateTimerRef = useRef(0)
   const finishTimerRef = useRef(0)
 
-  const startRouteTransition = (targetPath) => {
+  const startRouteTransition = (targetPath, routeState = null) => {
     if (!targetPath || routeTransitionActive) return
 
     window.clearTimeout(navigateTimerRef.current)
@@ -23,10 +23,10 @@ function App() {
 
     const isBackToHome = targetPath === '/'
     if (isBackToHome) {
-      navigate(targetPath)
+      navigate(targetPath, routeState ? { state: routeState } : undefined)
     } else {
       navigateTimerRef.current = window.setTimeout(() => {
-        navigate(targetPath)
+        navigate(targetPath, routeState ? { state: routeState } : undefined)
       }, ROUTE_TRANSITION_MS)
     }
 
@@ -57,7 +57,7 @@ function App() {
           element={<HomePage onOpenMmice={startRouteTransition} onOpenShop={() => startRouteTransition('/shop')} />}
         />
         <Route path="/warmupbeforeburial" element={<MmicePage onBack={() => navigate('/')} />} />
-        <Route path="/shop" element={<ShopPage onBack={() => startRouteTransition('/')} />} />
+        <Route path="/shop" element={<ShopPage onBack={() => startRouteTransition('/', { fromShop: true })} />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
 

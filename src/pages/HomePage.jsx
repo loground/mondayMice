@@ -1,10 +1,12 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
+import { useLocation } from 'react-router-dom'
 import { DefaultLoadingManager } from 'three'
 import { ModelSlot } from '../components/ModelSlot'
 import { PageLoader } from '../components/PageLoader'
 import { SpotlightOverlay } from '../components/SpotlightOverlay'
 
 export function HomePage({ onOpenMmice, onOpenShop }) {
+  const location = useLocation()
   const [mode] = useState('regular')
   const [selectedModel, setSelectedModel] = useState(null)
   const [selectedMotion, setSelectedMotion] = useState({ x: 0, y: 0 })
@@ -227,6 +229,15 @@ export function HomePage({ onOpenMmice, onOpenShop }) {
       setSelectedMotion({ x: 0, y: 0 })
     }
   }
+
+  useEffect(() => {
+    if (!location.state?.fromShop) return
+    setTvModelVersion((prev) => prev + 1)
+    setTvCanvasVersion((prev) => prev + 1)
+    setTvSlotVersion((prev) => prev + 1)
+    setCartCanvasVersion((prev) => prev + 1)
+    setCartSlotVersion((prev) => prev + 1)
+  }, [location.state])
 
   useEffect(() => {
     return () => {
