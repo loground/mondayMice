@@ -21,9 +21,16 @@ function App() {
 
     setRouteTransitionActive(true)
 
-    navigateTimerRef.current = window.setTimeout(() => {
+    const isBackToHome = targetPath === '/'
+    if (isBackToHome) {
       navigate(targetPath)
-    }, ROUTE_TRANSITION_MS)
+    } else {
+      navigateTimerRef.current = window.setTimeout(() => {
+        navigate(targetPath)
+      }, ROUTE_TRANSITION_MS)
+    }
+
+    if (targetPath === '/shop') return
 
     finishTimerRef.current = window.setTimeout(() => {
       setRouteTransitionActive(false)
@@ -31,7 +38,12 @@ function App() {
   }
 
   useEffect(() => {
+    const handleShopReady = () => {
+      setRouteTransitionActive(false)
+    }
+    window.addEventListener('shop-model-ready', handleShopReady)
     return () => {
+      window.removeEventListener('shop-model-ready', handleShopReady)
       window.clearTimeout(navigateTimerRef.current)
       window.clearTimeout(finishTimerRef.current)
     }

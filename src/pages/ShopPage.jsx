@@ -1,16 +1,38 @@
+import { useState } from 'react'
 import { Canvas } from '@react-three/fiber'
 import { ToonModel } from '../components/models/ToonModel'
 
 export function ShopPage({ onBack }) {
+  const [hovered, setHovered] = useState(false)
+
+  const handleModelReady = () => {
+    window.dispatchEvent(new CustomEvent('shop-model-ready'))
+  }
+
   return (
     <main className="shop-page" aria-label="Shop page">
-      <button type="button" className="shop-page__corner-model" onClick={onBack} aria-label="Back">
+      <button
+        type="button"
+        className="shop-page__corner-model"
+        onClick={onBack}
+        onPointerEnter={() => setHovered(true)}
+        onPointerLeave={() => setHovered(false)}
+        onPointerCancel={() => setHovered(false)}
+        aria-label="Back"
+      >
         <Canvas camera={{ position: [0, 0, 4.8], fov: 34 }} dpr={[1, 2]}>
           <ambientLight intensity={0.72} color="#f5f1e8" />
           <hemisphereLight intensity={0.86} color="#ffe2b5" groundColor="#9fb3d8" />
           <directionalLight position={[2.8, 3.2, 2]} intensity={1.1} color="#ffdcb2" />
           <directionalLight position={[-2, 1.8, -2.2]} intensity={0.55} color="#ccdcff" />
-          <ToonModel modelPath="/newMouse.glb" selected />
+          <ToonModel
+            modelPath="/newMouse.glb"
+            hovered={hovered}
+            selected
+            animate
+            snapToBasePose
+            onReady={handleModelReady}
+          />
         </Canvas>
       </button>
 

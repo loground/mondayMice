@@ -1,9 +1,9 @@
 import { useFrame } from '@react-three/fiber'
 import { MathUtils } from 'three'
 
-export function useHoverMotion(groupRef, hovered, tiltSign = 1) {
+export function useHoverMotion(groupRef, hovered, tiltSign = 1, enabled = true) {
   useFrame((state, delta) => {
-    if (!groupRef.current) return
+    if (!groupRef.current || !enabled) return
 
     const baseYaw = -Math.PI / 2
     const t = state.clock.elapsedTime

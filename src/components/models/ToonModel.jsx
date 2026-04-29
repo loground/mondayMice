@@ -1,5 +1,5 @@
 import { useLoader } from '@react-three/fiber'
-import { useLayoutEffect, useMemo, useRef } from 'react'
+import { useEffect, useLayoutEffect, useMemo, useRef } from 'react'
 import { Box3, CanvasTexture, DoubleSide, LinearFilter, Mesh, MeshBasicMaterial, PlaneGeometry, SRGBColorSpace, TextureLoader, Vector3 } from 'three'
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
@@ -11,7 +11,15 @@ function withDraco(loader) {
   loader.setDRACOLoader(dracoLoader)
 }
 
-export function ToonModel({ modelPath, hovered = false, tiltSign = 1, selected = false }) {
+export function ToonModel({
+  modelPath,
+  hovered = false,
+  tiltSign = 1,
+  selected = false,
+  animate = true,
+  onReady,
+  snapToBasePose = false,
+}) {
   const gltf = useLoader(GLTFLoader, modelPath, withDraco)
   const groupRef = useRef(null)
   const showSoonSign = modelPath === '/newMouse.glb'
@@ -175,7 +183,22 @@ export function ToonModel({ modelPath, hovered = false, tiltSign = 1, selected =
     }
   }, [clonedScene])
 
-  useHoverMotion(groupRef, hovered, tiltSign)
+  useHoverMotion(groupRef, hovered, tiltSign, animate)
+
+  useEffect(() => {
+    if (!groupRef.current || (!snapToBasePose && animate)) return undefined
+    const baseYaw = -Math.PI / 2 + tiltSign * 0.08
+    groupRef.current.position.y = 0
+    groupRef.current.rotation.y = baseYaw
+    groupRef.current.rotation.x = -0.02
+    return undefined
+  }, [animate, tiltSign, snapToBasePose])
+
+  useEffect(() => {
+    if (typeof onReady !== 'function') return undefined
+    const raf = window.requestAnimationFrame(() => onReady())
+    return () => window.cancelAnimationFrame(raf)
+  }, [onReady, clonedScene])
 
   return (
     <group ref={groupRef}>
