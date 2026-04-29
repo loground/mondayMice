@@ -67,10 +67,10 @@ export function ToonModel({ modelPath, hovered = false, tiltSign = 1, selected =
     const ctx = canvas.getContext('2d')
     if (!ctx) return null
     ctx.clearRect(0, 0, canvas.width, canvas.height)
-    ctx.fillStyle = '#ff2d2d'
+    ctx.fillStyle = '#C51925'
     ctx.strokeStyle = '#240000'
     ctx.lineWidth = 8
-    ctx.font = '900 90px Arial Black, Impact, sans-serif'
+    ctx.font = '900 90px "Comic Sans MS", "Chalkboard SE", "Marker Felt", "Papyrus", cursive'
     ctx.textAlign = 'center'
     ctx.textBaseline = 'middle'
     ctx.strokeText(label, canvas.width / 2, canvas.height / 2 + 4)
