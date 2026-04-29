@@ -920,6 +920,7 @@
   }
 
   .layout--focused .model-slot.basket.is-selected {
+    transform: translate3d(var(--sel-x, 0px), var(--sel-y, 0px), 0) scale(0.666);
     transition: none !important;
     animation: none !important;
   }

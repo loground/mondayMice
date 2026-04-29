@@ -122,6 +122,10 @@ export function HomePage({ onOpenMmice }) {
       if (isMobile && modelId === 'tv') {
         targetMotion.x += window.innerWidth * 0.014
       }
+      if (isMobile && modelId === 'cart') {
+        targetMotion.x -= window.innerWidth * 0.05
+        targetMotion.y += window.innerHeight * 0.05
+      }
 
       if (modelId === 'tv') {
         setSpriteTransitionActive(true)
