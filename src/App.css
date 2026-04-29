@@ -268,6 +268,11 @@
     transition: none !important;
     animation: none !important;
   }
+
+  .layout--focused.layout--to-right .model-slot.basket.is-selected {
+    transition: none !important;
+    animation: none !important;
+  }
 }
 
 .layout--focused .model-slot.is-away {
@@ -904,6 +909,11 @@
 
   .layout--focused .model-slot.tv.is-selected {
     transform: translate3d(var(--sel-x, 0px), var(--sel-y, 0px), 0) scale(0.58);
+    transition: none !important;
+    animation: none !important;
+  }
+
+  .layout--focused .model-slot.basket.is-selected {
     transition: none !important;
     animation: none !important;
   }
