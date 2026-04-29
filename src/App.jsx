@@ -27,7 +27,7 @@ function App() {
 
     finishTimerRef.current = window.setTimeout(() => {
       setRouteTransitionActive(false)
-    }, ROUTE_TRANSITION_MS * 2)
+    }, ROUTE_TRANSITION_MS)
   }
 
   useEffect(() => {
