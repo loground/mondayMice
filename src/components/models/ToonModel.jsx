@@ -69,7 +69,7 @@ export function ToonModel({ modelPath, hovered = false, tiltSign = 1, selected =
     ctx.clearRect(0, 0, canvas.width, canvas.height)
     ctx.fillStyle = '#C51925'
     ctx.strokeStyle = '#240000'
-    ctx.lineWidth = 8
+    ctx.lineWidth = 20
     ctx.font = '900 90px "Comic Sans MS", "Chalkboard SE", "Marker Felt", "Papyrus", cursive'
     ctx.textAlign = 'center'
     ctx.textBaseline = 'middle'
@@ -109,7 +109,7 @@ export function ToonModel({ modelPath, hovered = false, tiltSign = 1, selected =
       <group position={centeredPosition} scale={fitScale}>
         <primitive object={clonedScene} />
         {showSoonSign && soonTexture ? (
-          <sprite ref={soonRef} position={[0.0, 0, -0.3]} scale={[0.4, 0.1, 1]}>
+          <sprite ref={soonRef} position={[0.0, 0, -0.28]} scale={[0.35, 0.09, 0]}>
             <spriteMaterial
               map={soonTexture}
               transparent
