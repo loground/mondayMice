@@ -126,6 +126,7 @@ export function ModelSlot({
             modelPath={modelPath}
             hovered={hovered}
             tiltSign={tiltSign}
+            selected={selected}
           />
         )}
       </Canvas>

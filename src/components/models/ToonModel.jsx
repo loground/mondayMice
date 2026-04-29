@@ -1,6 +1,6 @@
 import { useFrame, useLoader } from '@react-three/fiber'
 import { useLayoutEffect, useMemo, useRef } from 'react'
-import { AdditiveBlending, Box3, CanvasTexture, LinearFilter, SRGBColorSpace, Vector3 } from 'three'
+import { Box3, CanvasTexture, LinearFilter, SRGBColorSpace, Vector3 } from 'three'
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 import { useHoverMotion } from '../../hooks/useHoverMotion'
@@ -11,11 +11,11 @@ function withDraco(loader) {
   loader.setDRACOLoader(dracoLoader)
 }
 
-export function ToonModel({ modelPath, hovered = false, tiltSign = 1 }) {
+export function ToonModel({ modelPath, hovered = false, tiltSign = 1, selected = false }) {
   const gltf = useLoader(GLTFLoader, modelPath, withDraco)
   const groupRef = useRef(null)
-  const soonOrbitRef = useRef(null)
-  const showSoonOrbit = modelPath === '/cart.glb'
+  const soonRef = useRef(null)
+  const showSoonSign = modelPath === '/cart.glb' || modelPath === '/cartNew.glb'
 
   const clonedScene = useMemo(() => {
     const root = gltf.scene.clone(true)
@@ -48,24 +48,24 @@ export function ToonModel({ modelPath, hovered = false, tiltSign = 1 }) {
     const size = new Vector3()
     box.getSize(size)
     const maxAxis = Math.max(size.x, size.y, size.z) || 1
-    return 2.2 / maxAxis
+    return 2.6 / maxAxis
   }, [clonedScene])
 
   const centeredPosition = useMemo(() => {
     const box = new Box3().setFromObject(clonedScene)
     const center = new Vector3()
     box.getCenter(center)
-    return [-center.x * fitScale, -center.y * fitScale, -center.z * fitScale]
+    return [-center.x * fitScale, -center.y * fitScale + 0.2, -center.z * fitScale]
   }, [clonedScene, fitScale])
 
-  const soonOrbitTexture = useMemo(() => {
-    if (!showSoonOrbit) return null
+  const soonTexture = useMemo(() => {
+    if (!showSoonSign) return null
+    const label = selected ? 'B A C K' : 'S O O N'
     const canvas = document.createElement('canvas')
     canvas.width = 512
     canvas.height = 128
     const ctx = canvas.getContext('2d')
     if (!ctx) return null
-
     ctx.clearRect(0, 0, canvas.width, canvas.height)
     ctx.fillStyle = '#ff2d2d'
     ctx.strokeStyle = '#240000'
@@ -73,16 +73,15 @@ export function ToonModel({ modelPath, hovered = false, tiltSign = 1 }) {
     ctx.font = '900 90px Arial Black, Impact, sans-serif'
     ctx.textAlign = 'center'
     ctx.textBaseline = 'middle'
-    ctx.strokeText('S O O N', canvas.width / 2, canvas.height / 2 + 4)
-    ctx.fillText('S O O N', canvas.width / 2, canvas.height / 2 + 4)
-
+    ctx.strokeText(label, canvas.width / 2, canvas.height / 2 + 4)
+    ctx.fillText(label, canvas.width / 2, canvas.height / 2 + 4)
     const texture = new CanvasTexture(canvas)
     texture.colorSpace = SRGBColorSpace
     texture.minFilter = LinearFilter
     texture.magFilter = LinearFilter
     texture.needsUpdate = true
     return texture
-  }, [showSoonOrbit])
+  }, [showSoonSign, selected])
 
   useLayoutEffect(() => {
     return () => {
@@ -93,36 +92,34 @@ export function ToonModel({ modelPath, hovered = false, tiltSign = 1 }) {
           if (material?.isMaterial) material.dispose()
         })
       })
-      soonOrbitTexture?.dispose?.()
+      soonTexture?.dispose?.()
     }
-  }, [clonedScene, soonOrbitTexture])
+  }, [clonedScene, soonTexture])
 
   useHoverMotion(groupRef, hovered, tiltSign)
 
   useFrame((state) => {
-    if (!showSoonOrbit || !soonOrbitRef.current) return
+    if (!soonRef.current) return
     const t = state.clock.elapsedTime
-    soonOrbitRef.current.rotation.y = Math.sin(t * 0.55) * 0.08
-    soonOrbitRef.current.position.y = -0.12 + Math.sin(t * 1.1) * 0.015
+    soonRef.current.position.y = 0.3 + Math.sin(t * 1.1) * 0.012
   })
 
   return (
     <group ref={groupRef}>
       <group position={centeredPosition} scale={fitScale}>
         <primitive object={clonedScene} />
-        {showSoonOrbit && soonOrbitTexture ? (
-          <group ref={soonOrbitRef}>
-            <sprite position={[0.46, 0.3, 0.22]} scale={[0.5, 0.128, 1]}>
-              <spriteMaterial
-                map={soonOrbitTexture}
-                transparent
-                opacity={0.95}
-                depthWrite={false}
-                depthTest={false}
-                blending={AdditiveBlending}
-              />
-            </sprite>
-          </group>
+        {showSoonSign && soonTexture ? (
+          <sprite ref={soonRef} position={[0.0, 0, -0.3]} scale={[0.4, 0.1, 1]}>
+            <spriteMaterial
+              map={soonTexture}
+              transparent
+              alphaTest={0.08}
+              opacity={1}
+              depthWrite={false}
+              depthTest={false}
+              toneMapped={false}
+            />
+          </sprite>
         ) : null}
       </group>
     </group>
