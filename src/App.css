@@ -1071,6 +1071,13 @@
     height: min(28vw, 118px);
   }
 
+  @media (max-width: 390px) {
+    .shop-page__corner-model {
+      width: min(28vw, 120px);
+      height: min(26vw, 108px);
+    }
+  }
+
   .shop-page__footer img {
     width: min(48vw, 190px);
     max-height: 42px;
