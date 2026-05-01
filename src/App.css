@@ -1065,7 +1065,7 @@
   }
 
   .shop-page__corner-model {
-    top: calc(2px + env(safe-area-inset-top));
+    top: calc(env(safe-area-inset-top) - 2px);
     right: 2px;
     width: min(30vw, 130px);
     height: min(28vw, 118px);
