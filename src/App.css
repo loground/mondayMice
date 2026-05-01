@@ -987,7 +987,7 @@
   }
 
   .layout--focused .model-slot.basket.is-selected {
-    transform: translate3d(var(--sel-x, 0px), var(--sel-y, 0px), 0) scale(0.666);
+    transform: translate3d(var(--sel-x, 0px), var(--sel-y, 0px), 0) scale(0.56);
     transition: none !important;
     animation: none !important;
   }
@@ -1067,8 +1067,8 @@
   .shop-page__corner-model {
     top: calc(2px + env(safe-area-inset-top));
     right: 2px;
-    width: min(38vw, 170px);
-    height: min(34vw, 150px);
+    width: min(30vw, 130px);
+    height: min(28vw, 118px);
   }
 
   .shop-page__footer img {
