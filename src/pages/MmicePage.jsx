@@ -16,7 +16,7 @@ export function MmicePage({ onBack }) {
         <section className="video-page__content">
           <div className="video-page__player">
             <iframe
-              src="https://www.youtube.com/embed/V69txbJx0rM?si=XB3Oco0spRILAvTD"
+              src="https://www.youtube.com/embed/hcLpAVJ24u8"
               title="MMICE FULL VIDEO 2025"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
               referrerPolicy="strict-origin-when-cross-origin"
