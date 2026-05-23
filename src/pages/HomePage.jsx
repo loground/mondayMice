@@ -304,6 +304,9 @@ export function HomePage({ onOpenMmice, onOpenShop }) {
     const warmCacheTimer = window.setTimeout(() => {
       if (mounted) setAssetsReady(true)
     }, 250)
+    const videoFallbackTimer = window.setTimeout(() => {
+      if (mounted) setVideoReady(true)
+    }, 1800)
 
     const onTvVideoReady = () => {
       if (mounted) setVideoReady(true)
@@ -313,6 +316,7 @@ export function HomePage({ onOpenMmice, onOpenShop }) {
     return () => {
       mounted = false
       window.clearTimeout(warmCacheTimer)
+      window.clearTimeout(videoFallbackTimer)
       window.removeEventListener('tv-video-ready', onTvVideoReady)
       DefaultLoadingManager.onStart = prevOnStart
       DefaultLoadingManager.onLoad = prevOnLoad

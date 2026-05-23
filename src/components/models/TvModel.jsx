@@ -178,6 +178,11 @@ export function TvModel({
     }
     const onLoadedMetadata = () => {
       applyCenterCrop()
+      markVideoReady()
+      tryPlay()
+    }
+    const onCanPlay = () => {
+      markVideoReady()
       tryPlay()
     }
     const onVideoError = () => {
@@ -204,7 +209,7 @@ export function TvModel({
     }
 
     video.addEventListener('loadedmetadata', onLoadedMetadata)
-    video.addEventListener('canplay', tryPlay)
+    video.addEventListener('canplay', onCanPlay)
     video.addEventListener('playing', markVideoReady)
     video.addEventListener('ended', onEnded)
     video.addEventListener('error', onVideoError)
@@ -216,7 +221,7 @@ export function TvModel({
     return () => {
       videoRef.current = null
       video.removeEventListener('loadedmetadata', onLoadedMetadata)
-      video.removeEventListener('canplay', tryPlay)
+      video.removeEventListener('canplay', onCanPlay)
       video.removeEventListener('playing', markVideoReady)
       video.removeEventListener('ended', onEnded)
       video.removeEventListener('error', onVideoError)
