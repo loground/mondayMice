@@ -56,6 +56,7 @@ function App() {
           path="/"
           element={
             <HomePage
+              key="home"
               onOpenGallery={() => startRouteTransition('/gallery')}
               onOpenMmice={startRouteTransition}
               onOpenShop={() => startRouteTransition('/shop')}
@@ -66,6 +67,7 @@ function App() {
           path="/gallery"
           element={
             <HomePage
+              key="gallery"
               galleryOpen
               onCloseGallery={() => startRouteTransition('/')}
               onOpenMmice={startRouteTransition}

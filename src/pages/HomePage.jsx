@@ -264,6 +264,26 @@ export function HomePage({ galleryOpen = false, onCloseGallery, onOpenGallery, o
   }, [location.state])
 
   useEffect(() => {
+    if (galleryOpen) {
+      setSelectedModel(null)
+      setSelectedMotion({ x: 0, y: 0 })
+      setPanelVisible(true)
+      setTvBannersVisible(true)
+      setForceBackVideo(true)
+      return
+    }
+
+    setSelectedModel(null)
+    setSelectedMotion({ x: 0, y: 0 })
+    setPanelVisible(false)
+    setTvBannersVisible(false)
+    setForceBackVideo(false)
+    setTvModelVersion((prev) => prev + 1)
+    setTvCanvasVersion((prev) => prev + 1)
+    setTvSlotVersion((prev) => prev + 1)
+  }, [galleryOpen])
+
+  useEffect(() => {
     return () => {
       if (closeTimerRef.current) window.clearTimeout(closeTimerRef.current)
       if (motionRafRef.current) window.cancelAnimationFrame(motionRafRef.current)
