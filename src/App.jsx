@@ -57,6 +57,7 @@ function App() {
           element={<HomePage onOpenMmice={startRouteTransition} onOpenShop={() => startRouteTransition('/shop')} />}
         />
         <Route path="/warmupbeforeburial" element={<MmicePage onBack={() => navigate('/')} />} />
+        <Route path="/mmice" element={<MmicePage variant="magatour" onBack={() => navigate('/')} />} />
         <Route path="/shop" element={<ShopPage onBack={() => startRouteTransition('/', { fromShop: true })} />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>

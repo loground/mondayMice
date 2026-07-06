@@ -737,6 +737,55 @@
   display: block;
 }
 
+.video-page--magatour {
+  overflow: hidden;
+  background: #ffffff;
+}
+
+.video-page--magatour .video-page__content {
+  z-index: 4;
+  padding-top: clamp(178px, 13.6vw, 278px);
+  padding-left: clamp(48px, 3.9vw, 82px);
+  padding-right: 46vw;
+}
+
+.video-page--magatour .video-page__player {
+  width: min(49.8vw, 1020px);
+}
+
+.video-page--magatour .video-page__footer {
+  display: none;
+}
+
+.video-page__magatour-header {
+  position: absolute;
+  z-index: 5;
+  top: clamp(42px, 5.9vh, 78px);
+  left: clamp(58px, 6.2vw, 130px);
+  width: min(46vw, 930px);
+  height: auto;
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+.video-page__magatour-mice {
+  position: absolute;
+  z-index: 3;
+  top: clamp(72px, 6vw, 122px);
+  right: clamp(36px, 9.1vw, 186px);
+  width: min(25.5vw, 646px);
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+.video-page__magatour-mice img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
 .video-page__footer {
   position: absolute;
   left: 0;
@@ -1052,6 +1101,42 @@
 
   .video-page__player {
     width: min(89vw, 416px);
+  }
+
+  .video-page--magatour {
+    min-height: 100dvh;
+    overflow: hidden;
+  }
+
+  .video-page--magatour .video-page__content {
+    padding-top: clamp(196px, 21.5vh, 228px);
+    padding-left: 0;
+    padding-right: 0;
+    padding-bottom: 0;
+  }
+
+  .video-page--magatour .video-page__player {
+    width: min(84.2vw, 416px);
+  }
+
+  .video-page--magatour .video-page__back {
+    top: calc(clamp(196px, 21.5vh, 228px) + min(84.2vw, 416px) * 0.5625 + 8px);
+    right: calc(4px - 20px);
+  }
+
+  .video-page__magatour-header {
+    top: clamp(54px, 7vh, 72px);
+    left: 50%;
+    width: min(80vw, 400px);
+    transform: translateX(-50%);
+  }
+
+  .video-page__magatour-mice {
+    top: calc(clamp(196px, 21.5vh, 228px) + min(84.2vw, 416px) * 0.5625 + 10px);
+    right: auto;
+    left: 50%;
+    width: min(76vw, 380px);
+    transform: translateX(-50%);
   }
 
   .video-page__footer img {

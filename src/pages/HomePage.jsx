@@ -45,8 +45,17 @@ export function HomePage({ onOpenMmice, onOpenShop }) {
         id: 'tv-banner-0',
         delay: '90ms',
         image: '/banners/mmice.png',
+        label: 'MMICE FULL VIDEO 2025',
         category: 'skate',
         route: '/warmupbeforeburial',
+      },
+      {
+        id: 'tv-banner-1',
+        delay: '180ms',
+        image: '/banners/m-mice-china.png',
+        label: 'MAGAMAEV PROTOUR',
+        category: 'skate',
+        route: '/mmice',
       },
     ],
     [],
@@ -284,7 +293,7 @@ export function HomePage({ onOpenMmice, onOpenShop }) {
 
     banners.forEach((banner) => observer.observe(banner))
     return () => observer.disconnect()
-  }, [tvPanelVisible])
+  }, [tvPanelVisible, filteredTvBanners])
 
   useEffect(() => {
     let mounted = true
@@ -413,9 +422,9 @@ export function HomePage({ onOpenMmice, onOpenShop }) {
               }}
               onClick={() => handleBannerClick(banner.route)}
             >
-              <img className="tv-banner__image" src={banner.image} alt="MMICE FULL VIDEO 2025" />
+              <img className="tv-banner__image" src={banner.image} alt={banner.label} />
               <div className="tv-banner__overlay" />
-              <div className="tv-banner__label">MMICE FULL VIDEO 2025</div>
+              <div className="tv-banner__label">{banner.label}</div>
             </button>
           ))}
           <div className={`tv-filters ${tvPanelVisible ? 'is-visible' : ''}`}>
