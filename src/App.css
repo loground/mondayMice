@@ -753,10 +753,6 @@
   width: min(49.8vw, 1020px);
 }
 
-.video-page--magatour .video-page__footer {
-  display: none;
-}
-
 .video-page__magatour-header {
   position: absolute;
   z-index: 5;
@@ -1109,7 +1105,7 @@
   }
 
   .video-page--magatour .video-page__content {
-    padding-top: clamp(196px, 21.5vh, 228px);
+    padding-top: clamp(166px, 18vh, 190px);
     padding-left: 0;
     padding-right: 0;
     padding-bottom: 0;
@@ -1120,7 +1116,7 @@
   }
 
   .video-page--magatour .video-page__back {
-    top: calc(clamp(196px, 21.5vh, 228px) + min(84.2vw, 416px) * 0.5625 + 8px);
+    top: calc(clamp(166px, 18vh, 190px) + min(84.2vw, 416px) * 0.5625 + 8px);
     right: calc(4px - 20px);
   }
 
@@ -1132,7 +1128,7 @@
   }
 
   .video-page__magatour-mice {
-    top: calc(clamp(196px, 21.5vh, 228px) + min(84.2vw, 416px) * 0.5625 + 10px);
+    top: calc(clamp(166px, 18vh, 190px) + min(84.2vw, 416px) * 0.5625 + 10px);
     right: auto;
     left: 50%;
     width: min(76vw, 380px);

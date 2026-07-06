@@ -6,7 +6,7 @@ const VIDEO_PAGES = {
   },
   magatour: {
     label: 'MAGAMAEV PROTOUR',
-    embedUrl: 'https://www.youtube.com/embed/R1xWvW1osQc',
+    embedUrl: 'https://www.youtube.com/embed/nS9rtbNpu3M',
     className: 'video-page--magatour',
   },
 }
