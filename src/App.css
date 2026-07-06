@@ -779,13 +779,6 @@
 
 .video-page--magatour .video-page__content {
   z-index: 4;
-  padding-top: clamp(178px, 13.6vw, 278px);
-  padding-left: clamp(48px, 3.9vw, 82px);
-  padding-right: 46vw;
-}
-
-.video-page--magatour .video-page__player {
-  width: min(49.8vw, 1020px);
 }
 
 .video-page__magatour-header {
@@ -1147,18 +1140,11 @@
   }
 
   .video-page--magatour .video-page__content {
-    padding-top: clamp(166px, 18vh, 190px);
-    padding-left: 0;
-    padding-right: 0;
-    padding-bottom: 0;
-  }
-
-  .video-page--magatour .video-page__player {
-    width: min(84.2vw, 416px);
+    z-index: 4;
   }
 
   .video-page--magatour .video-page__back {
-    top: calc(clamp(166px, 18vh, 190px) + min(84.2vw, 416px) * 0.5625 + 8px);
+    top: calc(clamp(133px, 34vw, 201px) + min(89vw, 416px) * 0.5625 + 8px);
     right: calc(4px - 20px);
   }
 
@@ -1170,7 +1156,7 @@
   }
 
   .video-page__magatour-mice {
-    top: calc(clamp(166px, 18vh, 190px) + min(84.2vw, 416px) * 0.5625 + 10px);
+    top: calc(clamp(133px, 34vw, 201px) + min(89vw, 416px) * 0.5625 + 10px);
     right: auto;
     left: 50%;
     width: min(76vw, 380px);
