@@ -5,15 +5,15 @@ import { ModelSlot } from '../components/ModelSlot'
 import { PageLoader } from '../components/PageLoader'
 import { SpotlightOverlay } from '../components/SpotlightOverlay'
 
-export function HomePage({ onOpenMmice, onOpenShop }) {
+export function HomePage({ galleryOpen = false, onCloseGallery, onOpenGallery, onOpenMmice, onOpenShop }) {
   const location = useLocation()
   const [mode] = useState('regular')
   const [selectedModel, setSelectedModel] = useState(null)
   const [selectedMotion, setSelectedMotion] = useState({ x: 0, y: 0 })
-  const [panelVisible, setPanelVisible] = useState(false)
+  const [panelVisible, setPanelVisible] = useState(galleryOpen)
   const [assetsReady, setAssetsReady] = useState(false)
   const [videoReady, setVideoReady] = useState(false)
-  const [tvBannersVisible, setTvBannersVisible] = useState(false)
+  const [tvBannersVisible, setTvBannersVisible] = useState(galleryOpen)
   const [tvCanvasVersion, setTvCanvasVersion] = useState(0)
   const [tvSlotVersion, setTvSlotVersion] = useState(0)
   const [cartCanvasVersion, setCartCanvasVersion] = useState(0)
@@ -23,7 +23,7 @@ export function HomePage({ onOpenMmice, onOpenShop }) {
   const [returnSwipe, setReturnSwipe] = useState('')
   const [spriteTransitionActive, setSpriteTransitionActive] = useState(false)
   const [suppressSelectTransition, setSuppressSelectTransition] = useState(false)
-  const [forceBackVideo, setForceBackVideo] = useState(false)
+  const [forceBackVideo, setForceBackVideo] = useState(galleryOpen)
 
   const closeTimerRef = useRef(0)
   const motionRafRef = useRef(0)
@@ -33,11 +33,11 @@ export function HomePage({ onOpenMmice, onOpenShop }) {
   const unsuppressTimerRef = useRef(0)
   const DESKTOP_SPRITE_MS = 680
   const DESKTOP_NO_FLY_SUPPRESS_MS = 900
-  const isFocused = selectedModel !== null
+  const isFocused = galleryOpen || selectedModel !== null
   const focusSide = 'right'
   const contentFromSide = focusSide === 'right' ? 'left' : 'right'
   const pageReady = assetsReady && videoReady
-  const tvPanelVisible = selectedModel === 'tv' && panelVisible && tvBannersVisible
+  const tvPanelVisible = galleryOpen || (selectedModel === 'tv' && panelVisible && tvBannersVisible)
   const cartPanelVisible = selectedModel === 'cart' && panelVisible
   const tvBanners = useMemo(
     () => [
@@ -114,7 +114,17 @@ export function HomePage({ onOpenMmice, onOpenShop }) {
   const toggleModel = (modelId, element) => {
     const isMobile = window.matchMedia('(max-width: 900px)').matches
 
+    if (galleryOpen && modelId === 'tv' && typeof onCloseGallery === 'function') {
+      onCloseGallery()
+      return
+    }
+
     if (selectedModel === null) {
+      if (modelId === 'tv' && !galleryOpen && typeof onOpenGallery === 'function') {
+        onOpenGallery()
+        return
+      }
+
       if (closeTimerRef.current) window.clearTimeout(closeTimerRef.current)
       if (motionRafRef.current) window.cancelAnimationFrame(motionRafRef.current)
       if (spriteTransitionTimerRef.current) window.clearTimeout(spriteTransitionTimerRef.current)
@@ -175,6 +185,11 @@ export function HomePage({ onOpenMmice, onOpenShop }) {
 
     if (selectedModel === modelId) {
       if (modelId === 'tv') {
+        if (galleryOpen && typeof onCloseGallery === 'function') {
+          onCloseGallery()
+          return
+        }
+
         if (spriteTransitionTimerRef.current) window.clearTimeout(spriteTransitionTimerRef.current)
         if (unsuppressTimerRef.current) window.clearTimeout(unsuppressTimerRef.current)
         setSpriteTransitionActive(true)
@@ -259,13 +274,18 @@ export function HomePage({ onOpenMmice, onOpenShop }) {
   }, [])
 
   useEffect(() => {
+    if (galleryOpen) {
+      setTvBannersVisible(true)
+      return undefined
+    }
+
     if (selectedModel === 'tv' && panelVisible) {
       setTvBannersVisible(true)
       return undefined
     }
     setTvBannersVisible(false)
     return undefined
-  }, [selectedModel, panelVisible, spriteTransitionActive])
+  }, [galleryOpen, selectedModel, panelVisible, spriteTransitionActive])
 
   useEffect(() => {
     const panel = tvBannersPanelRef.current
@@ -339,7 +359,7 @@ export function HomePage({ onOpenMmice, onOpenShop }) {
 
   return (
     <main
-      className={`page ${mode === 'spotlight' ? 'page--spotlight' : 'page--regular'} ${tvPanelVisible ? 'page--tv-panel' : ''}`}
+      className={`page ${mode === 'spotlight' ? 'page--spotlight' : 'page--regular'} ${galleryOpen ? 'page--gallery-route' : ''} ${tvPanelVisible ? 'page--tv-panel' : ''}`}
     >
       {!pageReady ? <PageLoader /> : null}
       {/* Switcher hidden for now by request */}
@@ -377,11 +397,11 @@ export function HomePage({ onOpenMmice, onOpenShop }) {
           modelType="tv"
           tiltSign={1}
           mode={mode}
-          selected={selectedModel === 'tv'}
+          selected={galleryOpen || selectedModel === 'tv'}
           modelVersion={tvModelVersion}
-          forceBackVideo={forceBackVideo}
+          forceBackVideo={galleryOpen || forceBackVideo}
           away={selectedModel === 'cart'}
-          selectedMotion={selectedModel === 'tv' ? selectedMotion : undefined}
+          selectedMotion={!galleryOpen && selectedModel === 'tv' ? selectedMotion : undefined}
           onToggle={(element) => toggleModel('tv', element)}
         />
 

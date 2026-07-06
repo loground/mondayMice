@@ -54,10 +54,28 @@ function App() {
       <Routes>
         <Route
           path="/"
-          element={<HomePage onOpenMmice={startRouteTransition} onOpenShop={() => startRouteTransition('/shop')} />}
+          element={
+            <HomePage
+              onOpenGallery={() => startRouteTransition('/gallery')}
+              onOpenMmice={startRouteTransition}
+              onOpenShop={() => startRouteTransition('/shop')}
+            />
+          }
         />
-        <Route path="/warmupbeforeburial" element={<MmicePage onBack={() => navigate('/')} />} />
-        <Route path="/mmice" element={<MmicePage variant="magatour" onBack={() => navigate('/')} />} />
+        <Route
+          path="/gallery"
+          element={
+            <HomePage
+              galleryOpen
+              onCloseGallery={() => startRouteTransition('/')}
+              onOpenMmice={startRouteTransition}
+              onOpenShop={() => startRouteTransition('/shop')}
+            />
+          }
+        />
+        <Route path="/galeria" element={<Navigate to="/gallery" replace />} />
+        <Route path="/warmupbeforeburial" element={<MmicePage onBack={() => navigate('/gallery')} />} />
+        <Route path="/mmice" element={<MmicePage variant="magatour" onBack={() => navigate('/gallery')} />} />
         <Route path="/shop" element={<ShopPage onBack={() => startRouteTransition('/', { fromShop: true })} />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>

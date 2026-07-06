@@ -603,6 +603,41 @@
   background: #ffffff !important;
 }
 
+.page--gallery-route .layout {
+  position: fixed;
+  inset: 0;
+  z-index: 24;
+  width: 100%;
+  min-height: 100dvh;
+  margin: 0;
+  padding: 0;
+  display: block;
+  pointer-events: none;
+}
+
+.page--gallery-route .title,
+.page--gallery-route .basket {
+  display: none;
+}
+
+.page--gallery-route .model-slot.tv {
+  position: fixed;
+  top: clamp(18px, 3.7vh, 42px);
+  right: clamp(34px, 5.2vw, 100px);
+  z-index: 25;
+  width: clamp(150px, 13vw, 230px);
+  height: clamp(150px, 13vw, 230px);
+  margin: 0;
+  pointer-events: auto;
+  transform: none !important;
+  transition: none !important;
+  animation: none !important;
+}
+
+.page--gallery-route .tv-banner {
+  opacity: 1;
+}
+
 .tv-banner__label {
   position: absolute;
   left: clamp(12px, 1.6vw, 24px);
