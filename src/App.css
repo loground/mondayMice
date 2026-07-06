@@ -671,12 +671,13 @@
 }
 
 .video-page {
+  --video-page-bg: #e9e9eb;
   position: relative;
   height: 100dvh;
   width: 100%;
   overflow-x: hidden;
   overflow-y: hidden;
-  background: #e9e9eb;
+  background: var(--video-page-bg);
   color: #0f0f0f;
 }
 
@@ -763,6 +764,8 @@
   width: min(56vw, 760px);
   aspect-ratio: 16 / 9;
   background: #000;
+  box-sizing: border-box;
+  flex: 0 0 auto;
 }
 
 .video-page__player iframe {
@@ -774,7 +777,7 @@
 
 .video-page--magatour {
   overflow: hidden;
-  background: #ffffff;
+  background: var(--video-page-bg);
 }
 
 .video-page--magatour .video-page__content {
@@ -1143,10 +1146,13 @@
     top: var(--video-mobile-top);
     left: 50%;
     width: var(--video-mobile-width);
+    height: var(--video-mobile-height);
+    max-width: calc(100vw - 32px);
     transform: translateX(-50%);
   }
 
   .video-page--magatour {
+    --video-mobile-width: min(89vw, 416px);
     min-height: 100dvh;
     overflow: hidden;
   }
