@@ -1072,6 +1072,13 @@
     animation: none !important;
   }
 
+  .page--gallery-route .model-slot.tv {
+    top: calc(5px + env(safe-area-inset-top));
+    right: 12px;
+    width: clamp(70px, 22vw, 88px);
+    height: clamp(70px, 22vw, 88px);
+  }
+
   .tv-banner {
     height: auto;
   }
