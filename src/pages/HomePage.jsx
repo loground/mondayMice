@@ -31,6 +31,7 @@ export function HomePage({ galleryOpen = false, onCloseGallery, onOpenGallery, o
   const returnSwipeTimerRef = useRef(0)
   const spriteTransitionTimerRef = useRef(0)
   const unsuppressTimerRef = useRef(0)
+  const assetsReadyLockedRef = useRef(false)
   const DESKTOP_SPRITE_MS = 680
   const DESKTOP_NO_FLY_SUPPRESS_MS = 900
   const isFocused = galleryOpen || selectedModel !== null
@@ -339,23 +340,39 @@ export function HomePage({ galleryOpen = false, onCloseGallery, onOpenGallery, o
     let mounted = true
     const prevOnStart = DefaultLoadingManager.onStart
     const prevOnLoad = DefaultLoadingManager.onLoad
+    const prevOnError = DefaultLoadingManager.onError
+
+    const markAssetsReady = () => {
+      if (!mounted) return
+      assetsReadyLockedRef.current = true
+      setAssetsReady(true)
+    }
 
     DefaultLoadingManager.onStart = (...args) => {
-      if (mounted) setAssetsReady(false)
+      if (mounted && !assetsReadyLockedRef.current) setAssetsReady(false)
       if (typeof prevOnStart === 'function') prevOnStart(...args)
     }
 
     DefaultLoadingManager.onLoad = (...args) => {
-      if (mounted) setAssetsReady(true)
+      markAssetsReady()
       if (typeof prevOnLoad === 'function') prevOnLoad(...args)
     }
 
+    DefaultLoadingManager.onError = (...args) => {
+      markAssetsReady()
+      if (typeof prevOnError === 'function') prevOnError(...args)
+    }
+
     const warmCacheTimer = window.setTimeout(() => {
-      if (mounted) setAssetsReady(true)
+      markAssetsReady()
     }, 250)
     const videoFallbackTimer = window.setTimeout(() => {
       if (mounted) setVideoReady(true)
     }, 1800)
+    const startupFallbackTimer = window.setTimeout(() => {
+      markAssetsReady()
+      if (mounted) setVideoReady(true)
+    }, 3200)
 
     const onTvVideoReady = () => {
       if (mounted) setVideoReady(true)
@@ -366,9 +383,11 @@ export function HomePage({ galleryOpen = false, onCloseGallery, onOpenGallery, o
       mounted = false
       window.clearTimeout(warmCacheTimer)
       window.clearTimeout(videoFallbackTimer)
+      window.clearTimeout(startupFallbackTimer)
       window.removeEventListener('tv-video-ready', onTvVideoReady)
       DefaultLoadingManager.onStart = prevOnStart
       DefaultLoadingManager.onLoad = prevOnLoad
+      DefaultLoadingManager.onError = prevOnError
     }
   }, [])
 
