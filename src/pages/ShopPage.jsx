@@ -56,6 +56,7 @@ export function ShopPage({ onBack }) {
   )
   const [cartItems, setCartItems] = useState([])
   const [previewProduct, setPreviewProduct] = useState(null)
+  const [loadedImages, setLoadedImages] = useState({})
 
   const cartTotal = cartItems.length * PRICE
 
@@ -84,6 +85,10 @@ export function ShopPage({ onBack }) {
 
   const removeFromCart = (cartId) => {
     setCartItems((items) => items.filter((item) => item.cartId !== cartId))
+  }
+
+  const markImageLoaded = (src) => {
+    setLoadedImages((loaded) => (loaded[src] ? loaded : { ...loaded, [src]: true }))
   }
 
   return (
@@ -119,17 +124,29 @@ export function ShopPage({ onBack }) {
             {PRODUCTS.map((product) => (
               <article className="shop-card" key={product.id}>
                 <button
-                  className="shop-card__image-wrap"
+                  className={`shop-card__image-wrap ${
+                    loadedImages[product.image] && loadedImages[product.zoomImage] ? 'is-loaded' : 'is-loading'
+                  }`}
                   type="button"
                   onClick={() => setPreviewProduct(product)}
                   aria-label={`Открыть фото ${product.name}`}
                 >
-                  <img className="shop-card__image shop-card__image--base" src={product.image} alt={product.name} />
                   <img
-                    className="shop-card__image shop-card__image--zoom"
+                    className={`shop-card__image shop-card__image--base ${
+                      loadedImages[product.image] ? 'is-loaded' : ''
+                    }`}
+                    src={product.image}
+                    alt={product.name}
+                    onLoad={() => markImageLoaded(product.image)}
+                  />
+                  <img
+                    className={`shop-card__image shop-card__image--zoom ${
+                      loadedImages[product.zoomImage] ? 'is-loaded' : ''
+                    }`}
                     src={product.zoomImage}
                     alt=""
                     aria-hidden="true"
+                    onLoad={() => markImageLoaded(product.zoomImage)}
                   />
                 </button>
                 <div className="shop-card__info">
@@ -246,12 +263,21 @@ export function ShopPage({ onBack }) {
               type="button"
               onClick={() => setPreviewProduct(null)}
               aria-label="Закрыть"
-            >
-              ×
-            </button>
+            />
             <div className="shop-preview__images">
-              <img src={previewProduct.image} alt={previewProduct.name} />
-              <img src={previewProduct.zoomImage} alt={`${previewProduct.name} close up`} />
+              {[previewProduct.image, previewProduct.zoomImage].map((src, index) => (
+                <div
+                  className={`shop-preview__image-wrap ${loadedImages[src] ? 'is-loaded' : 'is-loading'}`}
+                  key={src}
+                >
+                  <img
+                    className={loadedImages[src] ? 'is-loaded' : ''}
+                    src={src}
+                    alt={index === 0 ? previewProduct.name : `${previewProduct.name} close up`}
+                    onLoad={() => markImageLoaded(src)}
+                  />
+                </div>
+              ))}
             </div>
           </div>
         </div>
