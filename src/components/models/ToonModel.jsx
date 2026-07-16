@@ -17,8 +17,8 @@ export function ToonModel({
   const gltf = useLoader(GLTFLoader, modelPath, withLocalDraco)
   const groupRef = useRef(null)
   const showSoonSign = modelPath === '/newMouse.glb'
-  const [soonTexture, backCartTexture] = useLoader(TextureLoader, ['/soon.png', '/backCart.png'])
-  const activeSignTexture = selected ? backCartTexture : soonTexture
+  const [shopTexture, backCartTexture] = useLoader(TextureLoader, ['/shop.png', '/backCart.png'])
+  const activeSignTexture = selected ? backCartTexture : shopTexture
   const soonSignTexture = useMemo(() => {
     if (!showSoonSign || !activeSignTexture?.image) return null
     const image = activeSignTexture.image
@@ -118,7 +118,7 @@ export function ToonModel({
           Math.max(size.y * 1.08, 0.13),
         )
         const label = new Mesh(labelGeom, labelMat)
-        label.name = 'soon-on-sign'
+        label.name = 'shop-on-sign'
 
         const absX = Math.abs(size.x)
         const absY = Math.abs(size.y)

@@ -55,6 +55,7 @@ export function ShopPage({ onBack }) {
     PRODUCTS.reduce((sizes, product) => ({ ...sizes, [product.id]: SIZES[0] }), {}),
   )
   const [cartItems, setCartItems] = useState([])
+  const [previewProduct, setPreviewProduct] = useState(null)
 
   const cartTotal = cartItems.length * PRICE
 
@@ -117,7 +118,12 @@ export function ShopPage({ onBack }) {
           <div className="shop-page__grid">
             {PRODUCTS.map((product) => (
               <article className="shop-card" key={product.id}>
-                <div className="shop-card__image-wrap">
+                <button
+                  className="shop-card__image-wrap"
+                  type="button"
+                  onClick={() => setPreviewProduct(product)}
+                  aria-label={`Открыть фото ${product.name}`}
+                >
                   <img className="shop-card__image shop-card__image--base" src={product.image} alt={product.name} />
                   <img
                     className="shop-card__image shop-card__image--zoom"
@@ -125,7 +131,7 @@ export function ShopPage({ onBack }) {
                     alt=""
                     aria-hidden="true"
                   />
-                </div>
+                </button>
                 <div className="shop-card__info">
                   <div>
                     <h2 className="shop-card__name">{product.name}</h2>
@@ -171,8 +177,8 @@ export function ShopPage({ onBack }) {
                       {item.name}
                       <small>{item.size}</small>
                     </span>
-                    <button type="button" onClick={() => removeFromCart(item.cartId)} aria-label={`Remove ${item.name}`}>
-                      remove
+                    <button type="button" onClick={() => removeFromCart(item.cartId)} aria-label={`Убрать ${item.name}`}>
+                      убрать
                     </button>
                   </li>
                 ))}
@@ -225,6 +231,31 @@ export function ShopPage({ onBack }) {
           </aside>
         </div>
       </section>
+
+      {previewProduct ? (
+        <div
+          className="shop-preview"
+          role="dialog"
+          aria-modal="true"
+          aria-label={`Фото ${previewProduct.name}`}
+          onClick={() => setPreviewProduct(null)}
+        >
+          <div className="shop-preview__panel" onClick={(event) => event.stopPropagation()}>
+            <button
+              className="shop-preview__close"
+              type="button"
+              onClick={() => setPreviewProduct(null)}
+              aria-label="Закрыть"
+            >
+              ×
+            </button>
+            <div className="shop-preview__images">
+              <img src={previewProduct.image} alt={previewProduct.name} />
+              <img src={previewProduct.zoomImage} alt={`${previewProduct.name} close up`} />
+            </div>
+          </div>
+        </div>
+      ) : null}
     </main>
   )
 }
