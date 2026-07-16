@@ -45,6 +45,16 @@
     linear-gradient(160deg, #161b26 0%, #0a0d14 100%);
 }
 
+.page-loader::before {
+  content: '';
+  width: clamp(34px, 4vw, 56px);
+  aspect-ratio: 1;
+  border: 3px solid rgba(255, 255, 255, 0.22);
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  animation: loaderSpin 720ms linear infinite;
+}
+
 .page-loader__sprite {
   position: absolute;
   inset: 0;
@@ -1175,6 +1185,12 @@
 }
 
 @keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes loaderSpin {
   to {
     transform: rotate(360deg);
   }

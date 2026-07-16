@@ -1,15 +1,9 @@
 import { useLoader } from '@react-three/fiber'
 import { useEffect, useLayoutEffect, useMemo, useRef } from 'react'
 import { Box3, CanvasTexture, DoubleSide, LinearFilter, Mesh, MeshBasicMaterial, PlaneGeometry, SRGBColorSpace, TextureLoader, Vector3 } from 'three'
-import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 import { useHoverMotion } from '../../hooks/useHoverMotion'
-
-function withDraco(loader) {
-  const dracoLoader = new DRACOLoader()
-  dracoLoader.setDecoderPath('https://www.gstatic.com/draco/v1/decoders/')
-  loader.setDRACOLoader(dracoLoader)
-}
+import { withLocalDraco } from '../../utils/gltfLoader'
 
 export function ToonModel({
   modelPath,
@@ -20,7 +14,7 @@ export function ToonModel({
   onReady,
   snapToBasePose = false,
 }) {
-  const gltf = useLoader(GLTFLoader, modelPath, withDraco)
+  const gltf = useLoader(GLTFLoader, modelPath, withLocalDraco)
   const groupRef = useRef(null)
   const showSoonSign = modelPath === '/newMouse.glb'
   const [soonTexture, backCartTexture] = useLoader(TextureLoader, ['/soon.png', '/backCart.png'])
@@ -209,4 +203,4 @@ export function ToonModel({
   )
 }
 
-useLoader.preload(GLTFLoader, '/newMouse.glb', withDraco)
+useLoader.preload(GLTFLoader, '/newMouse.glb', withLocalDraco)

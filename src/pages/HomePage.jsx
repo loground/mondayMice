@@ -12,7 +12,6 @@ export function HomePage({ galleryOpen = false, onCloseGallery, onOpenGallery, o
   const [selectedMotion, setSelectedMotion] = useState({ x: 0, y: 0 })
   const [panelVisible, setPanelVisible] = useState(galleryOpen)
   const [assetsReady, setAssetsReady] = useState(false)
-  const [videoReady, setVideoReady] = useState(false)
   const [tvBannersVisible, setTvBannersVisible] = useState(galleryOpen)
   const [tvCanvasVersion, setTvCanvasVersion] = useState(0)
   const [tvSlotVersion, setTvSlotVersion] = useState(0)
@@ -37,7 +36,7 @@ export function HomePage({ galleryOpen = false, onCloseGallery, onOpenGallery, o
   const isFocused = galleryOpen || selectedModel !== null
   const focusSide = 'right'
   const contentFromSide = focusSide === 'right' ? 'left' : 'right'
-  const pageReady = assetsReady && videoReady
+  const pageReady = assetsReady
   const tvPanelVisible = galleryOpen || (selectedModel === 'tv' && panelVisible && tvBannersVisible)
   const cartPanelVisible = selectedModel === 'cart' && panelVisible
   const tvBanners = useMemo(
@@ -366,23 +365,18 @@ export function HomePage({ galleryOpen = false, onCloseGallery, onOpenGallery, o
     const warmCacheTimer = window.setTimeout(() => {
       markAssetsReady()
     }, 250)
-    const videoFallbackTimer = window.setTimeout(() => {
-      if (mounted) setVideoReady(true)
-    }, 1800)
     const startupFallbackTimer = window.setTimeout(() => {
       markAssetsReady()
-      if (mounted) setVideoReady(true)
-    }, 3200)
+    }, 1200)
 
     const onTvVideoReady = () => {
-      if (mounted) setVideoReady(true)
+      markAssetsReady()
     }
     window.addEventListener('tv-video-ready', onTvVideoReady)
 
     return () => {
       mounted = false
       window.clearTimeout(warmCacheTimer)
-      window.clearTimeout(videoFallbackTimer)
       window.clearTimeout(startupFallbackTimer)
       window.removeEventListener('tv-video-ready', onTvVideoReady)
       DefaultLoadingManager.onStart = prevOnStart

@@ -3,14 +3,49 @@
 
 <head>
   <meta charset="UTF-8" />
-    <link rel="icon" type="image/png" href="/icon.png" />
-    <link rel="apple-touch-icon" href="/icon.png" />
+  <link rel="icon" type="image/png" href="/icon.png" />
+  <link rel="apple-touch-icon" href="/icon.png" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>monday mice</title>
+  <style>
+    html,
+    body,
+    #root {
+      margin: 0;
+      width: 100%;
+      min-height: 100%;
+      background: #080a10;
+    }
+
+    .boot-loader {
+      min-height: 100dvh;
+      display: grid;
+      place-items: center;
+      background:
+        radial-gradient(circle at 50% 35%, #1b2030 0%, #0e121b 45%, #080a10 100%),
+        linear-gradient(160deg, #161b26 0%, #0a0d14 100%);
+    }
+
+    .boot-loader::before {
+      content: '';
+      width: clamp(34px, 4vw, 56px);
+      aspect-ratio: 1;
+      border: 3px solid rgba(255, 255, 255, 0.22);
+      border-top-color: #ffffff;
+      border-radius: 50%;
+      animation: bootLoaderSpin 720ms linear infinite;
+    }
+
+    @keyframes bootLoaderSpin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+  </style>
 </head>
 
 <body>
-  <div id="root"></div>
+  <div id="root"><div class="boot-loader" role="status" aria-label="Loading"></div></div>
   <script type="module" src="/src/main.jsx"></script>
 </body>
 

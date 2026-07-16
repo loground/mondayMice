@@ -1,14 +1,8 @@
 import { Canvas, useFrame, useLoader } from '@react-three/fiber'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { AnimationMixer, LoopOnce } from 'three'
-import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
-
-function withDraco(loader) {
-  const dracoLoader = new DRACOLoader()
-  dracoLoader.setDecoderPath('https://www.gstatic.com/draco/v1/decoders/')
-  loader.setDRACOLoader(dracoLoader)
-}
+import { withLocalDraco } from '../utils/gltfLoader'
 
 function SwitcherModel({ playTick, mode, onToggle }) {
   const groupRef = useRef(null)
@@ -16,7 +10,7 @@ function SwitcherModel({ playTick, mode, onToggle }) {
   const actionsRef = useRef([])
   const targetTimesRef = useRef([])
   const playingRef = useRef([])
-  const { nodes, materials, animations } = useLoader(GLTFLoader, '/switcher.glb', withDraco)
+  const { nodes, materials, animations } = useLoader(GLTFLoader, '/switcher.glb', withLocalDraco)
 
   useEffect(() => {
     if (!groupRef.current) return undefined
@@ -103,7 +97,7 @@ function SwitcherModel({ playTick, mode, onToggle }) {
   )
 }
 
-useLoader.preload(GLTFLoader, '/switcher.glb', withDraco)
+useLoader.preload(GLTFLoader, '/switcher.glb', withLocalDraco)
 
 export function ModeSwitcher({ mode, onChange }) {
   const [playTick, setPlayTick] = useState(0)

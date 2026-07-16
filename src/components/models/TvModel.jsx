@@ -9,16 +9,10 @@ import {
   Vector3,
   VideoTexture,
 } from 'three'
-import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 import { useHoverMotion } from '../../hooks/useHoverMotion'
+import { withLocalDraco } from '../../utils/gltfLoader'
 import { createPlanarUVGeometry } from '../../utils/threeHelpers'
-
-function withDraco(loader) {
-  const dracoLoader = new DRACOLoader()
-  dracoLoader.setDecoderPath('https://www.gstatic.com/draco/v1/decoders/')
-  loader.setDRACOLoader(dracoLoader)
-}
 
 const IDLE_CHANNELS = ['/tvchannels/1.mp4', '/tvchannels/2.mp4', '/tvchannels/3.mp4']
 const TRANSITION_CHANNEL = '/tvchannels/transition.mp4'
@@ -46,7 +40,7 @@ export function TvModel({
   forceBackVideo = false,
   ...props
 }) {
-  const gltf = useLoader(GLTFLoader, '/tv.glb', withDraco)
+  const gltf = useLoader(GLTFLoader, '/tv.glb', withLocalDraco)
   const { nodes, materials } = gltf
 
   const groupRef = useRef(null)
@@ -410,4 +404,4 @@ export function TvModel({
   )
 }
 
-useLoader.preload(GLTFLoader, '/tv.glb', withDraco)
+useLoader.preload(GLTFLoader, '/tv.glb', withLocalDraco)
