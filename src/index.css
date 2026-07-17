@@ -13,10 +13,12 @@ body,
 }
 
 body {
-  font-family: 'Nanum Pen Script', 'Comic Sans MS', cursive;
+  font-family: var(--app-font-family, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif);
   color: #1d1d1d;
   overscroll-behavior-x: none;
   touch-action: pan-y;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: geometricPrecision;
 }
 
 @media (max-width: 900px) {
