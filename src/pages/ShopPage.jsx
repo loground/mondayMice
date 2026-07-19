@@ -6,31 +6,31 @@ const PRODUCTS = [
   {
     id: 'kill',
     name: 'kill t shirt',
-    image: '/shop/kill_full.png',
-    zoomImage: '/shop/kill_zoomed.png',
+    image: '/shop/kill_full.jpg',
+    zoomImage: '/shop/kill_zoomed.jpg',
   },
   {
     id: 'sima',
     name: 'sima t shirt',
-    image: '/shop/sima_full.png',
-    zoomImage: '/shop/sima_zoomed.png',
+    image: '/shop/sima_full.jpg',
+    zoomImage: '/shop/sima_zoomed.jpg',
   },
   {
     id: 'spiral',
     name: 'spiral t shirt',
-    image: '/shop/spiral_full.png',
-    zoomImage: '/shop/spiral_zoomed.png',
+    image: '/shop/spiral_full.jpg',
+    zoomImage: '/shop/spiral_zoomed.jpg',
   },
   {
     id: 'jail',
     name: 'jail t shirt',
-    image: '/shop/jail_full.png',
-    zoomImage: '/shop/jail_zoomed.png',
+    image: '/shop/jail_full.jpg',
+    zoomImage: '/shop/jail_zoomed.jpg',
   },
 ]
 
 const SIZES = ['M', 'L', 'XL']
-const PRICE = 3150
+const PRICE = 3000
 
 const SIZE_DETAILS = [
   {
