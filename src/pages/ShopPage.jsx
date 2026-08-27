@@ -6,53 +6,43 @@ const PRODUCTS = [
   {
     id: 'kill',
     name: 'kill t shirt',
-    image: '/shop/kill_full.jpg',
-    zoomImage: '/shop/kill_zoomed.jpg',
+    image: '/shop/kill_full.png',
+    zoomImage: '/shop/kill_zoomed.png',
   },
   {
     id: 'sima',
     name: 'sima t shirt',
-    image: '/shop/sima_full.jpg',
-    zoomImage: '/shop/sima_zoomed.jpg',
+    image: '/shop/sima_full.png',
+    zoomImage: '/shop/sima_zoomed.png',
   },
   {
     id: 'spiral',
     name: 'spiral t shirt',
-    image: '/shop/spiral_full.jpg',
-    zoomImage: '/shop/spiral_zoomed.jpg',
+    image: '/shop/spiral_full.png',
+    zoomImage: '/shop/spiral_zoomed.png',
   },
   {
     id: 'jail',
     name: 'jail t shirt',
-    image: '/shop/jail_full.jpg',
-    zoomImage: '/shop/jail_zoomed.jpg',
+    image: '/shop/jail_full.png',
+    zoomImage: '/shop/jail_zoomed.png',
   },
 ]
 
-const SIZES = ['M', 'L', 'XL']
+const SIZES = [
+  { value: 'M', label: 'M — SOLD OUT', soldOut: true },
+  { value: 'L', label: 'L' },
+  { value: 'XL', label: 'XL' },
+]
+const DEFAULT_SIZE = SIZES.find((size) => !size.soldOut).value
 const PRICE = 3000
-
-const SIZE_DETAILS = [
-  {
-    size: 'M',
-    rows: ['длина — 71 см', 'обхват груди — 112 см', 'ширина плеч — 52 см', 'длина рукава — 22 см'],
-  },
-  {
-    size: 'L',
-    rows: ['длина — 74 см', 'обхват груди — 120 см', 'ширина плеч — 54 см', 'длина рукава — 24 см'],
-  },
-  {
-    size: 'XL',
-    rows: ['длина — 77 см', 'обхват груди — 128 см', 'ширина плеч — 60 см', 'длина рукава — 25 см'],
-  },
-]
 
 const formatPrice = (value) => `${value.toLocaleString('ru-RU')} ₽`
 
 export function ShopPage({ onBack }) {
   const [hovered, setHovered] = useState(false)
   const [selectedSizes, setSelectedSizes] = useState(() =>
-    PRODUCTS.reduce((sizes, product) => ({ ...sizes, [product.id]: SIZES[0] }), {}),
+    PRODUCTS.reduce((sizes, product) => ({ ...sizes, [product.id]: DEFAULT_SIZE }), {}),
   )
   const [cartItems, setCartItems] = useState([])
   const [previewProduct, setPreviewProduct] = useState(null)
@@ -166,8 +156,8 @@ export function ShopPage({ onBack }) {
                       }
                     >
                       {SIZES.map((size) => (
-                        <option value={size} key={size}>
-                          {size}
+                        <option value={size.value} key={size.value} disabled={size.soldOut}>
+                          {size.label}
                         </option>
                       ))}
                     </select>
@@ -227,22 +217,6 @@ export function ShopPage({ onBack }) {
                   <li>Оверсайз крой</li>
                   <li>Состав: 100% хлопок, 245 г/м²</li>
                 </ul>
-              </section>
-
-              <section>
-                <h3>Размеры:</h3>
-                <div className="shop-details__sizes">
-                  {SIZE_DETAILS.map((sizeInfo) => (
-                    <div className="shop-details__size" key={sizeInfo.size}>
-                      <strong>{sizeInfo.size}</strong>
-                      <ul>
-                        {sizeInfo.rows.map((row) => (
-                          <li key={row}>{row}</li>
-                        ))}
-                      </ul>
-                    </div>
-                  ))}
-                </div>
               </section>
             </div>
           </aside>

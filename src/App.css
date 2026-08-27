@@ -1186,25 +1186,6 @@
   padding-left: 16px;
 }
 
-.shop-details__sizes {
-  display: grid;
-  gap: 8px;
-}
-
-.shop-details__size {
-  min-width: 0;
-}
-
-.shop-details__size strong {
-  display: block;
-  margin-bottom: 5px;
-  font-size: 0.8rem;
-}
-
-.shop-details__size ul {
-  padding-left: 12px;
-}
-
 .shop-preview {
   position: fixed;
   inset: 0;
