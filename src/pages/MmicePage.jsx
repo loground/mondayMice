@@ -9,6 +9,11 @@ const VIDEO_PAGES = {
     embedUrl: 'https://www.youtube.com/embed/nS9rtbNpu3M',
     className: 'video-page--magatour',
   },
+  otem: {
+    label: 'ОТЭМ',
+    embedUrl: 'https://www.youtube.com/embed/t8Lc0CG9r4o',
+    className: 'video-page--otem',
+  },
 }
 
 export function MmicePage({ onBack, variant = 'full' }) {
@@ -21,7 +26,14 @@ export function MmicePage({ onBack, variant = 'full' }) {
       </button>
 
       <main className={`video-page ${page.className}`} aria-label={`${page.label} page`}>
-        {variant === 'magatour' ? (
+        {variant === 'otem' ? (
+          <>
+            <img className="video-page__otem-logo" src="/pages/otem-logo.png" alt="ОТЭМ" />
+            <img className="video-page__otem-chip video-page__otem-chip--top" src="/pages/otem-chip.png" alt="" />
+            <img className="video-page__otem-chip video-page__otem-chip--right" src="/pages/otem-chip.png" alt="" />
+            <img className="video-page__otem-scene" src="/pages/otem-mouse-chips.png" alt="" />
+          </>
+        ) : variant === 'magatour' ? (
           <>
             <img className="video-page__magatour-header" src="/pages/magatour_header.png" alt="" />
             <picture className="video-page__magatour-mice" aria-hidden="true">

@@ -8,33 +8,37 @@ const PRODUCTS = [
     name: 'kill t shirt',
     image: '/shop/kill_full.png',
     zoomImage: '/shop/kill_zoomed.png',
+    soldOut: true,
   },
   {
     id: 'sima',
     name: 'sima t shirt',
     image: '/shop/sima_full.png',
     zoomImage: '/shop/sima_zoomed.png',
+    soldOut: true,
   },
   {
     id: 'spiral',
     name: 'spiral t shirt',
     image: '/shop/spiral_full.png',
     zoomImage: '/shop/spiral_zoomed.png',
+    soldOut: true,
   },
   {
     id: 'jail',
     name: 'jail t shirt',
     image: '/shop/jail_full.png',
     zoomImage: '/shop/jail_zoomed.png',
+    soldOut: true,
   },
 ]
 
 const SIZES = [
   { value: 'M', label: 'M — SOLD OUT', soldOut: true },
-  { value: 'L', label: 'L' },
-  { value: 'XL', label: 'XL' },
+  { value: 'L', label: 'L — SOLD OUT', soldOut: true },
+  { value: 'XL', label: 'XL — SOLD OUT', soldOut: true },
 ]
-const DEFAULT_SIZE = SIZES.find((size) => !size.soldOut).value
+const DEFAULT_SIZE = SIZES[0].value
 const PRICE = 3000
 
 const formatPrice = (value) => `${value.toLocaleString('ru-RU')} ₽`
@@ -62,6 +66,8 @@ export function ShopPage({ onBack }) {
   }
 
   const addToCart = (product) => {
+    if (product.soldOut) return
+
     setCartItems((items) => [
       ...items,
       {
@@ -138,6 +144,9 @@ export function ShopPage({ onBack }) {
                     aria-hidden="true"
                     onLoad={() => markImageLoaded(product.zoomImage)}
                   />
+                  {product.soldOut ? (
+                    <img className="shop-card__sold-out" src="/shop/sold-out.png" alt="Sold out" />
+                  ) : null}
                 </button>
                 <div className="shop-card__info">
                   <div>
@@ -148,6 +157,7 @@ export function ShopPage({ onBack }) {
                     <span>размер</span>
                     <select
                       value={selectedSizes[product.id]}
+                      disabled={product.soldOut}
                       onChange={(event) =>
                         setSelectedSizes((sizes) => ({
                           ...sizes,
@@ -162,8 +172,13 @@ export function ShopPage({ onBack }) {
                       ))}
                     </select>
                   </label>
-                  <button className="shop-card__add" type="button" onClick={() => addToCart(product)}>
-                    добавить в корзину
+                  <button
+                    className="shop-card__add"
+                    type="button"
+                    disabled={product.soldOut}
+                    onClick={() => addToCart(product)}
+                  >
+                    {product.soldOut ? 'sold out' : 'добавить в корзину'}
                   </button>
                 </div>
               </article>
@@ -250,6 +265,9 @@ export function ShopPage({ onBack }) {
                     alt={index === 0 ? previewProduct.name : `${previewProduct.name} close up`}
                     onLoad={() => markImageLoaded(src)}
                   />
+                  {previewProduct.soldOut ? (
+                    <img className="shop-preview__sold-out" src="/shop/sold-out.png" alt="Sold out" />
+                  ) : null}
                 </div>
               ))}
             </div>

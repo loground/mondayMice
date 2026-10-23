@@ -57,6 +57,14 @@ export function HomePage({ galleryOpen = false, onCloseGallery, onOpenGallery, o
         category: 'skate',
         route: '/mmice',
       },
+      {
+        id: 'tv-banner-2',
+        delay: '270ms',
+        image: '/banners/otem.png',
+        label: 'ОТЭМ',
+        category: 'skate',
+        route: '/otem',
+      },
     ],
     [],
   )
