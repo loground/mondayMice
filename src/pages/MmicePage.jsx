@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom'
+
 const VIDEO_PAGES = {
   full: {
     label: 'MMICE FULL VIDEO 2025',
@@ -62,8 +64,10 @@ export function MmicePage({ onBack, variant = 'full' }) {
           </div>
         </section>
 
-        <footer className="video-page__footer" aria-hidden="true">
-          <img src="/images/footer.png" alt="" />
+        <footer className="video-page__footer">
+          <Link to="/" aria-label="Return to main page">
+            <img src="/images/footer.png" alt="Monday Mice" />
+          </Link>
         </footer>
       </main>
     </>

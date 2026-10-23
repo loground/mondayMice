@@ -516,6 +516,20 @@
   -webkit-user-drag: none;
 }
 
+.tv-footer-slot__link,
+.video-page__footer a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.tv-footer-slot__link {
+  max-width: 100%;
+}
+
 .tv-scroll-header {
   position: fixed;
   top: 0;

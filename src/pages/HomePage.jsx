@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { useLocation } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { DefaultLoadingManager } from 'three'
 import { ModelSlot } from '../components/ModelSlot'
 import { PageLoader } from '../components/PageLoader'
@@ -500,8 +500,10 @@ export function HomePage({ galleryOpen = false, onCloseGallery, onOpenGallery, o
               </button>
             ))}
           </div>
-          <div className="tv-footer-slot" aria-hidden="true">
-            <img className="tv-footer-slot__image" src="/images/footer.png" alt="" />
+          <div className="tv-footer-slot">
+            <Link className="tv-footer-slot__link" to="/" aria-label="Return to main page">
+              <img className="tv-footer-slot__image" src="/images/footer.png" alt="Monday Mice" />
+            </Link>
           </div>
         </div>
       </section>
