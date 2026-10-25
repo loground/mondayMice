@@ -23,12 +23,7 @@ export function MmicePage({ onBack, variant = 'full' }) {
 
   return (
     <>
-      <button
-        type="button"
-        className={`video-page__back ${variant === 'otem' ? 'video-page__back--otem' : ''}`}
-        onClick={onBack}
-        aria-label="Back"
-      >
+      <button type="button" className="video-page__back" onClick={onBack} aria-label="Back">
         <img src="/pages/mmiceBack.png" alt="" />
       </button>
 
