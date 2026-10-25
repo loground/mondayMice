@@ -1704,7 +1704,7 @@
   }
 
   .video-page--otem {
-    --video-mobile-top: clamp(260px, 66vw, 345px);
+    --video-mobile-top: clamp(205px, 54vw, 270px);
   }
 
   .video-page--otem .video-page__content {
@@ -1715,12 +1715,12 @@
     width: var(--video-mobile-width);
   }
 
-  .video-page--otem .video-page__back {
+  .video-page__back--otem {
     top: calc(var(--video-mobile-top) + var(--video-mobile-height) + 4px);
   }
 
   .video-page__otem-logo {
-    top: clamp(178px, 45vw, 232px);
+    top: clamp(126px, 34vw, 176px);
     left: 50%;
     width: min(92vw, 470px);
     transform: translateX(-50%);
