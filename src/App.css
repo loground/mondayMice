@@ -1704,7 +1704,7 @@
   }
 
   .video-page--otem {
-    --video-mobile-top: clamp(260px, 66vw, 345px);
+    --video-mobile-top: clamp(199px, 50vw, 264px);
   }
 
   .video-page--otem .video-page__content {
@@ -1720,7 +1720,7 @@
   }
 
   .video-page__otem-logo {
-    top: clamp(178px, 45vw, 232px);
+    top: clamp(136px, 34vw, 177px);
     left: 50%;
     width: min(92vw, 470px);
     transform: translateX(-50%);
